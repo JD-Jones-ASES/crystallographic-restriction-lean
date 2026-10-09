@@ -9,8 +9,8 @@ For a positive integer `m`, let `ψ(m)` be the sum of `φ(pᵏ)` over the prime 
 dividing `m`, except that the prime power `2` contributes `0` (`φ` is Euler's totient). So
 `ψ(1) = ψ(2) = 0`, `ψ(3) = ψ(4) = ψ(6) = 2`, `ψ(5) = ψ(8) = ψ(10) = ψ(12) = 4`, `ψ(7) = ψ(9) = 6`, and
 `ψ(ab) = ψ(a) + ψ(b)` for coprime `a`, `b` (OEIS A080737). The crystallographic restriction in every
-dimension (Vaidyanathaswamy 1928; rediscovered by Hiller 1985; a proof in Kuzmanovich–Pavlichenkov
-2002; stated as Theorem 1 of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of
+dimension (Vaidyanathaswamy 1928; independently Hiller 1985, who introduced `ψ` and the tables; a proof
+in Kuzmanovich–Pavlichenkov 2002; Theorem 1 of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of
 invertible integer `N × N` matrices has an element of order `m ≥ 1` if and only if `ψ(m) ≤ N`. In
 dimensions two and three this is the classical restriction: the finite orders are `1, 2, 3, 4, 6`.
 
@@ -27,8 +27,8 @@ This file states, and `Solution.lean` proves (kernel-only):
   `GL(φ(n), ℤ)` of order `n` for every `n ≥ 1` (multiplication by a primitive `n`-th root of unity on
   `ℤ[X]/(Φₙ)`); the same equivalence over `ℚ`; `GL(N + 1, ℤ)` has the same finite orders as
   `GL(N, ℤ)` for even `N ≥ 2`; the set of finite orders is finite, bounded by `2^(N + 1)`;
-* the tables: the finite orders of `GL(N, ℤ)` for `N = 1, …, 12`, and the largest finite order
-  `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`.
+* the tables: the finite orders of `GL(N, ℤ)` for `N = 1, …, 12` (OEIS A080738), and the largest finite
+  order `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`.
 
 Conventions: `orderOf` is Mathlib's (`0` at infinite order); `Matrix.GeneralLinearGroup (Fin N) ℤ`
 is the group of units of the matrix ring `Matrix (Fin N) (Fin N) ℤ`; `Nat.totient` is `φ`;
@@ -93,7 +93,8 @@ theorem psi_orderOf_le {N : ℕ} (A : Matrix.GeneralLinearGroup (Fin N) ℤ) :
 
 /-- Sufficiency: for `N ≥ 1`, `m ≥ 1` and `ψ(m) ≤ N`, `GL(N, ℤ)` has an element of order `m`: a
 block for each prime power `pᵏ ≠ 2` exactly dividing `m` (multiplication by the root of `Φ_{pᵏ}` on
-`ℤ[X]/(Φ_{pᵏ})`, of size `φ(pᵏ)`), the sign `−1` when `m ≡ 2 (mod 4)`, and an identity block. -/
+`ℤ[X]/(Φ_{pᵏ})`, of size `φ(pᵏ)`), the sign `−1` when `m ≡ 2 (mod 4)`, and an identity block; for `m = 2`
+the `1 × 1` block `−1`. -/
 theorem exists_orderOf_eq {N m : ℕ} (hN : 0 < N) (hm : 0 < m) (h : psi m ≤ N) :
     ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = m := sorry
 
@@ -113,7 +114,7 @@ theorem isLeast_dimension {m : ℕ} (hm : 0 < m) :
       (if m = 2 then 1 else psi m) := sorry
 
 /-- For every `n ≥ 1`, `GL(φ(n), ℤ)` has an element of order `n`: multiplication by the root of the
-`n`-th cyclotomic polynomial on `ℤ[X]/(Φₙ)` in its power basis (the companion matrix of `Φₙ`). -/
+`n`-th cyclotomic polynomial on `ℤ[X]/(Φₙ)` in its power basis (a companion matrix of `Φₙ`). -/
 theorem exists_orderOf_eq_totient {n : ℕ} (hn : 0 < n) :
     ∃ A : Matrix.GeneralLinearGroup (Fin (Nat.totient n)) ℤ, orderOf A = n := sorry
 
@@ -136,7 +137,7 @@ theorem finiteOrders_finite (N : ℕ) : (finiteOrders N).Finite := sorry
 
 /-! ### The tables
 
-The finite orders of `GL(N, ℤ)` for `N = 1, …, 12` (Hiller's table), by the bounding lemma and a
+The finite orders of `GL(N, ℤ)` for `N = 1, …, 12` (OEIS A080738), by the bounding lemma and a
 kernel computation of `ψ` on `m ≤ 2^(N + 1)`. -/
 
 theorem finiteOrders_one : finiteOrders 1 = {1, 2} := sorry

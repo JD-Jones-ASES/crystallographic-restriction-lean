@@ -5,8 +5,8 @@
 
 In order: the pins (lean-toolchain and the Mathlib revision of lake-manifest.json are the committed
 ones), the source guard, the definition comparison between Challenge.lean and Crystallographic/Defs.lean, the
-statement comparison between Challenge.lean and Solution.lean, the exact replay scripts/check_hk.py,
-the exact certificates under note/certificates/ (if any), the metadata (formalization.yaml parses;
+statement comparison between Challenge.lean and Solution.lean, the standard-library replay of the
+tables scripts/check_tables.py, the metadata (formalization.yaml parses;
 its title length, main results and alignment against comparator.json; no definition holes; no
 original-proof source), the Lean build of every target (including the Test audit, which fails on
 any axiom beyond propext, Classical.choice and Quot.sound), the module-resolution check, the
@@ -14,7 +14,7 @@ elaboration check of the compared definitions (printed with pp.all from the Chal
 Crystallographic.Defs, which must agree exactly, as the registry's comparator demands), and Palomar's
 core-notation audit of the compared declarations. The compared definitions are read from
 Challenge.lean at run time: every `def` and `noncomputable def` at the start of a line, in namespace
-Crystallographic (the inductive `Model` is compared through `scripts/check_definitions.py`). `--fetch-cache` runs
+Crystallographic. `--fetch-cache` runs
 `lake exe cache get` first (network); `--skip-build` leaves out the four Lean steps. The last line
 is `VERIFY: PASS` or `VERIFY: FAIL`. Exit status 0 on PASS only.
 """
@@ -66,21 +66,11 @@ def check_script(name, args):
 
 
 def check_replay():
-    result = run([sys.executable, "-I", "scripts/check_hk.py"], capture_output=True)
+    result = run([sys.executable, "-I", "scripts/check_tables.py"], capture_output=True)
     lines = result.stdout.strip().splitlines()
     good = result.returncode == 0 and lines[-1:] == ["VERDICT: PASS"]
-    return step("check_hk.py (the standard-library replay)", good,
+    return step("check_tables.py (the standard-library replay of the tables)", good,
                 lines[-1] if lines else (result.stderr.strip().splitlines()[-1:] or [""])[0])
-
-
-def check_certificates():
-    ok = True
-    for path in sorted((ROOT / "note" / "certificates").glob("*/verify.py")):
-        result = run([sys.executable, str(path)], capture_output=True)
-        verdict = [line for line in result.stdout.splitlines() if line.startswith("VERDICT")]
-        good = result.returncode == 0 and verdict == ["VERDICT: PASS"]
-        ok &= step(f"certificate {path.parent.name}", good, verdict[-1] if verdict else "no verdict")
-    return ok
 
 
 def check_yaml():
@@ -201,7 +191,6 @@ def main():
     ok &= check_script("definitions", ["scripts/check_definitions.py"])
     ok &= check_script("statements", ["scripts/check_statements.py"])
     ok &= check_replay()
-    ok &= check_certificates()
     ok &= check_yaml()
     if not skip_build:
         if fetch:
