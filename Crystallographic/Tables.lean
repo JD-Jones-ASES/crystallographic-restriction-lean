@@ -24,11 +24,82 @@ def tbl_L12 : List ℕ :=
    35, 36, 40, 42, 44, 45, 48, 56, 60, 63, 66, 70, 72, 80, 84, 90, 105, 120, 126, 140, 168, 180,
    210]
 
-/-- The kernel check, chunked (`512 * i + k`, `i < 17`, `k < 512`) to keep the kernel's recursion
-depth bounded: below `8704`, `0 < m ∧ psiC m ≤ 12` holds exactly on `tbl_L12`. -/
+/-- The kernel check in seventeen declarations (`512 * i + k`, `i < 17`, `k < 512`), one per chunk so
+that the kernel's caches are released between chunks: below `8704`, `0 < m ∧ psiC m ≤ 12` holds
+exactly on `tbl_L12`. -/
+theorem tbl_chunk12_0 : ∀ k, k < 512 →
+    (0 < 512 * 0 + k ∧ psiC (512 * 0 + k) ≤ 12 ↔ 512 * 0 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_1 : ∀ k, k < 512 →
+    (0 < 512 * 1 + k ∧ psiC (512 * 1 + k) ≤ 12 ↔ 512 * 1 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_2 : ∀ k, k < 512 →
+    (0 < 512 * 2 + k ∧ psiC (512 * 2 + k) ≤ 12 ↔ 512 * 2 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_3 : ∀ k, k < 512 →
+    (0 < 512 * 3 + k ∧ psiC (512 * 3 + k) ≤ 12 ↔ 512 * 3 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_4 : ∀ k, k < 512 →
+    (0 < 512 * 4 + k ∧ psiC (512 * 4 + k) ≤ 12 ↔ 512 * 4 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_5 : ∀ k, k < 512 →
+    (0 < 512 * 5 + k ∧ psiC (512 * 5 + k) ≤ 12 ↔ 512 * 5 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_6 : ∀ k, k < 512 →
+    (0 < 512 * 6 + k ∧ psiC (512 * 6 + k) ≤ 12 ↔ 512 * 6 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_7 : ∀ k, k < 512 →
+    (0 < 512 * 7 + k ∧ psiC (512 * 7 + k) ≤ 12 ↔ 512 * 7 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_8 : ∀ k, k < 512 →
+    (0 < 512 * 8 + k ∧ psiC (512 * 8 + k) ≤ 12 ↔ 512 * 8 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_9 : ∀ k, k < 512 →
+    (0 < 512 * 9 + k ∧ psiC (512 * 9 + k) ≤ 12 ↔ 512 * 9 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_10 : ∀ k, k < 512 →
+    (0 < 512 * 10 + k ∧ psiC (512 * 10 + k) ≤ 12 ↔ 512 * 10 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_11 : ∀ k, k < 512 →
+    (0 < 512 * 11 + k ∧ psiC (512 * 11 + k) ≤ 12 ↔ 512 * 11 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_12 : ∀ k, k < 512 →
+    (0 < 512 * 12 + k ∧ psiC (512 * 12 + k) ≤ 12 ↔ 512 * 12 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_13 : ∀ k, k < 512 →
+    (0 < 512 * 13 + k ∧ psiC (512 * 13 + k) ≤ 12 ↔ 512 * 13 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_14 : ∀ k, k < 512 →
+    (0 < 512 * 14 + k ∧ psiC (512 * 14 + k) ≤ 12 ↔ 512 * 14 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_15 : ∀ k, k < 512 →
+    (0 < 512 * 15 + k ∧ psiC (512 * 15 + k) ≤ 12 ↔ 512 * 15 + k ∈ tbl_L12) := by
+  decide +kernel
+
+theorem tbl_chunk12_16 : ∀ k, k < 512 →
+    (0 < 512 * 16 + k ∧ psiC (512 * 16 + k) ≤ 12 ↔ 512 * 16 + k ∈ tbl_L12) := by
+  decide +kernel
+
 theorem tbl_chunks12 : ∀ i, i < 17 → ∀ k, k < 512 →
     (0 < 512 * i + k ∧ psiC (512 * i + k) ≤ 12 ↔ 512 * i + k ∈ tbl_L12) := by
-  decide +kernel
+  intro i hi
+  interval_cases i
+  exacts [tbl_chunk12_0, tbl_chunk12_1, tbl_chunk12_2, tbl_chunk12_3, tbl_chunk12_4, tbl_chunk12_5, tbl_chunk12_6, tbl_chunk12_7, tbl_chunk12_8, tbl_chunk12_9, tbl_chunk12_10, tbl_chunk12_11, tbl_chunk12_12, tbl_chunk12_13, tbl_chunk12_14, tbl_chunk12_15, tbl_chunk12_16]
 
 theorem tbl_key12 : ∀ m, m < 8193 → (0 < m ∧ psiC m ≤ 12 ↔ m ∈ tbl_L12) := by
   intro m hm

@@ -214,7 +214,6 @@ theorem le_two_pow_psi_internal {m : ℕ} (hm : 0 < m) : m ≤ 2 ^ (psi m + 1) :
 theorem psi_eq_sum_divisors_internal (m : ℕ) :
     psi m = ∑ d ∈ m.divisors,
       if IsPrimePow d ∧ Nat.Coprime d (m / d) ∧ d ≠ 2 then Nat.totient d else 0 := by
-  classical
   rcases eq_or_ne m 0 with rfl | hm
   · simp [psi_zero]
   set g : ℕ → ℕ := fun d =>
@@ -291,7 +290,6 @@ pinned form is false, e.g. `m = 3`, `S = {0}`). -/
 theorem psi_le_sum_totient_of_zero_notMem {m : ℕ} {S : Finset ℕ} (hS : 0 ∉ S)
     (hcover : ∀ p ∈ m.primeFactors, ∃ d ∈ S, p ^ m.factorization p ∣ d) :
     psi m ≤ ∑ d ∈ S, Nat.totient d := by
-  classical
   choose! c hcS hcd using hcover
   rw [psi_eq_sum_term, ← Finset.sum_fiberwise_of_maps_to hcS]
   refine Finset.sum_le_sum fun d hd => ?_
