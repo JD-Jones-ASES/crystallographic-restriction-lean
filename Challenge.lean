@@ -49,7 +49,7 @@ This file states, and `Solution.lean` proves (kernel-only):
 Conventions: `orderOf` is Mathlib's (`0` at infinite order); `Matrix.GeneralLinearGroup (Fin N) ℤ`
 is the group of units of the matrix ring `Matrix (Fin N) (Fin N) ℤ`; `Nat.totient` is `φ`;
 `m.factorization p` is the exponent of the prime `p` in `m`, and `m.primeFactors` its set of
-prime divisors; sets of natural numbers are `Set ℕ` literals.
+prime divisors; `N / 2` is natural-number division (rounded down); sets of natural numbers are `Set ℕ` literals.
 -/
 
 @[expose] public section

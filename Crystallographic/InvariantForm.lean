@@ -16,10 +16,11 @@ the sum is integral; its positive definiteness is also proved after casting
 to `ℝ`. So `ψ(m) ≤ N` is also the condition for an element of order `m` of
 `GL(N, ℤ)` preserving a positive definite integral form.
 
-This is the sum of the transforms of the identity form, the construction for
-finite subgroups of `GL(n, ℚ)` in Serre, *Bounds for the orders of the finite
-subgroups of G(k)*, §1.3.2; over `ℤ` with a cyclic group no division is needed,
-so the Gram matrix is integral. Its unimodularity is not asserted.
+This is the sum of the transforms of the identity form over the group generated
+by `A`, as in Serre, *Bounds for the orders of the finite subgroups of G(k)*,
+§1.3.2, for finite subgroups of `GL(n, ℚ)` (where an integer then clears the
+denominators); for `A ∈ GL(N, ℤ)` the sum is already integral. Its unimodularity
+is not asserted.
 -/
 
 @[expose] public section

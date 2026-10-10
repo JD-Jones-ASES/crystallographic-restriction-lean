@@ -7,6 +7,8 @@ from pathlib import Path
 import re
 import sys
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parents[1]
 
 

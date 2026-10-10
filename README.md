@@ -30,23 +30,20 @@ dimensions two and three this is the classical restriction: the finite orders ar
   orders with `ψ = 20, 22, 24` missing from Table 1 of Bamberg–Cairns–Kilminster, with their least dimensions;
 - every even number is `ψ(m)` for an odd squarefree `m ≥ 1` (Proposition 3(2) of Bamberg–Cairns–Kilminster and its
   proof), so the values of `ψ` are the even numbers; for `N, M ≥ 1`, `finiteOrders N ⊆ finiteOrders M` iff
-  `N / 2 ≤ M / 2`, and `finiteOrders N = finiteOrders M` iff `N / 2 = M / 2`; `GL(2n + 2, ℤ)` has an odd squarefree
+  `N / 2 ≤ M / 2` (integer halves), and `finiteOrders N = finiteOrders M` iff `N / 2 = M / 2`; `GL(2n + 2, ℤ)` has an odd squarefree
   finite order that `GL(2n + 1, ℤ)` lacks;
-- every `A ∈ GL(N, ℤ)` of finite order `m` preserves a symmetric integral form (`∑_{k<m} (Aᵏ)ᵀAᵏ`), positive definite on
+- every `A ∈ GL(N, ℤ)` of finite order `m` preserves a symmetric integral form (the proof takes `∑_{k<m} (Aᵏ)ᵀAᵏ`), positive definite on
   integer and on real vectors; so, for `N, m ≥ 1`, some element of order `m` of `GL(N, ℤ)` preserves a positive definite
   integral form iff `ψ(m) ≤ N`;
 - determinant `−1`: for `m ≥ 1`, `GL(N, ℤ)` has an element of order `m` and determinant `−1` iff `m` is even and
-  `N ≥ ψ(m) + 1`, so the least such dimension is `ψ(m) + 1` for even `m`; the same in `GL(N, ℚ)`. Necessity goes
-  through the invariant form: `AᵀQA = Q` gives `det(A + 1) = −det(A + 1)`, so `−1` is an eigenvalue and `Φ₂` divides
-  the minimal polynomial; sufficiency is `diag(−1, B)` with `B ∈ SL(ψ(m), ℤ)` of order `m`.
+  `N ≥ ψ(m) + 1`, so the least such dimension is `ψ(m) + 1` for even `m`; the same in `GL(N, ℚ)`.
 
 The hypotheses `N ≥ 1` and `m ≥ 1` are necessary and made explicit: `GL(0, ℤ)` is trivial while `ψ(2) = 0`, and Mathlib's
 `orderOf` is `0` at infinite order.
 
-On paper, not in Lean ([PROOF.md](PROOF.md) §12): for `m > 2`, the elements of order `m` of `GL(ψ(m), ℤ)` fall into
-`1`, `2^r − 1`, `2^r` or `3·2^(r−1)` classes under conjugacy in `GL(ψ(m), ℚ)`, `r` being the number of odd primes
-dividing `m` (for `m` odd; `m ≡ 2 (mod 4)`; `4 ∣ m` otherwise; `4 ∥ m` and `3 ∥ m`). `scripts/check_minimal_classes.py`
-checks this, and the determinant `−1` threshold, by exhaustive enumeration for every `m ≤ 500`.
+On paper, not in Lean ([PROOF.md](PROOF.md) §12): the number of classes, under conjugacy in `GL(ψ(m), ℚ)`, of the
+elements of order `m > 2` of `GL(ψ(m), ℤ)` (`1`, `2^r − 1`, `2^r` or `3·2^(r−1)`, `r` the number of odd primes dividing
+`m`); `scripts/check_minimal_classes.py` checks it, and the determinant `−1` threshold, by enumeration for every `m ≤ 500`.
 
 Not claimed: priority for the two- and three-dimensional cases (public Lean proofs of the case `N = 2` exist:
 acprk/symmetry-graded-lean, akiselev/ferris-howard); the wallpaper or space groups; the isometry group of a given lattice

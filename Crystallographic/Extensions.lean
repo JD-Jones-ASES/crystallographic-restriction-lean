@@ -26,7 +26,7 @@ p. 207; the half-dimension statements follow from it with the restriction and th
 namespace Crystallographic
 
 /-- An odd prime divisor of a positive integer contributes at least `p - 1` to `psi`. -/
-theorem prime_sub_one_le_psi_internal {m p : ℕ} (hm : 0 < m) (hp : p.Prime)
+theorem prime_sub_one_le_psi {m p : ℕ} (hm : 0 < m) (hp : p.Prime)
     (hp2 : p ≠ 2) (hpm : p ∣ m) : p - 1 ≤ psi m := by
   have hmem : p ∈ m.primeFactors := Nat.mem_primeFactors.mpr ⟨hp, hpm, hm.ne'⟩
   have hterm : p - 1 ≤ psi_term m p := by
@@ -51,7 +51,7 @@ theorem exists_odd_squarefree_psi_eq_internal (n : ℕ) :
     obtain ⟨m, hm, hmodd, hmsq, hpsi⟩ := ih (n - j) hr
     have hnot : ¬ p ∣ m := by
       intro hpm
-      have hbound := prime_sub_one_le_psi_internal hm hp hp2 hpm
+      have hbound := prime_sub_one_le_psi hm hp hp2 hpm
       omega
     have hcop : Nat.Coprime p m := (hp.coprime_iff_not_dvd).mpr hnot
     have hpsip : psi p = p - 1 := by
@@ -99,7 +99,7 @@ theorem finiteOrders_eq_iff_internal {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     · exact (finiteOrders_subset_iff_internal hN hM).mpr (by omega)
     · exact (finiteOrders_subset_iff_internal hM hN).mpr (by omega)
 
-/-- An odd squarefree order appears for the first time at each positive even dimension. -/
+/-- Each positive even dimension has an odd squarefree finite order that the dimension below lacks. -/
 theorem exists_new_odd_squarefree_order_internal (n : ℕ) :
     ∃ m : ℕ, Odd m ∧ Squarefree m ∧
       m ∈ finiteOrders (2 * n + 2) ∧ m ∉ finiteOrders (2 * n + 1) := by

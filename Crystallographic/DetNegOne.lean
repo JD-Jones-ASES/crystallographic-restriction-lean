@@ -127,7 +127,7 @@ theorem dn_gl_of_good {N m : ℕ} (h : dn_good N m) :
 
 /-- Sufficiency: for even `m ≥ 1` and `ψ m + 1 ≤ N`, an element of `GL(N, ℤ)` of order `m` and
 determinant `−1`. -/
-theorem exists_orderOf_eq_det_neg_one_internal {N m : ℕ} (hme : Even m) (hm : 0 < m)
+theorem dn_suff {N m : ℕ} (hme : Even m) (hm : 0 < m)
     (h : psi m + 1 ≤ N) :
     ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
       orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1 :=
@@ -261,7 +261,7 @@ theorem dn_nec_rat {N m : ℕ} (M : Matrix (Fin N) (Fin N) ℚ) (hm : 0 < m)
 
 /-- Necessity: an element of `GL(N, ℤ)` of order `m ≥ 1` and determinant `−1` has `m` even and
 `ψ m + 1 ≤ N`. -/
-theorem det_neg_one_imp_internal {N m : ℕ} (A : Matrix.GeneralLinearGroup (Fin N) ℤ)
+theorem dn_nec {N m : ℕ} (A : Matrix.GeneralLinearGroup (Fin N) ℤ)
     (hA : orderOf A = m) (hm : 0 < m) (hdet : (A : Matrix (Fin N) (Fin N) ℤ).det = -1) :
     Even m ∧ psi m + 1 ≤ N := by
   let φ : Matrix (Fin N) (Fin N) ℤ →+* Matrix (Fin N) (Fin N) ℚ := (Int.castRingHom ℚ).mapMatrix
@@ -285,17 +285,17 @@ theorem exists_orderOf_eq_det_neg_one_iff_internal {N m : ℕ} (hm : 0 < m) :
       Even m ∧ psi m + 1 ≤ N := by
   constructor
   · rintro ⟨A, hA, hdet⟩
-    exact det_neg_one_imp_internal A hA hm hdet
+    exact dn_nec A hA hm hdet
   · rintro ⟨he, h⟩
-    exact exists_orderOf_eq_det_neg_one_internal he hm h
+    exact dn_suff he hm h
 
 theorem isLeast_dimension_det_neg_one_internal {m : ℕ} (hm : Even m) (h0 : 0 < m) :
     IsLeast {N : ℕ | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
       orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1} (psi m + 1) := by
   constructor
-  · exact exists_orderOf_eq_det_neg_one_internal hm h0 le_rfl
+  · exact dn_suff hm h0 le_rfl
   · rintro N ⟨A, hA, hdet⟩
-    exact (det_neg_one_imp_internal A hA h0 hdet).2
+    exact (dn_nec A hA h0 hdet).2
 
 /-- The same classification over `ℚ`: necessity is `dn_nec_rat`; sufficiency maps the integer witness
 along the injective `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))`. -/
@@ -307,7 +307,7 @@ theorem exists_orderOf_eq_det_neg_one_iff_rat_internal {N m : ℕ} (hm : 0 < m) 
   · rintro ⟨A, hA, hdet⟩
     exact dn_nec_rat _ hm (by rw [orderOf_units, hA]) hdet
   · rintro ⟨he, h⟩
-    obtain ⟨A, hA, hdet⟩ := exists_orderOf_eq_det_neg_one_internal he hm h
+    obtain ⟨A, hA, hdet⟩ := dn_suff he hm h
     let φ : Matrix.GeneralLinearGroup (Fin N) ℤ →* Matrix.GeneralLinearGroup (Fin N) ℚ :=
       Units.map ((Int.castRingHom ℚ).mapMatrix : Matrix (Fin N) (Fin N) ℤ →+* _).toMonoidHom
     have hφ : Function.Injective φ := by

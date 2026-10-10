@@ -62,8 +62,8 @@ fully specified in the Challenge, so the comparator checks the Solution's values
 | 46 | `isGreatest_finiteOrders_twelve` — 210 in GL(12, ℤ) | Crystallographic/Tables.lean |
 | 47 | `exists_odd_squarefree_psi_eq` — every 2n is ψ(m) for an odd squarefree m ≥ 1 | Crystallographic/Extensions.lean |
 | 48 | `range_psi` — the values of ψ are the even numbers | Crystallographic/Extensions.lean |
-| 49 | `finiteOrders_subset_iff` — for N, M ≥ 1, the finite orders of GL(N, ℤ) are among those of GL(M, ℤ) iff N / 2 ≤ M / 2 | Crystallographic/Extensions.lean |
-| 50 | `finiteOrders_eq_iff` — for N, M ≥ 1, GL(N, ℤ) and GL(M, ℤ) have the same finite orders iff N / 2 = M / 2 | Crystallographic/Extensions.lean |
+| 49 | `finiteOrders_subset_iff` — for N, M ≥ 1, the finite orders of GL(N, ℤ) are among those of GL(M, ℤ) iff N / 2 ≤ M / 2 (integer halves) | Crystallographic/Extensions.lean |
+| 50 | `finiteOrders_eq_iff` — for N, M ≥ 1, GL(N, ℤ) and GL(M, ℤ) have the same finite orders iff N / 2 = M / 2 (integer halves) | Crystallographic/Extensions.lean |
 | 51 | `exists_new_odd_squarefree_order` — GL(2n + 2, ℤ) has an odd squarefree finite order that GL(2n + 1, ℤ) lacks | Crystallographic/Extensions.lean |
 | 52 | `exists_integral_invariant_posDef` — every A ∈ GL(N, ℤ) of finite order preserves a symmetric integral form, positive definite on integer and real vectors | Crystallographic/InvariantForm.lean |
 | 53 | `exists_integral_posDef_isometry_iff` — for N, m ≥ 1, some A ∈ GL(N, ℤ) of order m preserves a positive definite integral form iff ψ(m) ≤ N | Crystallographic/InvariantForm.lean |
@@ -98,8 +98,9 @@ fully specified in the Challenge, so the comparator checks the Solution's values
   brute force for `n ≤ 14`) and compared with the printed row, with exactly the eleven omissions the theorems state.
 - **Enumeration for PROOF.md §12** (`scripts/check_minimal_classes.py`, standard library; failures are raised, not
   asserted, so `python -O` keeps every check): for each order `m ≤ 500`, every multiset of cyclotomic indices `d ∣ m`
-  (`1`, `2` and repetitions included) with least common multiple `m` and `∑ φ(d) ≤ ψ(m) + 1`; the classes at dimension
-  `ψ(m)` are those listed in §12 (869 in all), and the least dimension with determinant `−1` is `ψ(m) + 1` for even `m`
+  (`1`, `2` and repetitions included) with least common multiple `m` and `∑ φ(d) ≤ ψ(m) + 1`; the classes at the least
+  dimension are those listed in §12 for `m > 2` (867 for `3 ≤ m ≤ 500`; 869 with the single classes of `m = 1`
+  and `m = 2`), and the least dimension with determinant `−1` is `ψ(m) + 1` for even `m`
   and absent for odd `m` (statement 54). The class count of §12 is a paper proof outside comparator.json.
 - **Module resolution** (`scripts/check_module_resolution.py`, under `lake env`): `Challenge` and `Solution` resolve to
   this repository's files first in `LEAN_SRC_PATH`.
