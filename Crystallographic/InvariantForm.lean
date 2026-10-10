@@ -13,12 +13,13 @@ is symmetric and satisfies `Aᵀ * invariantGram A m * A = invariantGram A m`.
 For `m > 0` it is positive definite: its `k = 0` summand is the identity,
 and every other summand is positive semidefinite. If `A` is integral then
 the sum is integral; its positive definiteness is also proved after casting
-to `ℝ`. Thus the crystallographic order criterion can be realized by actual
-isometries of positive definite integral lattices, with the same dimension.
+to `ℝ`. So `ψ(m) ≤ N` is also the condition for an element of order `m` of
+`GL(N, ℤ)` preserving a positive definite integral form.
 
-This is the usual finite-group averaging argument, specialized to a cyclic
-group and written without division, so the preserved Gram matrix has integer
-entries. No unimodularity of that Gram matrix is asserted.
+This is the sum of the transforms of the identity form, the construction for
+finite subgroups of `GL(n, ℚ)` in Serre, *Bounds for the orders of the finite
+subgroups of G(k)*, §1.3.2; over `ℤ` with a cyclic group no division is needed,
+so the Gram matrix is integral. Its unimodularity is not asserted.
 -/
 
 @[expose] public section

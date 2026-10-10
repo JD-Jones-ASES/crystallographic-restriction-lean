@@ -64,7 +64,10 @@ run_cmd do
       `Crystallographic.finiteOrders_subset_iff, `Crystallographic.finiteOrders_eq_iff,
       `Crystallographic.exists_new_odd_squarefree_order,
       `Crystallographic.exists_integral_invariant_posDef,
-      `Crystallographic.exists_integral_posDef_isometry_iff] do
+      `Crystallographic.exists_integral_posDef_isometry_iff,
+      `Crystallographic.exists_orderOf_eq_det_neg_one_iff,
+      `Crystallographic.isLeast_dimension_det_neg_one,
+      `Crystallographic.exists_orderOf_eq_det_neg_one_iff_rat] do
     unless env.contains n do
       logError m!"Compared theorem is missing from the environment: {n}"
   logInfo m!"Audited {checked} project constants; unexpected axiom dependencies: {rejected}."

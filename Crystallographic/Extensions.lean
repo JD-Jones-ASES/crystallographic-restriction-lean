@@ -13,14 +13,12 @@ and recurse on `2 * n - (p - 1)`.  This remainder is smaller than `p - 1`, so `p
 cannot divide the previously constructed integer; multiplication by `p` preserves
 squarefreeness and adds exactly `p - 1` to `psi`.
 
-Consequently the inclusions and coincidences among the finite-order spectra are exact:
-for positive dimensions `N` and `M`, inclusion is equivalent to `N / 2 ≤ M / 2`, and
-equality is equivalent to `N / 2 = M / 2`.  Thus every positive even dimension adds
-an order, already an odd squarefree one.
+Consequently, for positive dimensions `N` and `M`, `finiteOrders N ⊆ finiteOrders M` iff
+`N / 2 ≤ M / 2`, and equality iff `N / 2 = M / 2`; every positive even dimension adds an odd
+squarefree order.
 
-The surjectivity statement and the odd squarefree witnesses are Proposition 3(2)
-and its proof in Bamberg--Cairns--Kilminster (2003), p. 207.  The spectrum consequences
-follow from their statement together with the crystallographic restriction.
+The witnesses are those of the proof of Proposition 3(2) of Bamberg–Cairns–Kilminster (2003),
+p. 207; the half-dimension statements follow from it with the restriction and the parity of `ψ`.
 -/
 
 @[expose] public section
@@ -74,7 +72,7 @@ theorem range_psi_internal : Set.range psi = {n : ℕ | Even n} := by
     obtain ⟨m, _, _, _, hpsi⟩ := exists_odd_squarefree_psi_eq_internal k
     exact ⟨m, by omega⟩
 
-/-- Inclusion of the finite-order spectra is completely determined by half the dimension. -/
+/-- For positive dimensions, the finite orders of GL(N, Z) are among those of GL(M, Z) iff N / 2 <= M / 2. -/
 theorem finiteOrders_subset_iff_internal {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     finiteOrders N ⊆ finiteOrders M ↔ N / 2 ≤ M / 2 := by
   rw [finiteOrders_eq_internal hN, finiteOrders_eq_internal hM]
@@ -88,7 +86,7 @@ theorem finiteOrders_subset_iff_internal {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     obtain ⟨k, hk⟩ := even_psi_internal m
     exact ⟨hm.1, by have := hm.2; omega⟩
 
-/-- Two positive dimensions have the same spectrum exactly when their integer halves agree. -/
+/-- Two positive dimensions have the same finite orders iff their integer halves agree. -/
 theorem finiteOrders_eq_iff_internal {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     finiteOrders N = finiteOrders M ↔ N / 2 = M / 2 := by
   constructor

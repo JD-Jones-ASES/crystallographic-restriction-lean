@@ -13,3 +13,4 @@ public import Crystallographic.Erratum
 public import Crystallographic.SL
 public import Crystallographic.Extensions
 public import Crystallographic.InvariantForm
+public import Crystallographic.DetNegOne

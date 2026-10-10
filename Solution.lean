@@ -221,4 +221,21 @@ theorem exists_integral_posDef_isometry_iff {N m : ℕ} (hN : 0 < N) (hm : 0 < m
             (A : Matrix (Fin N) (Fin N) ℤ) = Q) ↔ psi m ≤ N :=
   exists_integral_posDef_isometry_iff_internal hN hm
 
+theorem exists_orderOf_eq_det_neg_one_iff {N m : ℕ} (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1) ↔
+      Even m ∧ psi m + 1 ≤ N :=
+  exists_orderOf_eq_det_neg_one_iff_internal hm
+
+theorem isLeast_dimension_det_neg_one {m : ℕ} (hm : Even m) (h0 : 0 < m) :
+    IsLeast {N : ℕ | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1} (psi m + 1) :=
+  isLeast_dimension_det_neg_one_internal hm h0
+
+theorem exists_orderOf_eq_det_neg_one_iff_rat {N m : ℕ} (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℚ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℚ).det = -1) ↔
+      Even m ∧ psi m + 1 ≤ N :=
+  exists_orderOf_eq_det_neg_one_iff_rat_internal hm
+
 end Crystallographic

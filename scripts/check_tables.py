@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Standard-library replay of the tables in Challenge.lean.
 
-Two independent computations of Hiller's additive totient psi (through the prime factorization, and
+Two independent computations of the additive totient psi (Bamberg-Cairns-Kilminster 2003, p. 202) (through the prime factorization, and
 through the exact prime-power divisors), the sets {m >= 1 : psi(m) <= N} for N = 1..12 computed with the
 bound m <= 2^(N+1) and again by brute force to 10^5, the largest element of each, and the comparison
 against the set literals of the theorems finiteOrders_<N> and the values of isGreatest_finiteOrders_<N> in

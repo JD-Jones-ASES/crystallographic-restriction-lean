@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "The crystallographic restriction in every dimension: for N, m >= 1, GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
+  name: "The crystallographic restriction in every dimension: for N, m >= 1, GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the tables for N <= 12, the least dimension of each order, the determinant -1 threshold psi(m) + 1, and the same over Q"
   description: >-
     A Lean 4 development of the crystallographic restriction in every dimension. For a positive integer m
     let psi(m) be the sum of phi(p^k) over the prime powers p^k exactly dividing m, except that the prime
@@ -28,18 +28,22 @@ project:
     3080, 3960, 4620, 5040 (psi = 24), which rows 20, 22 and 24 of Table 1 of Bamberg-Cairns-Kilminster
     omit, are checked with their least dimensions. The same equivalence holds in SL(N, Z) for N >= 2 (an
     element of odd order has determinant 1; the block for 2^k, k >= 2, has even size and determinant 1; -A
-    keeps the determinant in even dimension), and SL(1, Z) is trivial. The development also formalizes
-    BCK Proposition 3(2), including odd squarefree witnesses for every even value of psi; exact spectrum
-    inclusion and equality by half-dimension; and an integral symmetric positive definite form preserved
-    by every finite-order matrix, positive definite also after casting to R. Thus the same psi criterion
-    is realized by isometries of suitable integral positive definite forms. The hypotheses N >= 1 and m >= 1 are
+    keeps the determinant in even dimension), and SL(1, Z) is trivial. Every even number is psi(m) for an
+    odd squarefree m (Proposition 3(2) of Bamberg-Cairns-Kilminster and its proof), so for N, M >= 1 the
+    finite orders of GL(N, Z) are among those of GL(M, Z) iff N / 2 <= M / 2 (integer division); every
+    element of finite order m of GL(N, Z) preserves the symmetric integral form sum_{k<m} (A^k)^T A^k,
+    positive definite on integer and real vectors, so psi(m) <= N is also the condition for an element of
+    order m of GL(N, Z) preserving a positive definite integral form; and GL(N, Z) has an element of order
+    m >= 1 and determinant -1 iff m is even and psi(m) + 1 <= N, so the least such dimension is psi(m) + 1
+    for even m (also over Q). The hypotheses N >= 1 and m >= 1 are
     necessary and explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. The
     theorem is the standard description of the finite orders of integer matrices, used in the crystallography
     of higher-dimensional lattices and quasicrystals and in integral representation theory; Mathlib's
     docs/1000.yaml (Q3527223) and mathlib4 issue #6091 (item 60) list it unformalized, and as of 2026-10-09 no
     formalization in every dimension, in either direction, was located in the registry, Mathlib, the Lean
     repositories searched, the Isabelle AFP or arXiv. Not claimed: priority for the two- and three-dimensional
-    cases (public Lean proofs of the case N = 2 exist), the wallpaper or space groups, or classification of full isometry groups.
+    cases (public Lean proofs of the case N = 2 exist), the wallpaper or space groups, the isometry group of a
+    given lattice or form, or integral conjugacy.
   authors: ["JD Jones"]
   responsible_maintainers: ["JD Jones"]
   license: "MIT"
@@ -53,7 +57,7 @@ sources:
     authors: ["John Bamberg", "Grant Cairns", "Devin Kilminster"]
     id: "doi:10.1080/00029890.2003.11919956"
     type: "paper"
-    location: "The American Mathematical Monthly 110 (2003), no. 3, 202-209 (JSTOR 3647934): p. 202 (Ord_n, the finite orders of GL(n, Z); the definition of psi with psi(2) = 0 and psi(1) = 0; Theorem 1, Ord_n = {m in N | psi(m) <= n}); p. 203 (psi is even, so Ord_{2k+1} = Ord_{2k}); p. 204 (Table 1, the rows psi^{-1}{n} for even n <= 24); p. 207 (Proposition 3(2) and its odd squarefree witness construction). The text read is the authors' PDF at cage.ugent.be, which carries the Monthly's page numbers."
+    location: "The American Mathematical Monthly 110 (2003), no. 3, 202-209 (JSTOR 3647934): p. 202 (Ord_n, the finite orders of GL(n, Z); the definition of psi with psi(2) = 0 and psi(1) = 0; Theorem 1, Ord_n = {m in N | psi(m) <= n}); p. 203 (psi is even, so Ord_{2k+1} = Ord_{2k}); p. 204 (Table 1, the rows psi^{-1}{n} for even n <= 24); p. 207 (Proposition 3(2), psi^{-1}{n} nonempty for every even n >= 2, and its proof by distinct odd primes; psi maps N onto the even nonnegative integers). The text read is the authors' PDF at cage.ugent.be, which carries the Monthly's page numbers."
     relationship: "formalizes"
     author_endorsement: "not-contacted"
     note: >-
@@ -64,11 +68,12 @@ sources:
       by the tables for N = 1, ..., 12. The source states Theorem 1 without proof, citing Vaidyanathaswamy
       (1928) for it and Kuzmanovich-Pavlichenkov (2002) for a proof; the proof here (the minimal polynomial
       over Q is a product of distinct cyclotomic polynomials, psi <= phi and additivity; for sufficiency,
-      multiplication by a root on Z[X]/(Phi_{p^k}) and block sums) is the standard argument and is not
-      taken from a proof source read during the initial development. The pre-submission consult later
-      recovered both original 1928 papers and verified the correspondence directly (see SOURCES.md).
-      Proposition 3(2), p. 207, and its proof supply the odd squarefree witnesses for every even value
-      of psi, now formalized together with exact spectrum inclusion and equality consequences.
+      multiplication by a root on Z[X]/(Phi_{p^k}) and block sums) is the standard argument, the cyclotomic
+      route of Vaidyanathaswamy's notes (the next two entries). Proposition 3(2) and its proof (p. 207) are
+      formalized as exists_odd_squarefree_psi_eq and, with the parity of p. 203, as range_psi;
+      finiteOrders_subset_iff, finiteOrders_eq_iff and exists_new_odd_squarefree_order are derived from
+      them with Theorem 1; the remark of p. 202 that Ord_n is the set of orders of lattice symmetries is
+      formalized for integral forms as exists_integral_posDef_isometry_iff.
       Rows n = 20, 22 and 24 of Table 1 omit their values
       above 2000 (2520; 2310; 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040; the largest printed
       entry is 1980); these values of psi and the least dimensions they give are theorems here.
@@ -76,29 +81,41 @@ sources:
     authors: ["R. Vaidyanathaswamy"]
     id: "doi:10.1112/jlms/s1-3.2.121"
     type: "paper"
-    location: "Journal of the London Mathematical Society s1-3 (1928), no. 2, 121-124"
+    location: "Journal of the London Mathematical Society s1-3 (1928), no. 2, 121-124: p. 122 (section 1, the companion matrix; the matrices up to integral conjugacy left open), pp. 122-123 (section 2, equations (2) and (3)), p. 123 (section 3). The text read is the scan of the printed volume at the Central University Library, Iasi (dspace.bcu-iasi.ro, handle 123456789/43233)."
     relationship: "background"
     author_endorsement: "n/a"
     note: >-
-      Read in full from the original 1928 volume in the Central University Library, Iasi,
-      https://dspace.bcu-iasi.ro/handle/123456789/43233 (PDF pages 131-134). Companion matrices on
-      p. 122; cyclotomic characteristic-polynomial and dimension/LCM criterion and block construction
-      on pp. 122-123. Its p. 123 omission of order 6 in dimension 2 is explicitly corrected in the
-      later note's p. 272 footnote. The explicit additive-totient threshold is in the next entry.
+      In the 1928 vocabulary the order of a matrix is its dimension and its period is its order. p. 122:
+      the companion matrix realizes any monic integer polynomial. pp. 122-123: Omega^r = 1 iff the
+      invariant factors are linear and the latent roots are r-th roots of unity; the characteristic
+      polynomial is then a product of cyclotomic factors P_d^x with d | r, the period is exactly r iff the
+      d have least common multiple r, the dimension is the sum of x phi(d), and block sums of companion
+      matrices realize every solution. p. 123: finitely many periods in each dimension; its list for
+      dimension 2 omits the period 6, corrected in a footnote on p. 272 of the next entry. The proofs here
+      take the same route; nothing is transcribed from it.
   - title: "On the Possible Periods of Integer-Matrices"
     authors: ["R. Vaidyanathaswamy"]
     id: "doi:10.1112/jlms/s1-3.4.268"
     type: "paper"
-    location: "Journal of the London Mathematical Society s1-3 (1928), no. 4, 268-272"
+    location: "Journal of the London Mathematical Society s1-3 (1928), no. 4, 268-272: p. 268 (Theorem I, condition (2)), p. 269 (section 2; Lemma I), p. 270 (Lemma II; Theorem II), p. 271 (equality in (4) only for 3 and 2^2; the period 2r from an odd period r), p. 272 (section 5: the growth with the dimension, each r > 2 a primitive period of the n given by (7), Theorems III-V, the footnote). The text read is the same scan."
     relationship: "background"
     author_endorsement: "n/a"
     note: >-
-      Read in full from the same original volume (PDF pages 278-282). Theorem I, p. 268, is the direct
-      original statement of the exact additive-totient threshold; proof pp. 269-271. Theorem II,
-      pp. 270-271, minimizes the totient sum for fixed LCM (the isolated order 2 must be handled
-      separately). Theorem III, p. 272, gives even-to-odd stability; its footnote corrects the earlier
-      note. Theorems IV-V give coprime multiplicativity and prime-power decomposition. See SOURCES.md
-      for exact page correspondence and boundary conventions.
+      Theorem I, p. 268: for r = 2^m p_1^{a_1} ... p_l^{a_l} (distinct odd primes p_i), an integer matrix
+      of dimension n and period r exists iff phi(2^m) + phi(p_1^{a_1}) + ... + phi(p_l^{a_l}) <= n when
+      m > 1, and phi(p_1^{a_1}) + ... + phi(p_l^{a_l}) <= n when m = 0 or 1: that is, psi(r) <= n, the
+      statement of exists_orderOf_eq_iff and of Theorem 1 of Bamberg-Cairns-Kilminster, who cite this
+      note and the previous one for it. The proof (pp. 269-271) exhibits solutions of the equations of the
+      previous entry and bounds the sum of phi(d_i) below over distinct d_i != 1 with least common multiple
+      r (Theorem II, p. 270, which read literally fails at r = 2, where that minimum is phi(2) = 1;
+      isLeast_dimension treats m = 2 apart). p. 271: the product of the totients of distinct prime powers
+      other than 2 equals their sum only for 3 and 4 (used in PROOF.md section 12), and an odd period r
+      gives the period 2r in the same dimension (exists_orderOf_eq_two_mul). p. 272: a period of
+      dimension n is one of every larger dimension (finiteOrders_mono); no odd dimension n >= 3 has a
+      period that n - 1 lacks (Theorem III; finiteOrders_succ_of_even); each r > 2 is first a period in
+      dimension psi(r) (isLeast_dimension); Theorems IV and V describe the periods new in dimension n
+      through prime powers; a footnote corrects p. 123 of the previous entry (dimension 2 has the periods
+      2, 3, 4 and 6).
   - title: "The crystallographic restriction in higher dimensions"
     authors: ["H. Hiller"]
     id: "doi:10.1107/S0108767385001180"
@@ -109,10 +126,8 @@ sources:
     note: >-
       An independent rediscovery in the lattice form: m is the order of an element of the point group of
       an n-dimensional space group iff Phi(m) <= n, for Hiller's additive totient Phi, with a table of
-      the allowable orders in dimensions <= 23. Only the abstract was read; the exact small-argument
-      conventions for Phi have not been independently checked. A public scan was indexed but failed
-      to download in the consult. The full-text caveat remains;
-      Bamberg-Cairns-Kilminster cite its Proposition 2.2 for their formula (1) and report its computation of
+      the allowable orders in dimensions <= 23. Only the abstract was read, so Phi is not compared with
+      psi at 1 and 2; Bamberg-Cairns-Kilminster cite its Proposition 2.2 for their formula (1) and report its computation of
       Ord_n minus Ord_{n-1} for n <= 22. Nothing from it is formalized.
   - title: "Finite Groups of Matrices Whose Entries Are Integers"
     authors: ["James Kuzmanovich", "Andrey Pavlichenkov"]
@@ -124,6 +139,16 @@ sources:
     note: >-
       The expository proof that Bamberg-Cairns-Kilminster cite for Theorem 1. Only the abstract was read;
       nothing from it is formalized.
+  - title: "Bounds for the orders of the finite subgroups of G(k)"
+    authors: ["Jean-Pierre Serre"]
+    id: "https://arxiv.org/abs/1011.0346"
+    type: "paper"
+    location: "Group Representation Theory (eds. M. Geck, D. Testerman, J. Thevenaz), EPFL Press, Lausanne, 2007, 405-450; the text read is arXiv:1011.0346v1, Lecture I, sections 1.3.1 and 1.3.2 (a finite subgroup of GL_n(Q) stabilizes a lattice and preserves a positive definite quadratic form with integral coefficients, the sum of the transforms of x_1^2 + ... + x_n^2), arXiv p. 5"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      The construction of exists_integral_invariant_posDef: for A in GL(N, Z) of order m the sum of
+      (A^k)^T A^k over k < m is already integral. Background only.
   - title: "A080737: a(1) = a(2) = 0; for n > 2, the least dimension of a lattice possessing a symmetry of order n"
     authors: ["N. J. A. Sloane"]
     id: "https://oeis.org/A080737"
@@ -223,7 +248,7 @@ related_formalizations:
 
 status:
   scope: >-
-    Fifty-three compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
+    Fifty-six compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
     a hole. The arithmetic of psi (zero set, prime powers, additivity, psi <= phi, parity, the divisor-sum
     form, m <= 2^(psi(m) + 1)); necessity, psi(orderOf A) <= N for every element of GL(N, Z); sufficiency
     for N >= 1, m >= 1, psi(m) <= N; the equivalence; finiteOrders N = {m | 0 < m and psi m <= N} for
@@ -232,15 +257,17 @@ status:
     finiteOrders N for even N >= 2; every finite order is at most 2^(N + 1) and the set is finite; the
     twelve tables N = 1, ..., 12 as explicit sets; the maxima in dimensions 1, 2, 4, 6, 8, 10, 12; the
     values psi(2520) = 20, psi(2310) = 22 and psi = 24 at nine further integers, with the least dimensions
-    20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Also formalized: odd squarefree witnesses for every even value of psi;
-    the image of psi; exact spectrum inclusion and equality by half-dimension; an odd squarefree new
-    order at every positive even dimension; an integral symmetric positive definite invariant form
-    for each finite-order matrix, including positive definiteness after casting to R; and the same
-    psi criterion realized by isometries of suitable integral positive definite forms. The determinant
-    -1 and minimum rational conjugacy results of MATHEMATICAL-EXTENSIONS.md are handwritten and
-    explicitly outside the compared Lean scope. Not claimed:
-    priority for the two- and three-dimensional cases (public Lean proofs of the case N = 2 exist); the
-    wallpaper or space groups; classification of full isometry groups. The intentional placeholders of
+    20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Also: every
+    even number is psi(m) for an odd squarefree m, and the values of psi are the even numbers; for
+    N, M >= 1, finiteOrders N is contained in (equal to) finiteOrders M iff N / 2 <= M / 2 (N / 2 = M / 2);
+    an odd squarefree order of dimension 2n + 2 that 2n + 1 lacks; a symmetric integral form, positive
+    definite over Z and R, preserved by each element of finite order; for N, m >= 1, an element of order
+    m preserving a positive definite integral form iff psi(m) <= N; and, for m >= 1, an element of order m
+    and determinant -1 in GL(N, Z) iff m is even and psi(m) + 1 <= N, with the least dimension psi(m) + 1
+    for even m, also over Q. The count of rational conjugacy classes at the least dimension (PROOF.md
+    section 12) is a paper proof, not compared. Not claimed: priority for the two- and three-dimensional
+    cases (public Lean proofs of the case N = 2 exist); the wallpaper or space groups; the isometry group
+    of a given lattice or form; integral conjugacy. The intentional placeholders of
     Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -513,6 +540,21 @@ status:
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_det_neg_one_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isLeast_dimension_det_neg_one"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_det_neg_one_iff_rat"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
 
 automation:
   methods:
@@ -530,18 +572,21 @@ automation:
         proofs use Mathlib's minimal and cyclotomic polynomials over Q, AdjoinRoot with its power basis and
         the left-multiplication matrix for the blocks, Nat.recOnPosPrimePosCoprime for the induction over the
         factorization, and decide +kernel over a structurally recursive trial-division computation of psi
-        (proved equal to psi) for the tables and the values beyond dimension 12.
+        (proved equal to psi) for the tables and the values beyond dimension 12. The odd squarefree
+        witnesses use Mathlib's Bertrand postulate; the invariant form is the Gram sum of the powers of the
+        matrix; the determinant -1 theorem uses that form and a Bezout identity for the cyclotomic factor
+        X + 1.
       spend_usd: "not tracked"
     - method: "agent"
-      models: ["GPT-6 Astra (OpenAI)"]
-      framework: "ChatGPT with parallel review and proof-development agents"
+      models: ["GPT-6 Pro (OpenAI)"]
+      framework: "ChatGPT"
       tool_setup: >-
-        A pre-submission consult inspected the original commit 3b1c237f18122450e1ede1e9f11ea099dd7f28ba,
-        read both recovered 1928 originals, corrected source attribution, and added Extensions.lean
-        and InvariantForm.lean with seven compared theorems. It separately supplied the explicitly
-        unformalized mathematical derivations in MATHEMATICAL-EXTENSIONS.md and an independent finite
-        enumeration script. The pinned Lean and Mathlib versions were retained; the expanded build,
-        axiom audit and comparison checks were rerun. See VERIFICATION.md for environment details.
+        A pre-submission consult on 2026-10-10 reviewed the repository and contributed the seven statements
+        of Crystallographic/Extensions.lean and Crystallographic/InvariantForm.lean with their Lean proofs,
+        the paper proofs of the determinant -1 threshold and of the class count of PROOF.md section 12 with
+        scripts/check_minimal_classes.py, and the page references to Vaidyanathaswamy's two 1928 notes;
+        Claude re-derived and verified these, proved the determinant -1 threshold in Lean, integrated them
+        and wrote the final documents.
       spend_usd: "not tracked"
 
 fidelity:
@@ -555,27 +600,35 @@ fidelity:
     its rows n <= 12. The values beyond dimension 12 (psi(2520) = 20, psi(2310) = 22, nine values with
     psi = 24) are not in the source: they are the values above 2000 that rows 20, 22, 24 of its Table 1
     omit, found while checking the table, and are stated here as values of psi and as least dimensions.
-    BCK Proposition 3(2) and its proof already supply the odd squarefree witnesses added in the consult;
-    the exact spectrum inclusion/equality statements are consequences. The invariant-form theorems
-    additionally formalize the standard finite cyclic averaging construction, with an existential
-    integral form whose real cast is positive definite. They do not classify the automorphism group
-    of a specified form. The determinant -1 criterion and rational conjugacy class counts in
-    MATHEMATICAL-EXTENSIONS.md are not compared theorems and are not claimed Lean-verified.
-    GL(N, Z) is Matrix.GeneralLinearGroup (Fin N) Z, the units of the matrix ring, and orderOf is
-    Mathlib's order of a unit. The equivalence over Q, the dimension-0 and monotonicity statements, the
-    block of size phi(n) for every n, the arithmetic lemmas on psi and the SL(N, Z) version are additions of
-    this development (the source speaks of GL(n, Z) only).
+    Proposition 3(2) of the source is stated for even n >= 2; exists_odd_squarefree_psi_eq also covers 0
+    (m = 1) and records the odd squarefree witness of its proof. finiteOrders_subset_iff,
+    finiteOrders_eq_iff and exists_new_odd_squarefree_order are not stated in the source; they follow
+    from Theorem 1, the parity of p. 203 and Proposition 3(2). The source's remark (p. 202) that Ord_n is
+    the set of orders of lattice symmetries is formalized for integral forms:
+    exists_integral_posDef_isometry_iff chooses the form with the matrix (the Gram sum of the powers,
+    Serre's construction without division); positive definiteness is Mathlib's Matrix.PosDef over Z and
+    again over R (equivalent for a symmetric integer matrix; IsSymm is part of PosDef); the form's
+    unimodularity, the isometry group of a given form and integral conjugacy are not addressed. The
+    determinant -1 threshold is not in the sources; its necessity goes through the invariant form and
+    the cyclotomic factor X + 1 of the minimal polynomial. The count of rational conjugacy classes at the
+    least dimension (PROOF.md section 12) is a paper proof outside the Lean interface. GL(N, Z) is
+    Matrix.GeneralLinearGroup (Fin N) Z, the units of the matrix ring, and orderOf is Mathlib's order of a
+    unit. The equivalence over Q, the dimension-0 and monotonicity statements, the block of size phi(n)
+    for every n, the arithmetic lemmas on psi, the SL(N, Z) version, the half-dimension statements, the
+    invariant form and the determinant -1 threshold are additions of this development (the source speaks
+    of GL(n, Z) only).
 
 review:
   status: "self-assessed"
   notes: >-
     No independent human expert review and no source-author endorsement is claimed; AI agents developed
-    the proofs and audited them in separate passes, the statements were checked against the authors' PDF of
-    Bamberg-Cairns-Kilminster (pp. 202-204, and p. 207 for the added surjectivity proof). Both original
-    Vaidyanathaswamy notes were read during the consult; Hiller and Kuzmanovich-Pavlichenkov remain
-    unread in full (SOURCES.md). psi, the twelve tables and the maxima were recomputed
-    outside Lean by two independent routes and against OEIS A080737, A080738, A080740, A005417 and A152455.
-    Mechanical correctness and agreement of formal statements do not establish priority or significance.
+    the proofs and audited them in separate passes; the statements were checked against the authors' PDF of
+    Bamberg-Cairns-Kilminster (pp. 202-204 and 207) and the printed pages of Vaidyanathaswamy's two 1928
+    notes (pp. 121-124 and 268-272), Hiller and Kuzmanovich-Pavlichenkov being read in abstract only;
+    psi, the twelve tables and the maxima were recomputed outside Lean by two independent routes and
+    against OEIS A080737, A080738, A080740, A005417 and A152455, and the class count of PROOF.md section 12
+    and the determinant -1 threshold by exhaustive enumeration for orders up to 500. Mechanical
+    correctness and agreement of formal statements do not establish priority or significance.
 
 alignment:
   namespace: "Crystallographic"
@@ -811,43 +864,58 @@ alignment:
       status: "proved"
       note: "210 in GL(12, ℤ)."
 
-    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 207 (Proposition 3(2) and its proof)"
       lean: "Crystallographic.exists_odd_squarefree_psi_eq"
       module: "Solution"
       status: "proved"
-      note: "Every even value is attained by a positive odd squarefree order (BCK Proposition 3(2) and its proof)."
-    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      note: "Every even number is ψ(m) for some odd squarefree m ≥ 1."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 207 (ψ maps ℕ onto the even nonnegative integers) and p. 203 (parity)"
       lean: "Crystallographic.range_psi"
       module: "Solution"
       status: "proved"
-      note: "The image of psi is exactly the even natural numbers."
-    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      note: "The values of ψ are the even numbers."
+    - source: "this development (from Bamberg-Cairns-Kilminster 2003, Theorem 1, p. 203 and Proposition 3(2))"
       lean: "Crystallographic.finiteOrders_subset_iff"
       module: "Solution"
       status: "proved"
-      note: "In positive dimensions, spectrum inclusion is equivalent to comparison of integer half-dimensions."
-    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      note: "For N, M ≥ 1, finiteOrders N ⊆ finiteOrders M iff N / 2 ≤ M / 2."
+    - source: "this development (from Bamberg-Cairns-Kilminster 2003, Theorem 1, p. 203 and Proposition 3(2))"
       lean: "Crystallographic.finiteOrders_eq_iff"
       module: "Solution"
       status: "proved"
-      note: "Two positive dimensions have identical finite-order spectra exactly when their integer halves agree."
-    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      note: "For N, M ≥ 1, finiteOrders N = finiteOrders M iff N / 2 = M / 2."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 203 (Ord_n minus Ord_{n-1} = ψ^{-1}{n} for even n) and p. 207 (Proposition 3(2) and its proof)"
       lean: "Crystallographic.exists_new_odd_squarefree_order"
       module: "Solution"
       status: "proved"
-      note: "An odd squarefree order first appears at each positive even dimension."
-    - source: "Standard finite-group averaging, specialized to cyclic groups; this development"
+      note: "GL(2n + 2, ℤ) has an odd squarefree finite order that GL(2n + 1, ℤ) lacks."
+    - source: "Serre 2007, section 1.3.2 (arXiv:1011.0346, p. 5), for a cyclic group over ℤ; this development"
       lean: "Crystallographic.exists_integral_invariant_posDef"
       module: "Solution"
       status: "proved"
-      note: "Every finite-order integral matrix preserves an integral symmetric positive definite form, also positive definite on real vectors."
-    - source: "Standard finite-group averaging, specialized to cyclic groups; this development"
+      note: "Every element of finite order of GL(N, ℤ) preserves a symmetric integral form, positive definite on integer and real vectors."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Ord_n as the orders of lattice symmetries; Theorem 1), for integral forms"
       lean: "Crystallographic.exists_integral_posDef_isometry_iff"
       module: "Solution"
       status: "proved"
-      note: "The crystallographic criterion is realized by an isometry of a suitable positive definite integral form in the same dimension."
+      note: "For N, m ≥ 1: an element of order m of GL(N, ℤ) preserving a positive definite integral form exists iff ψ(m) ≤ N."
+    - source: "this development"
+      lean: "Crystallographic.exists_orderOf_eq_det_neg_one_iff"
+      module: "Solution"
+      status: "proved"
+      note: "For m ≥ 1, GL(N, ℤ) has an element of order m and determinant −1 iff m is even and ψ(m) + 1 ≤ N."
+    - source: "this development"
+      lean: "Crystallographic.isLeast_dimension_det_neg_one"
+      module: "Solution"
+      status: "proved"
+      note: "For even m ≥ 1, the least dimension with an element of order m and determinant −1 is ψ(m) + 1."
+    - source: "this development"
+      lean: "Crystallographic.exists_orderOf_eq_det_neg_one_iff_rat"
+      module: "Solution"
+      status: "proved"
+      note: "The same classification in GL(N, ℚ)."
 
 acknowledgements: >-
   Vaidyanathaswamy, Hiller, Kuzmanovich and Pavlichenkov, and Bamberg, Cairns and Kilminster for the theorem, its
-  additive totient and the tables; the OEIS editors for A080737, A080738, A080740, A005417 and A152455; Lean, Mathlib,
+  additive totient and the tables; Serre for the invariant form; the OEIS editors for A080737, A080738, A080740, A005417 and A152455; Lean, Mathlib,
   Comparator, lean4export, NanoDa, and the Palomar policy and verifier projects. AI assistance is disclosed above.

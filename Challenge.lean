@@ -9,10 +9,11 @@ For a positive integer `m`, let `ψ(m)` be the sum of `φ(pᵏ)` over the prime 
 dividing `m`, except that the prime power `2` contributes `0` (`φ` is Euler's totient). So
 `ψ(1) = ψ(2) = 0`, `ψ(3) = ψ(4) = ψ(6) = 2`, `ψ(5) = ψ(8) = ψ(10) = ψ(12) = 4`, `ψ(7) = ψ(9) = 6`, and
 `ψ(ab) = ψ(a) + ψ(b)` for coprime `a`, `b` (OEIS A080737). The crystallographic restriction in every
-dimension (Vaidyanathaswamy 1928; independently Hiller 1985, with the additive totient — his `Φ` — and a
-table to dimension 23; a proof in Kuzmanovich–Pavlichenkov 2002; Theorem 1 of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of
-invertible integer `N × N` matrices has an element of order `m ≥ 1` if and only if `ψ(m) ≤ N`. In
-dimensions two and three this is the classical restriction: the finite orders are `1, 2, 3, 4, 6`.
+dimension (Vaidyanathaswamy 1928, Theorem I of his second note; independently Hiller 1985, with an
+additive totient `Φ` and a table to dimension 23; a proof in Kuzmanovich–Pavlichenkov 2002; Theorem 1
+of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of invertible integer `N × N`
+matrices has an element of order `m ≥ 1` if and only if `ψ(m) ≤ N`. In dimensions two and three this
+is the classical restriction: the finite orders are `1, 2, 3, 4, 6`.
 
 This file states, and `Solution.lean` proves (kernel-only):
 
@@ -35,10 +36,15 @@ This file states, and `Solution.lean` proves (kernel-only):
 * beyond dimension 12: the eleven orders `2520`, `2310`, `2184`, …, `5040` with `ψ = 20, 22, 24`, hence
   least dimensions `20`, `22`, `24` — the values above `2000` missing from rows `20`, `22`, `24` of Table 1
   of Bamberg–Cairns–Kilminster;
-* every even value of `ψ` has a positive odd squarefree witness; exact inclusion and equality of the
-  spectra in positive dimensions, determined by integer half-dimensions;
-* an integral symmetric positive definite form preserved by each finite-order integral matrix,
-  positive definite also on real vectors, and the resulting order criterion for suitable lattice forms.
+* every even number is `ψ(m)` for an odd squarefree `m ≥ 1`, so the values of `ψ` are the even numbers;
+  for `N, M ≥ 1` the finite orders of `GL(N, ℤ)` are among those of `GL(M, ℤ)` iff `N / 2 ≤ M / 2`, and
+  the same iff `N / 2 = M / 2`; `GL(2n + 2, ℤ)` has an odd squarefree finite order that `GL(2n + 1, ℤ)`
+  lacks;
+* every element of finite order of `GL(N, ℤ)` preserves a symmetric integral form, positive definite on
+  integer and on real vectors; so for `N, m ≥ 1` some element of order `m` preserves a positive definite
+  integral form iff `ψ(m) ≤ N`;
+* determinant `−1`: for `m ≥ 1`, `GL(N, ℤ)` has an element of order `m` and determinant `−1` iff `m` is
+  even and `ψ(m) + 1 ≤ N`, so the least such dimension is `ψ(m) + 1` for even `m`; the same over `ℚ`.
 
 Conventions: `orderOf` is Mathlib's (`0` at infinite order); `Matrix.GeneralLinearGroup (Fin N) ℤ`
 is the group of units of the matrix ring `Matrix (Fin N) (Fin N) ℤ`; `Nat.totient` is `φ`;
@@ -50,10 +56,10 @@ prime divisors; sets of natural numbers are `Set ℕ` literals.
 
 namespace Crystallographic
 
-/-- The additive totient `ψ` of Bamberg–Cairns–Kilminster (2003), p. 202: the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
-`m`, except that the prime power `2` (that is, `p = 2` with exponent `1`) contributes `0`. So
-`ψ(0) = ψ(1) = ψ(2) = 0`, `ψ(pᵏ) = φ(pᵏ)` for every other prime power, and `ψ(ab) = ψ(a) + ψ(b)`
-for coprime `a`, `b` (OEIS A080737). -/
+/-- The additive totient `ψ` (Bamberg–Cairns–Kilminster 2003, p. 202; OEIS A080737): the sum of `φ(pᵏ)`
+over the prime powers `pᵏ` exactly dividing `m`, except that the prime power `2` (that is, `p = 2` with
+exponent `1`) contributes `0`. So `ψ(0) = ψ(1) = ψ(2) = 0`, `ψ(pᵏ) = φ(pᵏ)` for every other prime power,
+and `ψ(ab) = ψ(a) + ψ(b)` for coprime `a`, `b`. -/
 def psi (m : ℕ) : ℕ :=
   ∑ p ∈ m.primeFactors,
     if p ^ m.factorization p = 2 then 0 else Nat.totient (p ^ m.factorization p)
@@ -253,29 +259,31 @@ theorem isGreatest_finiteOrders_ten : IsGreatest (finiteOrders 10) 120 := sorry
 
 theorem isGreatest_finiteOrders_twelve : IsGreatest (finiteOrders 12) 210 := sorry
 
-/-! ### Every even minimum dimension occurs, and integral invariant forms -/
+/-! ### The values of `ψ`, the finite orders by half-dimension, and an invariant form -/
 
-/-- Every even value is attained by a positive odd squarefree order (BCK Proposition 3(2) and its proof). -/
+/-- Every even number is `ψ(m)` for some odd squarefree `m ≥ 1` (Bamberg–Cairns–Kilminster 2003,
+Proposition 3(2) and its proof, p. 207). -/
 theorem exists_odd_squarefree_psi_eq (n : ℕ) :
     ∃ m : ℕ, 0 < m ∧ Odd m ∧ Squarefree m ∧ psi m = 2 * n := sorry
 
-/-- The image of psi is exactly the even natural numbers. -/
+/-- The values of `ψ` are the even numbers. -/
 theorem range_psi : Set.range psi = {n : ℕ | Even n} := sorry
 
-/-- In positive dimensions, spectrum inclusion is equivalent to comparison of integer half-dimensions. -/
+/-- For `N, M ≥ 1`, the finite orders of `GL(N, ℤ)` are among those of `GL(M, ℤ)` iff `N / 2 ≤ M / 2`. -/
 theorem finiteOrders_subset_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     finiteOrders N ⊆ finiteOrders M ↔ N / 2 ≤ M / 2 := sorry
 
-/-- Two positive dimensions have identical finite-order spectra exactly when their integer halves agree. -/
+/-- For `N, M ≥ 1`, `GL(N, ℤ)` and `GL(M, ℤ)` have the same finite orders iff `N / 2 = M / 2`. -/
 theorem finiteOrders_eq_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
     finiteOrders N = finiteOrders M ↔ N / 2 = M / 2 := sorry
 
-/-- An odd squarefree order first appears at each positive even dimension. -/
+/-- `GL(2n + 2, ℤ)` has an odd squarefree finite order that `GL(2n + 1, ℤ)` lacks. -/
 theorem exists_new_odd_squarefree_order (n : ℕ) :
     ∃ m : ℕ, Odd m ∧ Squarefree m ∧
       m ∈ finiteOrders (2 * n + 2) ∧ m ∉ finiteOrders (2 * n + 1) := sorry
 
-/-- Every finite-order integral matrix preserves an integral symmetric positive definite form, also positive definite on real vectors. -/
+/-- Every element of finite order of `GL(N, ℤ)` preserves a symmetric integral form that is positive
+definite on integer and on real vectors. -/
 theorem exists_integral_invariant_posDef {N m : ℕ}
     (A : Matrix.GeneralLinearGroup (Fin N) ℤ) (hm : 0 < m) (hA : orderOf A = m) :
     ∃ Q : Matrix (Fin N) (Fin N) ℤ,
@@ -283,7 +291,8 @@ theorem exists_integral_invariant_posDef {N m : ℕ}
         Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
           (A : Matrix (Fin N) (Fin N) ℤ) = Q := sorry
 
-/-- The crystallographic criterion is realized by an isometry of a suitable positive definite integral form in the same dimension. -/
+/-- For `N, m ≥ 1`: some element of order `m` of `GL(N, ℤ)` preserves a positive definite integral form
+iff `ψ(m) ≤ N`. -/
 theorem exists_integral_posDef_isometry_iff {N m : ℕ} (hN : 0 < N) (hm : 0 < m) :
     (∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
       ∃ Q : Matrix (Fin N) (Fin N) ℤ,
@@ -291,5 +300,26 @@ theorem exists_integral_posDef_isometry_iff {N m : ℕ} (hN : 0 < N) (hm : 0 < m
           ((Int.castRingHom ℝ).mapMatrix Q).PosDef ∧
           Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
             (A : Matrix (Fin N) (Fin N) ℤ) = Q) ↔ psi m ≤ N := sorry
+
+/-! ### Determinant `−1` -/
+
+/-- For `m ≥ 1`, `GL(N, ℤ)` has an element of order `m` and determinant `−1` iff `m` is even and
+`ψ(m) + 1 ≤ N`. -/
+theorem exists_orderOf_eq_det_neg_one_iff {N m : ℕ} (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1) ↔
+      Even m ∧ psi m + 1 ≤ N := sorry
+
+/-- For even `m ≥ 1`, the least dimension with an element of order `m` and determinant `−1` is
+`ψ(m) + 1`. -/
+theorem isLeast_dimension_det_neg_one {m : ℕ} (hm : Even m) (h0 : 0 < m) :
+    IsLeast {N : ℕ | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℤ).det = -1} (psi m + 1) := sorry
+
+/-- The same classification in `GL(N, ℚ)`. -/
+theorem exists_orderOf_eq_det_neg_one_iff_rat {N m : ℕ} (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℚ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℚ).det = -1) ↔
+      Even m ∧ psi m + 1 ≤ N := sorry
 
 end Crystallographic

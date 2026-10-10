@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exhaustively check the handwritten minimum-dimension consequences.
+"""Exhaustively check the least-dimension consequences stated in PROOF.md.
 
 Enumerate all characteristic polynomials of finite-order rational matrices with
 order m and dimension at most psi(m)+1. A polynomial is encoded by the multiset
@@ -8,8 +8,9 @@ including Phi_1 and Phi_2, with dimension, lcm of indices, and determinant sign
 as the state. This enumeration does not assume the classification being checked.
 
 The checks cover m=1,...,500 by default, using only Python's standard library.
-They provide finite sanity checks for MATHEMATICAL-EXTENSIONS.md; they are not
-Lean proofs and do not establish the all-orders assertions by computation.
+They are finite checks of PROOF.md section 12 (the classes at the least dimension, on
+paper) and of the determinant -1 threshold (a theorem of the development); the all-orders
+statements are not established by computation.
 """
 
 import argparse
@@ -177,13 +178,13 @@ def main():
     if args.max_order < 1:
         parser.error("--max-order must be positive")
     total_classes = sum(check_order(m) for m in range(1, args.max_order + 1))
+    print("A finite check; the all-orders statements rest on the proofs in PROOF.md.")
     print(
-        "PASS: orders 1..{}; {} minimum-dimension rational classes; "
-        "all determinant -1 minimum dimensions and constructions agree.".format(
+        "PASS: orders 1..{}; {} least-dimension rational classes; "
+        "all determinant -1 least dimensions and listed polynomials agree.".format(
             args.max_order, total_classes
         )
     )
-    print("Finite external sanity check only; the all-orders arguments are handwritten.")
 
 
 if __name__ == "__main__":
