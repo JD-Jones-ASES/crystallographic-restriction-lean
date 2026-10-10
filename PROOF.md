@@ -27,8 +27,8 @@ additive totient, the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly div
 - `le_two_pow_psi`: every prime power `q ≠ 2` satisfies `q ≤ 2^φ(q)` (`3 ≤ 4`; for `q ≥ 4`, `φ(q) ≥ q/2` and
   `2^(q/2) ≥ q`), and `2 ≤ 2¹`; multiplying over the prime powers of `m`, with the exponent `ψ(m) + [2 ∥ m]` additive on
   coprime factors, gives `m ≤ 2^(ψ(m) + 1)` for `m ≥ 1`.
-- `psi_le_sum_totient` (the covering inequality, used by necessity): if every prime power `pᵏ ∥ m` divides some
-  `d ∈ S`, then `ψ(m) ≤ ∑_{d ∈ S} φ(d)`. Choose such a `d_p` for each prime `p` of `m`; the `p`-term of `ψ(m)` is at most
+- `psi_le_sum_totient_of_zero_notMem` (the covering inequality, used by necessity): if `0 ∉ S` and every prime
+  power `pᵏ ∥ m` divides some `d ∈ S`, then `ψ(m) ≤ ∑_{d ∈ S} φ(d)`. Choose such a `d_p` for each prime `p` of `m`; the `p`-term of `ψ(m)` is at most
   the `p`-term of `ψ(d_p)` (the exponent of `p` in `d_p` is at least that in `m`, `φ(p^·)` is monotone, and the
   `2`-exception only lowers the left side); grouping the primes by their `d`, the terms assigned to one `d` are
   distinct terms of `ψ(d)`, and `ψ(d) ≤ φ(d)`.
@@ -45,7 +45,7 @@ for a prime power `q = pᵏ ∥ m`, if no `d ∈ S` were divisible by `q`, then 
 `d ∣ m`, `q ∣ d` (`Irreducible.coprime_iff_not_dvd`), hence — splitting `X^m − 1 = ∏_{d ∣ m} Φ_d`
 (`Polynomial.prod_cyclotomic_eq_X_pow_sub_one`) — would divide `∏_{d ∣ m/p} Φ_d = X^{m/p} − 1`
 (`IsCoprime.dvd_of_dvd_mul_left`), so `M^{m/p} = 1` (`Polynomial.aeval_eq_zero_of_dvd_aeval_eq_zero`, `minpoly.aeval`)
-and `m ∣ m/p` (`orderOf_dvd_iff_pow_eq_one`), impossible. Then `psi_le_sum_totient` with this `S` gives `ψ(m) ≤ N`.
+and `m ∣ m/p` (`orderOf_dvd_iff_pow_eq_one`), impossible. Then `psi_le_sum_totient_of_zero_notMem` with this `S` (no divisor is `0`) gives `ψ(m) ≤ N`.
 Over `ℤ` (`psi_orderOf_le`): the hom `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))` from `GL(N, ℤ)` to `GL(N, ℚ)`
 is injective, so it preserves `orderOf` (`orderOf_injective`).
 

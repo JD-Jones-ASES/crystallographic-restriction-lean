@@ -20,7 +20,7 @@ definitions character for character (same `import Mathlib`).
 | Module | Lane | Imports | Pinned statements |
 | --- | --- | --- | --- |
 | `Defs` | desk (done) | Mathlib | `psi`, `finiteOrders` |
-| `Psi` | **psi** | Defs | `psi_zero/one/two`, `psi_eq_zero_iff_internal`, `psi_prime_pow_internal`, `psi_mul_internal`, `psi_le_totient_internal`, `even_psi_internal`, `psi_eq_sum_divisors_internal`, `le_two_pow_psi_internal`, `psi_le_sum_totient` |
+| `Psi` | **psi** | Defs | `psi_zero/one/two`, `psi_eq_zero_iff_internal`, `psi_prime_pow_internal`, `psi_mul_internal`, `psi_le_totient_internal`, `even_psi_internal`, `psi_eq_sum_divisors_internal`, `le_two_pow_psi_internal`, `psi_le_sum_totient_of_zero_notMem` |
 | `Necessity` | **necessity** | Psi | `psi_orderOf_le_rat`, `psi_orderOf_le_internal` |
 | `Block` | **block** | Defs | `exists_orderOf_eq_totient_internal`, `exists_orderOf_eq_mul`, `exists_orderOf_eq_of_le`, `exists_orderOf_eq_two_mul`, `orderOf_neg_one_gl` |
 | `Sufficiency` | **sufficiency** | Psi, Block | `exists_orderOf_eq_psi`, `exists_orderOf_eq_internal` |
@@ -46,7 +46,7 @@ coprime `a * b` with `1 < a, b`), `Nat.prod_primeFactors_pow_factorization`, `Na
 each `≥ 2`, the sum is at most the product (induction; the empty product is `1 ≥ 0`). For
 `le_two_pow_psi`: every prime power `q ≠ 2` has `q ≤ 2 ^ φ q` (`q = 3`: `3 ≤ 4`; `q ≥ 4`:
 `φ q ≥ q / 2` and `2 ^ (q/2) ≥ q`), `2 ≤ 2 ^ 1`; multiply over the factorization with the fully
-additive `ψ' = ψ + [2 ∥ m]`, so `m ≤ 2 ^ ψ' m ≤ 2 ^ (ψ m + 1)`. For `psi_le_sum_totient`: pick
+additive `ψ' = ψ + [2 ∥ m]`, so `m ≤ 2 ^ ψ' m ≤ 2 ^ (ψ m + 1)`. For `psi_le_sum_totient_of_zero_notMem`: pick
 `d p ∈ S` for each `p ∈ m.primeFactors`; `m.factorization p ≤ (d p).factorization p`, so the
 `p`-term of `ψ m` is at most the `p`-term of `ψ (d p)` (the `2`-exception only lowers the left side;
 `φ (p ^ ·)` is monotone); regroup by `d` (`Finset.sum_fiberwise_of_maps_to`) and use `ψ d ≤ φ d`.
@@ -69,7 +69,7 @@ Every `d ∣ m` with `q ∣ d` has `cyclotomic d ℚ ∤ f`, hence `IsCoprime (c
 The divisors `d ∣ m` with `¬ q ∣ d` are exactly the divisors of `m / p` (`Nat.factorization`
 comparison or `Nat.dvd_div_iff_mul_dvd`), so `f ∣ X ^ (m / p) - 1`, `M ^ (m / p) = 1`
 (`Polynomial.aeval_eq_zero_of_dvd_aeval_eq_zero`, `minpoly.aeval`), `orderOf A ∣ m / p`
-(`orderOf_dvd_iff_pow_eq_one`), impossible as `0 < m / p < m`. Then `psi_le_sum_totient`. For `ℤ`:
+(`orderOf_dvd_iff_pow_eq_one`), impossible as `0 < m / p < m`. Then `psi_le_sum_totient_of_zero_notMem`. For `ℤ`:
 `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ)).toMonoidHom`, injective (`Units.map_injective`,
 `Matrix.map_injective`, `Int.cast_injective`), and `orderOf_injective`.
 

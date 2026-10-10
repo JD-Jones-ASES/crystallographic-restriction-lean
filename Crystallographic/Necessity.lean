@@ -11,7 +11,7 @@ irreducibles over `ℚ`, so `∏_{d ∈ S} Φ_d ∣ f`, whence `∑_{d ∈ S} φ
 (`Matrix.minpoly_dvd_charpoly`, `Matrix.charpoly_natDegree_eq_dim`). If some prime power `p ^ k`
 exactly dividing `m` divided no `d ∈ S`, then `f` would be coprime to every `Φ_d` with `d ∣ m`,
 `p ^ k ∣ d`, hence would divide `∏_{d ∣ m / p} Φ_d = X ^ (m / p) − 1`, so `A ^ (m / p) = 1`,
-contradicting `orderOf A = m`. Then `psi_le_sum_totient` gives `ψ m ≤ ∑_{d ∈ S} φ d ≤ N`.
+contradicting `orderOf A = m`. Then `psi_le_sum_totient_of_zero_notMem` gives `ψ m ≤ ∑_{d ∈ S} φ d ≤ N`.
 For infinite order `orderOf A = 0` and `ψ 0 = 0`. Over `ℤ`: map to `ℚ` by the injective
 hom `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))`, which preserves `orderOf`.
 Lane: **necessity**.
@@ -91,7 +91,9 @@ theorem psi_orderOf_le_rat {N : ℕ} (A : Matrix.GeneralLinearGroup (Fin N) ℚ)
     rw [Polynomial.natDegree_prod_of_monic _ _ (fun d _ => cyclotomic.monic d ℚ)] at h1
     simp only [natDegree_cyclotomic] at h1
     omega
-  refine le_trans (psi_le_sum_totient ?_) hsum
+  refine le_trans (psi_le_sum_totient_of_zero_notMem ?_ ?_) hsum
+  · intro h0
+    exact absurd (Nat.pos_of_mem_divisors (Finset.mem_filter.1 h0).1) (lt_irrefl 0)
   intro p hp
   have hpp : p.Prime := Nat.prime_of_mem_primeFactors hp
   have hpm : p ∣ m := Nat.dvd_of_mem_primeFactors hp
