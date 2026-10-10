@@ -316,11 +316,4 @@ theorem psi_le_sum_totient_of_zero_notMem {m : ℕ} {S : Finset ℕ} (hS : 0 ∉
     _ = psi d := rfl
     _ ≤ Nat.totient d := psi_le_totient_internal d
 
-/-- The covering inequality: if every prime power `p ^ k` exactly dividing `m` divides some
-`d ∈ S`, then `ψ m ≤ ∑_{d ∈ S} φ d`. (Group the primes of `m` by a chosen `d`; the terms of `ψ m`
-at the primes assigned to `d` are at most the corresponding terms of `ψ d`, and `ψ d ≤ φ d`.) -/
-theorem psi_le_sum_totient {m : ℕ} {S : Finset ℕ}
-    (hcover : ∀ p ∈ m.primeFactors, ∃ d ∈ S, p ^ m.factorization p ∣ d) :
-    psi m ≤ ∑ d ∈ S, Nat.totient d := sorry
-
 end Crystallographic
