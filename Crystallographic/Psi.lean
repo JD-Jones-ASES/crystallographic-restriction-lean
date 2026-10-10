@@ -6,9 +6,8 @@ public import Crystallographic.Defs
 # The arithmetic of `ψ`
 
 Values, additivity on coprime factors, the comparison with `φ`, parity, the divisor-sum form, the
-bound `m ≤ 2^(ψ m + 1)`, and the covering inequality `ψ m ≤ ∑_{d ∈ S} φ d` used by necessity.
-Lane: **psi**. Every statement below is pinned (name, hypotheses, conclusion); helpers may be added
-freely in this file.
+bound `m ≤ 2^(ψ m + 1)`, and the covering inequality `ψ m ≤ ∑_{d ∈ S} φ d` (for `0 ∉ S`) used by
+necessity.
 -/
 
 @[expose] public section

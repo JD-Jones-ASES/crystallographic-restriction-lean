@@ -14,7 +14,6 @@ exactly dividing `m` divided no `d ∈ S`, then `f` would be coprime to every `�
 contradicting `orderOf A = m`. Then `psi_le_sum_totient_of_zero_notMem` gives `ψ m ≤ ∑_{d ∈ S} φ d ≤ N`.
 For infinite order `orderOf A = 0` and `ψ 0 = 0`. Over `ℤ`: map to `ℚ` by the injective
 hom `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))`, which preserves `orderOf`.
-Lane: **necessity**.
 -/
 
 @[expose] public section

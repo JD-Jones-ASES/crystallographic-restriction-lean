@@ -3,7 +3,7 @@ module
 public import Crystallographic.Main
 
 /-!
-# Stretch: the restriction for `SL(N, ℤ)`
+# The restriction for `SL(N, ℤ)`
 
 For `N ≥ 2`, `SL(N, ℤ)` has an element of order `m ≥ 1` iff `ψ m ≤ N`. Necessity: the inclusion
 `SL → GL` (`Matrix.SpecialLinearGroup.toGL`) is an injective hom, so `orderOf` is preserved and
@@ -14,7 +14,7 @@ power is `−1`) and determinant `(−1) ^ (2 ^ j) · 1 = 1` (`det_eq_sign_charp
 `charpoly_leftMulMatrix`, and `minpoly ℤ root = X ^ (2 ^ j) + 1` by `minpoly.unique'`); block sums
 multiply determinants (`Matrix.det_fromBlocks_zero₂₁`); `det (−A) = det A` in even dimension
 (`Matrix.det_neg`), and `ψ m` is even; `−1` in dimension `2` has order `2` and determinant `1`.
-`SL(1, ℤ)` is trivial. Lane: **sl** (stretch).
+`SL(1, ℤ)` is trivial.
 -/
 
 @[expose] public section

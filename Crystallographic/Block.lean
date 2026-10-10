@@ -17,8 +17,6 @@ public import Crystallographic.Defs
   coprime orders multiply (`Commute.orderOf_mul_eq_mul_orderOf_of_coprime`).
 * Padding by an identity block, and the sign: `−A` has order `2u` when `A` has odd order `u` in a
   positive dimension (`orderOf_neg_one`, the two commute, `Nat.Coprime 2 u`).
-
-Lane: **block**. Every statement below is pinned; helpers may be added freely in this file.
 -/
 
 @[expose] public section

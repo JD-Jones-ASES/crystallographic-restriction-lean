@@ -3,7 +3,7 @@
 All forty-six statements of Challenge.lean have proofs. The local build, the axiom audit, the source guard, the
 definition and statement checks, the standard-library replay of the tables, the metadata check, the module-resolution
 check, the elaboration check and Palomar's core-notation audit of the statements pass; `python scripts/verify.py` runs
-them all and ends with `VERIFY: PASS`. The checks below were last run on the tree of the final commit (CONSTANTS_PLACEHOLDER
+them all and ends with `VERIFY: PASS`. The checks below were last run on the tree of the final commit (204
 project constants audited, 48 declarations printed); a build log is evidence for that tree only. Theorems are numbered
 as in `comparator.json`, which is also their order in Challenge.lean. `comparator.json` lists no `definition_names`: a
 name there is a definition hole whose value the Solution supplies; the two definitions here (`psi`, `finiteOrders`) are

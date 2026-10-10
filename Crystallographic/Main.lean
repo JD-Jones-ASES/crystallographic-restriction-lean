@@ -10,7 +10,6 @@ The equivalence, the set of finite orders, the least dimension, the rational ver
 `psi_orderOf_le_rat`; sufficiency maps the integer witness along
 `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))`, injective, so `orderOf` is preserved), parity
 (from `even_psi_internal`), the bound and finiteness (from `le_two_pow_psi_internal`).
-Lane: **main**.
 -/
 
 @[expose] public section

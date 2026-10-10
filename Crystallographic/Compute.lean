@@ -12,8 +12,7 @@ reduces it): `psiAux fuel p m` sums the `ψ`-terms of the prime powers of `m` wh
 the sum is `0`; if `1 < m < p²` then `m` is prime and contributes `m − 1` (or `0` when `m = 2`);
 otherwise, when `p ∣ m`, `p` is prime, `stripPow` removes it (`m = p ^ k * m'`, `p ∤ m'`), the term
 is `φ (p ^ k)` (or `0` when `p ^ k = 2`) and the loop continues at `p + 1` on `m'`; when `p ∤ m`
-the loop continues at `p + 1` on `m`. Lane: **compute** (proves `psiC_eq_psi`; the definitions are
-the desk's and are shared with the **tables** lane, so change them only by agreement).
+the loop continues at `p + 1` on `m`.
 -/
 
 @[expose] public section

@@ -11,7 +11,7 @@ public import Crystallographic.Compute
 (`tbl_chunks12`, chunked to bound the kernel's recursion depth) shows that below `8193` the orders
 with `psiC m ≤ 12` are exactly the `48` members of `tbl_L12`; every table `N ≤ 12` is then cut out
 of that list by a `decide +kernel` over its `48` members (`tbl_table`), and each maximum reads off
-its list. Lane: **tables**.
+its list.
 -/
 
 @[expose] public section

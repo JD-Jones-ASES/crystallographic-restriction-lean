@@ -6,7 +6,7 @@ public import Crystallographic.Block
 # The dimension `0` and monotonicity
 
 `GL(0, ℤ)` is trivial, so its only finite order is `1`; an identity block pads an element of
-`GL(N, ℤ)` to `GL(N', ℤ)` for `N ≤ N'`, so the finite orders grow with the dimension. Desk module.
+`GL(N, ℤ)` to `GL(N', ℤ)` for `N ≤ N'`, so the finite orders grow with the dimension.
 -/
 
 @[expose] public section
@@ -15,7 +15,7 @@ namespace Crystallographic
 
 theorem finiteOrders_zero_internal : finiteOrders 0 = {1} := by
   ext m
-  simp only [finiteOrders, Set.mem_setOf_eq, Set.mem_singleton_iff]
+  simp only [finiteOrders, Set.mem_ofPred_eq, Set.mem_singleton_iff]
   constructor
   · rintro ⟨-, A, hA⟩
     have hA1 : A = 1 := Units.ext (Matrix.ext fun i _ => Fin.elim0 i)
