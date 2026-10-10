@@ -43,6 +43,7 @@ run_cmd do
       `Crystallographic.exists_orderOf_eq_iff_rat, `Crystallographic.finiteOrders_zero,
       `Crystallographic.finiteOrders_mono, `Crystallographic.finiteOrders_succ_of_even,
       `Crystallographic.le_two_pow_of_mem_finiteOrders, `Crystallographic.finiteOrders_finite,
+      `Crystallographic.exists_orderOf_eq_iff_sl, `Crystallographic.orderOf_sl_one,
       `Crystallographic.finiteOrders_one, `Crystallographic.finiteOrders_two,
       `Crystallographic.finiteOrders_three, `Crystallographic.finiteOrders_four,
       `Crystallographic.finiteOrders_five, `Crystallographic.finiteOrders_six,

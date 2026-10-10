@@ -10,3 +10,4 @@ public import Crystallographic.Extra
 public import Crystallographic.Compute
 public import Crystallographic.Tables
 public import Crystallographic.Erratum
+public import Crystallographic.SL

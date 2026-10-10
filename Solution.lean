@@ -84,6 +84,13 @@ theorem le_two_pow_of_mem_finiteOrders {N m : ℕ} (h : m ∈ finiteOrders N) :
 theorem finiteOrders_finite (N : ℕ) : (finiteOrders N).Finite :=
   finiteOrders_finite_internal N
 
+theorem exists_orderOf_eq_iff_sl {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) :
+    (∃ A : Matrix.SpecialLinearGroup (Fin N) ℤ, orderOf A = m) ↔ psi m ≤ N :=
+  exists_orderOf_eq_iff_sl_internal hN hm
+
+theorem orderOf_sl_one (A : Matrix.SpecialLinearGroup (Fin 1) ℤ) : orderOf A = 1 :=
+  orderOf_sl_one_internal A
+
 theorem finiteOrders_one : finiteOrders 1 = {1, 2} :=
   finiteOrders_one_internal
 

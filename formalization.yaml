@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "The crystallographic restriction in every dimension: GL(N, Z) has an element of order m if and only if psi(m) <= N, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
+  name: "The crystallographic restriction in every dimension: GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
   description: >-
     A Lean 4 development of the crystallographic restriction in every dimension. For a positive integer m
     let psi(m) be the sum of phi(p^k) over the prime powers p^k exactly dividing m, except that the prime
@@ -26,10 +26,12 @@ project:
     in dimensions 1, 2, 4, 6, 8, 10, 12 are proved by the bound and a kernel computation of psi. Beyond
     dimension 12, the eleven orders 2520 (psi = 20), 2310 (psi = 22) and 2184, 2340, 2640, 2730, 2772,
     3080, 3960, 4620, 5040 (psi = 24), which rows 20, 22 and 24 of Table 1 of Bamberg-Cairns-Kilminster
-    omit, are checked with their least dimensions. The hypotheses N >= 1 and m >= 1 are necessary and
-    explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. Not claimed: any
-    first formalization of the two-dimensional case (public Lean proofs exist), the wallpaper or space
-    groups, isometry groups, or statements about SL(N, Z).
+    omit, are checked with their least dimensions. The same equivalence holds in SL(N, Z) for N >= 2 (an
+    element of odd order has determinant 1; the block for 2^k, k >= 2, has even size and determinant 1; -A
+    keeps the determinant in even dimension), and SL(1, Z) is trivial. The hypotheses N >= 1 and m >= 1 are
+    necessary and explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. Not
+    claimed: any first formalization of the two-dimensional case (public Lean proofs exist), the wallpaper
+    or space groups, or isometry groups.
   authors: ["JD Jones"]
   responsible_maintainers: ["JD Jones"]
   license: "MIT"
@@ -208,7 +210,7 @@ sources:
 
 status:
   scope: >-
-    Forty-four compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
+    Forty-six compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
     a hole. The arithmetic of psi (zero set, prime powers, additivity, psi <= phi, parity, the divisor-sum
     form, m <= 2^(psi(m) + 1)); necessity, psi(orderOf A) <= N for every element of GL(N, Z); sufficiency
     for N >= 1, m >= 1, psi(m) <= N; the equivalence; finiteOrders N = {m | 0 < m and psi m <= N} for
@@ -217,8 +219,8 @@ status:
     finiteOrders N for even N >= 2; every finite order is at most 2^(N + 1) and the set is finite; the
     twelve tables N = 1, ..., 12 as explicit sets; the maxima in dimensions 1, 2, 4, 6, 8, 10, 12; the
     values psi(2520) = 20, psi(2310) = 22 and psi = 24 at nine further integers, with the least dimensions
-    20, 22, 24 they give. Not claimed: anything about SL(N, Z); the wallpaper or space groups; isometry
-    groups; novelty of the two- and three-dimensional cases. The intentional placeholders of
+    20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Not claimed:
+    the wallpaper or space groups; isometry groups; novelty of the two- and three-dimensional cases. The intentional placeholders of
     Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -316,6 +318,16 @@ status:
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator.json"
     - declaration: "Crystallographic.finiteOrders_finite"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_iff_sl"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.orderOf_sl_one"
       file: "Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -478,7 +490,8 @@ fidelity:
     omit, found while checking the table, and are stated here as values of psi and as least dimensions.
     GL(N, Z) is Matrix.GeneralLinearGroup (Fin N) Z, the units of the matrix ring, and orderOf is
     Mathlib's order of a unit. The equivalence over Q, the dimension-0 and monotonicity statements, the
-    block of size phi(n) for every n and the arithmetic lemmas on psi are additions of this development.
+    block of size phi(n) for every n, the arithmetic lemmas on psi and the SL(N, Z) version are additions of
+    this development (the source speaks of GL(n, Z) only).
 
 review:
   status: "self-assessed"
@@ -587,6 +600,16 @@ alignment:
       module: "Solution"
       status: "proved"
       note: "The set of finite orders of GL(N, ℤ) is finite."
+    - source: "this development (the determinant of each block of the construction)"
+      lean: "Crystallographic.exists_orderOf_eq_iff_sl"
+      module: "Solution"
+      status: "proved"
+      note: "The same restriction for SL(N, ℤ), N ≥ 2."
+    - source: "this development"
+      lean: "Crystallographic.orderOf_sl_one"
+      module: "Solution"
+      status: "proved"
+      note: "SL(1, ℤ) is trivial: every element has order 1."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
       lean: "Crystallographic.finiteOrders_one"
       module: "Solution"

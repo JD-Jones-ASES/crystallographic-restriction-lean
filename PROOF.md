@@ -105,7 +105,21 @@ and 24 omit exactly these eleven values, all above 2000 (the largest printed ent
 checking the table against `ψ` and confirmed by two independent enumerations outside Lean (a sieve with the bound
 `m ≤ 2^(n + 1)`, and the structural enumeration of products of prime powers `q ≤ 2n`).
 
-## 7. Relation to the sources
+## 7. The special linear group (`Crystallographic/SL.lean`)
+
+`orderOf_sl_one`: a `1 × 1` matrix of determinant `1` is `1`. `exists_orderOf_eq_iff_sl` (`N ≥ 2`): necessity through the
+injective inclusion `Matrix.SpecialLinearGroup.toGL` and `psi_orderOf_le`. Sufficiency tracks the determinant through the
+construction of §4 (`sl_good n m`: an integer matrix of determinant `1` and order `m` in dimension `n`): write
+`m = 2ᵏ u` with `u` odd. An element of `GL(ψ(u), ℤ)` of odd order `u` has determinant `1` (`sl_good_of_gl_odd`: the
+determinant is `±1` and its `u`-th power is `1`). For `k = 1`, `u = 1`: `−1` in dimension `2`; for `k = 1`, `u ≥ 3`: `−A`
+in the even dimension `ψ(u) = ψ(m)` (`sl_good_two_mul`, `Matrix.det_neg`). For `k ≥ 2`: multiplication by the root on
+`ℤ[X]/(X^(2^(k−1)) + 1)` in its power basis (`sl_two_pow_block`) has order `2ᵏ` (its `2^(k−1)`-th power is `−1`) and
+determinant `1` — the characteristic polynomial of the left-multiplication matrix is the minimal polynomial
+(`charpoly_leftMulMatrix`), which is `X^(2^(k−1)) + 1` (`minpoly.unique'`), so `det = (−1)^(2^(k−1)) · 1`
+(`Matrix.det_eq_sign_charpoly_coeff`); block sums multiply determinants (`sl_good_mul`, `Matrix.det_fromBlocks_zero₂₁`)
+and identity padding keeps them (`sl_good_of_le`).
+
+## 8. Relation to the sources
 
 The theorem is Vaidyanathaswamy's (1928), on the orders of integer matrices; Hiller (1985) rediscovered it in the
 language of the crystallographic restriction, introduced the additive totient `ψ` and tabulated the orders to dimension

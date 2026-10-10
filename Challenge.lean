@@ -28,6 +28,8 @@ This file states, and `Solution.lean` proves (kernel-only):
   `ℤ[X]/(Φₙ)`); the same equivalence over `ℚ`; `GL(0, ℤ)` has only the order `1` and the finite orders grow
   with the dimension; `GL(N + 1, ℤ)` has the same finite orders as `GL(N, ℤ)` for even `N ≥ 2`; the set of
   finite orders is finite, bounded by `2^(N + 1)`;
+* the same equivalence in `SL(N, ℤ)` for `N ≥ 2` (the blocks of the construction have determinant `1`),
+  and `SL(1, ℤ)` is trivial;
 * the tables: the finite orders of `GL(N, ℤ)` for `N = 1, …, 12` (OEIS A080738), and the largest finite
   order `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`;
 * beyond dimension 12: the eleven orders `2520`, `2310`, `2184`, …, `5040` with `ψ = 20, 22, 24`, hence
@@ -144,6 +146,20 @@ theorem le_two_pow_of_mem_finiteOrders {N m : ℕ} (h : m ∈ finiteOrders N) :
 
 /-- The set of finite orders of `GL(N, ℤ)` is finite. -/
 theorem finiteOrders_finite (N : ℕ) : (finiteOrders N).Finite := sorry
+
+/-! ### The special linear group
+
+The same criterion holds in `SL(N, ℤ)` for `N ≥ 2`: an element of odd order has determinant `1`
+automatically; the block for `2ᵏ`, `k ≥ 2`, is multiplication by the root of `X^(2^(k-1)) + 1`, of
+even size and determinant `1`; `−A` keeps the determinant in even dimension; and `−1` in dimension
+`2` has order `2`. `SL(1, ℤ)` is trivial. -/
+
+/-- The crystallographic restriction for `SL(N, ℤ)`, `N ≥ 2`. -/
+theorem exists_orderOf_eq_iff_sl {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) :
+    (∃ A : Matrix.SpecialLinearGroup (Fin N) ℤ, orderOf A = m) ↔ psi m ≤ N := sorry
+
+/-- `SL(1, ℤ)` is trivial. -/
+theorem orderOf_sl_one (A : Matrix.SpecialLinearGroup (Fin 1) ℤ) : orderOf A = 1 := sorry
 
 /-! ### The tables
 

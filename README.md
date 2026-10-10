@@ -10,7 +10,7 @@ Bamberg–Cairns–Kilminster, Amer. Math. Monthly 110 (2003) 202–209). In dim
 restriction: the finite orders are `1, 2, 3, 4, 6`.
 
 [Challenge.lean](Challenge.lean) defines `ψ` (`psi`) and the set `finiteOrders N` of finite orders of elements of
-`GL(N, ℤ)` and states forty-four theorems; [Solution.lean](Solution.lean) proves them, kernel-only; the table in
+`GL(N, ℤ)` and states forty-six theorems; [Solution.lean](Solution.lean) proves them, kernel-only; the table in
 [VERIFICATION.md](VERIFICATION.md) names each:
 
 - the arithmetic of `ψ`: `ψ(m) = 0` iff `m ≤ 2`; `ψ(pᵏ) = φ(pᵏ)` for a prime power `pᵏ ≠ 2`; additivity on coprime
@@ -23,6 +23,8 @@ restriction: the finite orders are `1, 2, 3, 4, 6`.
   (`ψ(m)`, or `1` for `m = 2`); an element of `GL(φ(n), ℤ)` of order `n` for every `n ≥ 1`; the same equivalence over `ℚ`;
   `GL(0, ℤ)` has only the order `1`, and the finite orders grow with the dimension; `GL(N + 1, ℤ)` has the finite orders
   of `GL(N, ℤ)` for even `N ≥ 2`; the set of finite orders is finite, bounded by `2^(N + 1)`;
+- the same equivalence in `SL(N, ℤ)` for `N ≥ 2` (an element of odd order has determinant `1`; the block for `2ᵏ`,
+  `k ≥ 2`, has even size and determinant `1`; `−A` keeps the determinant in even dimension), and `SL(1, ℤ)` is trivial;
 - the tables of finite orders for `N = 1, …, 12` (OEIS A080738) and the largest finite order `2, 6, 12, 30, 60, 120, 210`
   in dimensions `1, 2, 4, 6, 8, 10, 12`, by the bound and a kernel computation of `ψ`; beyond dimension 12, the eleven
   orders with `ψ = 20, 22, 24` missing from Table 1 of Bamberg–Cairns–Kilminster, with their least dimensions.
@@ -30,8 +32,8 @@ restriction: the finite orders are `1, 2, 3, 4, 6`.
 The hypotheses `N ≥ 1` and `m ≥ 1` are necessary and made explicit: `GL(0, ℤ)` is trivial while `ψ(2) = 0`, and Mathlib's
 `orderOf` is `0` at infinite order.
 
-Not claimed: the two-dimensional case as a first (it is in public Lean, acprk/symmetry-graded-lean, 2026-09); the
-wallpaper or space groups; isometry groups; any statement about `SL(N, ℤ)` beyond what the files prove.
+Not claimed: the two-dimensional case as a first (it is in public Lean, acprk/symmetry-graded-lean and
+akiselev/ferris-howard); the wallpaper or space groups; isometry groups.
 
 > As of 2026-10-09 (UTC), no formalization of the crystallographic restriction in every dimension, in either direction,
 > was located in the Palomar registry, Mathlib (whose `docs/1000.yaml` entry Q3527223 lists the theorem with no

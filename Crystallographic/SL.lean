@@ -200,7 +200,7 @@ theorem sl_suff {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) (h : psi m ≤ N) : sl_g
     rw [hpsi, h2k] at h
     exact sl_good_of_le h (sl_good_mul hcop (sl_two_pow_block (j := j + 1) (by omega)) hgu)
 
-theorem exists_orderOf_eq_iff_sl {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) :
+theorem exists_orderOf_eq_iff_sl_internal {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) :
     (∃ A : Matrix.SpecialLinearGroup (Fin N) ℤ, orderOf A = m) ↔ psi m ≤ N := by
   constructor
   · rintro ⟨A, rfl⟩
@@ -209,7 +209,7 @@ theorem exists_orderOf_eq_iff_sl {N m : ℕ} (hN : 2 ≤ N) (hm : 0 < m) :
   · intro h
     exact sl_of_good (sl_suff hN hm h)
 
-theorem orderOf_sl_one (A : Matrix.SpecialLinearGroup (Fin 1) ℤ) : orderOf A = 1 := by
+theorem orderOf_sl_one_internal (A : Matrix.SpecialLinearGroup (Fin 1) ℤ) : orderOf A = 1 := by
   have hA : A = 1 := by
     ext i j
     have hdet : (A : Matrix (Fin 1) (Fin 1) ℤ).det = 1 := A.prop
