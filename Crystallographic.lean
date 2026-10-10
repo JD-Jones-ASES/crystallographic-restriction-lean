@@ -6,5 +6,7 @@ public import Crystallographic.Necessity
 public import Crystallographic.Block
 public import Crystallographic.Sufficiency
 public import Crystallographic.Main
+public import Crystallographic.Extra
 public import Crystallographic.Compute
 public import Crystallographic.Tables
+public import Crystallographic.Erratum

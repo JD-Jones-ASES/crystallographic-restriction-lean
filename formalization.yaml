@@ -1,0 +1,719 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "The crystallographic restriction in every dimension: GL(N, Z) has an element of order m if and only if psi(m) <= N, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
+  description: >-
+    A Lean 4 development of the crystallographic restriction in every dimension. For a positive integer m
+    let psi(m) be the sum of phi(p^k) over the prime powers p^k exactly dividing m, except that the prime
+    power 2 contributes 0 (phi is Euler's totient; psi(1) = psi(2) = 0, psi(3) = psi(4) = psi(6) = 2,
+    psi(ab) = psi(a) + psi(b) for coprime a, b; OEIS A080737). Theorem (Vaidyanathaswamy 1928; Hiller
+    1985; a proof in Kuzmanovich-Pavlichenkov 2002; Theorem 1 of Bamberg-Cairns-Kilminster 2003): for
+    N >= 1, the group GL(N, Z) of invertible integer N x N matrices has an element of order m >= 1 if and
+    only if psi(m) <= N. The development proves both directions: necessity through the minimal polynomial
+    of the matrix over Q, which divides X^m - 1 and is therefore a product of distinct cyclotomic
+    polynomials whose indices have least common multiple m, so that psi(m) is at most its degree;
+    sufficiency by one block of size phi(p^k) for each prime power p^k != 2 of m (multiplication by the
+    root on Z[X]/(Phi_{p^k}) in its power basis), the sign -1 when m is 2 modulo 4, and an identity block.
+    Corollaries: the finite orders of GL(N, Z) are the positive m with psi(m) <= N; the least dimension
+    carrying an element of order m is psi(m), or 1 for m = 2 (OEIS A152455); GL(phi(n), Z) has an element
+    of order n for every n >= 1; the same equivalence holds for GL(N, Q); GL(0, Z) has only the order 1 and
+    the finite orders grow with the dimension; GL(N + 1, Z) has the finite orders of GL(N, Z) for even
+    N >= 2; the set of finite orders is finite and bounded by 2^(N + 1). The arithmetic of psi: psi(m) = 0
+    iff m <= 2; psi(p^k) = phi(p^k) for a prime power p^k != 2; additivity on coprime factors; psi <= phi;
+    psi is even; psi as a sum over the exact prime-power divisors; m <= 2^(psi(m) + 1). The tables of
+    finite orders for N = 1, ..., 12 (OEIS A080738) and the largest finite order 2, 6, 12, 30, 60, 120, 210
+    in dimensions 1, 2, 4, 6, 8, 10, 12 are proved by the bound and a kernel computation of psi. Beyond
+    dimension 12, the eleven orders 2520 (psi = 20), 2310 (psi = 22) and 2184, 2340, 2640, 2730, 2772,
+    3080, 3960, 4620, 5040 (psi = 24), which rows 20, 22 and 24 of Table 1 of Bamberg-Cairns-Kilminster
+    omit, are checked with their least dimensions. The hypotheses N >= 1 and m >= 1 are necessary and
+    explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. Not claimed: any
+    first formalization of the two-dimensional case (public Lean proofs exist), the wallpaper or space
+    groups, isometry groups, or statements about SL(N, Z).
+  authors: ["JD Jones"]
+  responsible_maintainers: ["JD Jones"]
+  license: "MIT"
+
+classification:
+  arxiv: ["math.GR", "math.NT"]
+  msc2020: ["20H25", "20H15", "15B36", "11A25"]
+
+sources:
+  - title: "The Crystallographic Restriction, Permutations, and Goldbach's Conjecture"
+    authors: ["John Bamberg", "Grant Cairns", "Devin Kilminster"]
+    id: "doi:10.1080/00029890.2003.11919956"
+    type: "paper"
+    location: "The American Mathematical Monthly 110 (2003), no. 3, 202-209 (JSTOR 3647934): p. 202 (Ord_n, the finite orders of GL(n, Z); the definition of psi with psi(2) = 0 and psi(1) = 0; Theorem 1, Ord_n = {m in N | psi(m) <= n}); p. 203 (psi is even, so Ord_{2k+1} = Ord_{2k}); p. 204 (Table 1, the rows psi^{-1}{n} for even n <= 24). The text read is the authors' PDF at cage.ugent.be, which carries the Monthly's page numbers."
+    relationship: "formalizes"
+    author_endorsement: "not-contacted"
+    note: >-
+      The statement formalized: Theorem 1, with psi as defined on p. 202, for every N >= 1 and m >= 1
+      (the source's Ord_n read at n = 0 would contain 2, since psi(2) = 0, while GL(0, Z) is trivial;
+      Lean's orderOf is 0 at infinite order, hence m >= 1). The parity remark of p. 203 is formalized as
+      finiteOrders (N + 1) = finiteOrders N for even N >= 2, and the rows n <= 12 of Table 1 are reproduced
+      by the tables for N = 1, ..., 12. The source states Theorem 1 without proof, citing Vaidyanathaswamy
+      (1928) for it and Kuzmanovich-Pavlichenkov (2002) for a proof; the proof here (the minimal polynomial
+      over Q is a product of distinct cyclotomic polynomials, psi <= phi and additivity; for sufficiency,
+      multiplication by a root on Z[X]/(Phi_{p^k}) and block sums) is the standard argument and is not
+      taken from a text read for this development. Rows n = 20, 22 and 24 of Table 1 omit their values
+      above 2000 (2520; 2310; 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040; the largest printed
+      entry is 1980); these values of psi and the least dimensions they give are theorems here.
+  - title: "Integer-Roots of the Unit Matrix"
+    authors: ["R. Vaidyanathaswamy"]
+    id: "doi:10.1112/jlms/s1-3.2.121"
+    type: "paper"
+    location: "Journal of the London Mathematical Society s1-3 (1928), no. 2, 121-124"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: >-
+      Cited by Bamberg-Cairns-Kilminster, with the next entry, as the original correct description of
+      the finite orders of integer matrices. Not read for this development.
+  - title: "On the Possible Periods of Integer-Matrices"
+    authors: ["R. Vaidyanathaswamy"]
+    id: "doi:10.1112/jlms/s1-3.4.268"
+    type: "paper"
+    location: "Journal of the London Mathematical Society s1-3 (1928), no. 4, 268-272"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The second of the two 1928 notes cited for Theorem 1 by Bamberg-Cairns-Kilminster. Not read for this development."
+  - title: "The crystallographic restriction in higher dimensions"
+    authors: ["H. Hiller"]
+    id: "doi:10.1107/S0108767385001180"
+    type: "paper"
+    location: "Acta Crystallographica Section A 41 (1985), no. 6, 541-544"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      An independent rediscovery in the lattice form: m is the order of an element of the point group of
+      an n-dimensional space group iff Phi(m) <= n, for Hiller's additive totient Phi (the psi of this
+      development), with a table of the allowable orders in dimensions <= 23. Only the abstract was read;
+      Bamberg-Cairns-Kilminster quote its Proposition 2.2. Nothing from it is formalized.
+  - title: "Finite Groups of Matrices Whose Entries Are Integers"
+    authors: ["James Kuzmanovich", "Andrey Pavlichenkov"]
+    id: "doi:10.1080/00029890.2002.11919850"
+    type: "paper"
+    location: "The American Mathematical Monthly 109 (2002), no. 2, 173-186 (JSTOR 2695329)"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      The expository proof that Bamberg-Cairns-Kilminster cite for Theorem 1. Only the abstract was read;
+      nothing from it is formalized.
+  - title: "A080737: a(1) = a(2) = 0; for n > 2, the least dimension of a lattice possessing a symmetry of order n"
+    authors: ["N. J. A. Sloane"]
+    id: "https://oeis.org/A080737"
+    type: "other"
+    location: "The On-Line Encyclopedia of Integer Sequences, A080737 (read 2026-10-09; b-file n = 1..10000)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: >-
+      The function psi; its values agree with the pinned definition for every n <= 10000 (checked outside
+      Lean). Background only.
+  - title: "A152455: minimal integer m such that there exists an m X m integer matrix of order n"
+    authors: ["W. R. Unger"]
+    id: "https://oeis.org/A152455"
+    type: "other"
+    location: "The On-Line Encyclopedia of Integer Sequences, A152455 (read 2026-10-09; b-file n = 1..10000)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The least dimension (1 at n = 2, psi(n) otherwise) of isLeast_dimension; agrees for n <= 10000. Background only."
+  - title: "A080738: irregular triangle read by rows, the orders of GL(2n, Z) that are not orders of GL(2n - 1, Z)"
+    authors: ["N. J. A. Sloane"]
+    id: "https://oeis.org/A080738"
+    type: "other"
+    location: "The On-Line Encyclopedia of Integer Sequences, A080738 (read 2026-10-09)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "Its rows for 2n <= 12 are the differences of the tables for N = 1, ..., 12 (checked outside Lean). Background only."
+  - title: "A080740: number of m with A080737(m) <= 2n"
+    authors: ["N. J. A. Sloane"]
+    id: "https://oeis.org/A080740"
+    type: "other"
+    location: "The On-Line Encyclopedia of Integer Sequences, A080740 (read 2026-10-09)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The sizes 2, 5, 9, 17, 24, 35, 48 of the tables for N = 1, 2, 4, 6, 8, 10, 12 (checked outside Lean). Background only."
+  - title: "A005417: maximal period of an n-stage shift register (the largest finite order in GL(2n, Z) and GL(2n + 1, Z))"
+    authors: ["N. J. A. Sloane"]
+    id: "https://oeis.org/A005417"
+    type: "other"
+    location: "The On-Line Encyclopedia of Integer Sequences, A005417 (read 2026-10-09)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The maxima 2, 6, 12, 30, 60, 120, 210 for N = 1, 2, 4, 6, 8, 10, 12 (checked outside Lean). Background only."
+  - title: "Crystallographic restriction in rank two (SymmetryGraded/Crystallographic.lean)"
+    authors: ["acprk"]
+    id: "https://github.com/acprk/symmetry-graded-lean/tree/25fa230bf8bf0e5f1b33d6ed5ddac58bb0c76aea"
+    type: "other"
+    location: "SymmetryGraded/Crystallographic.lean: orderOf_mem, no_order_five_or_ge_seven, classification, MA_orderOf_three/four/six (read 2026-10-09)"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      Prior Lean formalization (Lean v4.31.0-rc2, no sorry, unregistered, no license file) of the case
+      N = 2: an integer 2 x 2 matrix of finite order has order in {1, 2, 3, 4, 6}, and 3, 4, 6 occur.
+      The tables for N = 2 and N = 3 here are corollaries of the general theorem and are not new.
+      Nothing from it is used.
+  - title: "Crystallographic restriction in dimension two (ferris-howard, lean/Crystal/Wallpaper/Restriction.lean)"
+    authors: ["Alexander Kiselev"]
+    id: "https://github.com/akiselev/ferris-howard/tree/0f1eacdaa0644a2a93cc35a6999e9e6d5127b068"
+    type: "other"
+    location: "lean/Crystal/Wallpaper/Restriction.lean (crystallographic_restriction, orderOf_rot4, orderOf_rot6); lean/Challenge.lean (read 2026-10-09)"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      A second prior Lean formalization of the case N = 2, stated for GL (Fin 2) Z and IsOfFinOrder, with
+      witnesses of orders 4 and 6; prepared for the registry (Apache-2.0 per its formalization.yaml) and
+      not registered as of 2026-10-09. Nothing from it is used.
+  - title: "CrystallographicRestriction.v (theory-of-systems-coq)"
+    authors: ["Horsocrates"]
+    id: "https://github.com/Horsocrates/theory-of-systems-coq/blob/90ff5c2031/src/stdlib/CrystallographicRestriction.v"
+    type: "other"
+    location: "src/stdlib/CrystallographicRestriction.v (commit 90ff5c2031, 2026-06-03; MIT)"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: >-
+      A Rocq development of a trace form of the restriction for rotations of Q^3 (orders 1, 2, 3, 4, 6).
+      Adjacent prior art named in the prior-art statement; nothing from it is used.
+  - title: "My 100 theorems (mathlib4 issue #6091), item 60: Generalised crystallographic restriction theorem"
+    authors: ["Parcly Taxel"]
+    id: "https://github.com/leanprover-community/mathlib4/issues/6091"
+    type: "web discussion"
+    location: "Issue body, item 60 (read 2026-10-09; open, not marked proved)"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+    note: "Lists the necessity direction as a formalization target. Named in the prior-art statement; nothing from it is used."
+  - title: "Mathlib docs/1000.yaml, entry Q3527223 (Crystallographic restriction theorem)"
+    authors: ["The mathlib Community"]
+    id: "https://github.com/leanprover-community/mathlib4/blob/master/docs/1000.yaml"
+    type: "other"
+    location: "docs/1000.yaml, Q3527223 (read 2026-10-09 at master a02a63c: no declaration, no URL)"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The theorem's entry in Mathlib's list of 1000+ theorems, unformalized there. Named in the prior-art statement."
+  - title: "The Lean 4 Theorem Prover and Programming Language"
+    authors: ["Leonardo de Moura", "Sebastian Ullrich"]
+    id: "doi:10.1007/978-3-030-79876-5_37"
+    type: "paper"
+    location: "Automated Deduction - CADE 28, Lecture Notes in Computer Science 12699, Springer, 2021, 625-635"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The proof assistant (leanprover/lean4:v4.35.0-rc2). Nothing mathematical is taken from it."
+  - title: "The Lean mathematical library"
+    authors: ["The mathlib Community"]
+    id: "doi:10.1145/3372885.3373824"
+    type: "paper"
+    location: "Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020), 367-381"
+    relationship: "background"
+    author_endorsement: "n/a"
+    note: "The library the development imports (tag v4.35.0-rc2): cyclotomic polynomials, minimal polynomials, AdjoinRoot, Nat.totient, Nat.factorization, the general linear group."
+
+status:
+  scope: >-
+    Forty-four compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
+    a hole. The arithmetic of psi (zero set, prime powers, additivity, psi <= phi, parity, the divisor-sum
+    form, m <= 2^(psi(m) + 1)); necessity, psi(orderOf A) <= N for every element of GL(N, Z); sufficiency
+    for N >= 1, m >= 1, psi(m) <= N; the equivalence; finiteOrders N = {m | 0 < m and psi m <= N} for
+    N >= 1; the least dimension (psi(m), or 1 for m = 2); an element of GL(phi(n), Z) of order n for every
+    n >= 1; the equivalence over Q; finiteOrders 0 = {1}; monotonicity in N; finiteOrders (N + 1) =
+    finiteOrders N for even N >= 2; every finite order is at most 2^(N + 1) and the set is finite; the
+    twelve tables N = 1, ..., 12 as explicit sets; the maxima in dimensions 1, 2, 4, 6, 8, 10, 12; the
+    values psi(2520) = 20, psi(2310) = 22 and psi = 24 at nine further integers, with the least dimensions
+    20, 22, 24 they give. Not claimed: anything about SL(N, Z); the wallpaper or space groups; isometry
+    groups; novelty of the two- and three-dimensional cases. The intentional placeholders of
+    Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+  main_results:
+    - declaration: "Crystallographic.psi_eq_zero_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_prime_pow"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_mul"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_le_totient"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.even_psi"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_eq_sum_divisors"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.le_two_pow_psi"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_orderOf_le"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_eq"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isLeast_dimension"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_totient"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_orderOf_eq_iff_rat"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_zero"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_mono"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_succ_of_even"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.le_two_pow_of_mem_finiteOrders"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_finite"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_one"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_two"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_three"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_four"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_five"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_six"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_seven"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_eight"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_nine"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_ten"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_eleven"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_twelve"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_2520"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_2310"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.psi_eq_twentyfour"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isLeast_dimension_2520"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isLeast_dimension_2310"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isLeast_dimension_twentyfour"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_one"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_two"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_four"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_six"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_eight"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_ten"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.isGreatest_finiteOrders_twelve"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["Claude Opus 5.5 (Anthropic)", "Claude Fable 5.1 (Anthropic)"]
+      framework: "Claude Code with parallel subagents"
+      tool_setup: >-
+        The project was directed by its author. Claude (Anthropic) in Claude Code was used throughout: the
+        statements and their fidelity check against Bamberg-Cairns-Kilminster, the Lean proofs, the
+        standard-library replay of the tables, the literature and prior-art searches, and the repository
+        text; Claude Fable 5.1 pinned the statements, merged the proof files and wrote the documents, Claude
+        Opus 5.5 subagents wrote the proofs, the checkers and the drafts. Lean v4.35.0-rc2 and Mathlib
+        v4.35.0-rc2 (commit 065356127b1dc0016f66b7283ce0ce2c4055aa55) are pinned by the committed manifest
+        and lake update is never run; there are no GitHub Actions workflows. There is no native_decide. The
+        proofs use Mathlib's minimal and cyclotomic polynomials over Q, AdjoinRoot with its power basis and
+        the left-multiplication matrix for the blocks, Nat.recOnPosPrimePosCoprime for the induction over the
+        factorization, and decide +kernel over a structurally recursive trial-division computation of psi
+        (proved equal to psi) for the tables and the values beyond dimension 12.
+      spend_usd: "not tracked"
+
+fidelity:
+  divergences: >-
+    The source states Theorem 1 as Ord_n = {m in N | psi(m) <= n} with no restriction on n; it is stated
+    here for N >= 1 and m >= 1, since GL(0, Z) is trivial while psi(2) = 0 and Lean's orderOf is 0 at
+    infinite order (finiteOrders N excludes orderOf A = 0 by the clause 0 < m). psi is defined on all
+    natural numbers with psi(0) = 0 (Nat.factorization 0 = 0), a convention the source does not need. The
+    tables are stated as Set N literals equal to finiteOrders N, where the source's Table 1 prints the
+    differences psi^{-1}{n} for even n; the twelve tables N = 1, ..., 12 contain the same information as
+    its rows n <= 12. The values beyond dimension 12 (psi(2520) = 20, psi(2310) = 22, nine values with
+    psi = 24) are not in the source: they are the values above 2000 that rows 20, 22, 24 of its Table 1
+    omit, found while checking the table, and are stated here as values of psi and as least dimensions.
+    GL(N, Z) is Matrix.GeneralLinearGroup (Fin N) Z, the units of the matrix ring, and orderOf is
+    Mathlib's order of a unit. The equivalence over Q, the dimension-0 and monotonicity statements, the
+    block of size phi(n) for every n and the arithmetic lemmas on psi are additions of this development.
+
+review:
+  status: "self-assessed"
+  notes: >-
+    No independent human expert review and no source-author endorsement is claimed; AI agents developed
+    the proofs and audited them in separate passes, the statements were checked against the authors' PDF of
+    Bamberg-Cairns-Kilminster (pp. 202-204), and psi, the twelve tables and the maxima were recomputed
+    outside Lean by two independent routes and against OEIS A080737, A080738, A080740, A005417 and A152455.
+    Mechanical correctness and agreement of formal statements do not establish priority or significance.
+
+alignment:
+  namespace: "Crystallographic"
+  statements:
+    - source: "this development"
+      lean: "Crystallographic.psi_eq_zero_iff"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(m) = 0 iff m ≤ 2."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (the definition of psi)"
+      lean: "Crystallographic.psi_prime_pow"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(pᵏ) = φ(pᵏ) for a prime power pᵏ ≠ 2."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (the definition of psi)"
+      lean: "Crystallographic.psi_mul"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(ab) = ψ(a) + ψ(b) for coprime a, b."
+    - source: "this development"
+      lean: "Crystallographic.psi_le_totient"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(m) ≤ φ(m)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 203 (parity)"
+      lean: "Crystallographic.even_psi"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(m) is even."
+    - source: "this development"
+      lean: "Crystallographic.psi_eq_sum_divisors"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(m) as the sum of φ(d) over the exact prime-power divisors d ≠ 2 of m."
+    - source: "this development"
+      lean: "Crystallographic.le_two_pow_psi"
+      module: "Solution"
+      status: "proved"
+      note: "M ≤ 2^(ψ(m) + 1) for m ≥ 1."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
+      lean: "Crystallographic.psi_orderOf_le"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(orderOf A) ≤ N for every A ∈ GL(N, ℤ) (necessity)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
+      lean: "Crystallographic.exists_orderOf_eq"
+      module: "Solution"
+      status: "proved"
+      note: "For N ≥ 1, m ≥ 1, ψ(m) ≤ N there is A ∈ GL(N, ℤ) of order m (sufficiency)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
+      lean: "Crystallographic.exists_orderOf_eq_iff"
+      module: "Solution"
+      status: "proved"
+      note: "The crystallographic restriction: for N ≥ 1, m ≥ 1, GL(N, ℤ) has an element of order m iff ψ(m) ≤ N."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
+      lean: "Crystallographic.finiteOrders_eq"
+      module: "Solution"
+      status: "proved"
+      note: "The finite orders of GL(N, ℤ), N ≥ 1, are {m ≥ 1 : ψ(m) ≤ N}."
+    - source: "OEIS A152455; Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
+      lean: "Crystallographic.isLeast_dimension"
+      module: "Solution"
+      status: "proved"
+      note: "The least N carrying an element of order m is ψ(m), or 1 for m = 2."
+    - source: "this development"
+      lean: "Crystallographic.exists_orderOf_eq_totient"
+      module: "Solution"
+      status: "proved"
+      note: "GL(φ(n), ℤ) has an element of order n, for every n ≥ 1."
+    - source: "this development"
+      lean: "Crystallographic.exists_orderOf_eq_iff_rat"
+      module: "Solution"
+      status: "proved"
+      note: "The same restriction for GL(N, ℚ)."
+    - source: "this development"
+      lean: "Crystallographic.finiteOrders_zero"
+      module: "Solution"
+      status: "proved"
+      note: "GL(0, ℤ) has only the order 1."
+    - source: "this development"
+      lean: "Crystallographic.finiteOrders_mono"
+      module: "Solution"
+      status: "proved"
+      note: "The finite orders grow with the dimension."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 203 (parity)"
+      lean: "Crystallographic.finiteOrders_succ_of_even"
+      module: "Solution"
+      status: "proved"
+      note: "GL(N + 1, ℤ) has the finite orders of GL(N, ℤ) for even N ≥ 2."
+    - source: "this development"
+      lean: "Crystallographic.le_two_pow_of_mem_finiteOrders"
+      module: "Solution"
+      status: "proved"
+      note: "Every finite order of GL(N, ℤ) is at most 2^(N + 1)."
+    - source: "this development"
+      lean: "Crystallographic.finiteOrders_finite"
+      module: "Solution"
+      status: "proved"
+      note: "The set of finite orders of GL(N, ℤ) is finite."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_one"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₁ = {1, 2}."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_two"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₂ = {1, 2, 3, 4, 6}."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_three"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₃ = {1, 2, 3, 4, 6}."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_four"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₄ = {1, 2, 3, 4, 5, 6, 8, 10, 12}."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_five"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₅ = Ord₄."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_six"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₆, seventeen orders, largest 30."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_seven"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₇ = Ord₆."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_eight"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₈, twenty-four orders, largest 60."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_nine"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₉ = Ord₈."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_ten"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₁₀, thirty-five orders, largest 120."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_eleven"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₁₁ = Ord₁₀."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A080738"
+      lean: "Crystallographic.finiteOrders_twelve"
+      module: "Solution"
+      status: "proved"
+      note: "Ord₁₂, forty-eight orders, largest 210."
+    - source: "this development (a value omitted from row 20 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.psi_2520"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(2520) = 20."
+    - source: "this development (a value omitted from row 22 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.psi_2310"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ(2310) = 22."
+    - source: "this development (the values omitted from row 24 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.psi_eq_twentyfour"
+      module: "Solution"
+      status: "proved"
+      note: "Ψ = 24 at 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040."
+    - source: "this development (row 20 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.isLeast_dimension_2520"
+      module: "Solution"
+      status: "proved"
+      note: "The least dimension with an element of order 2520 is 20."
+    - source: "this development (row 22 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.isLeast_dimension_2310"
+      module: "Solution"
+      status: "proved"
+      note: "The least dimension with an element of order 2310 is 22."
+    - source: "this development (row 24 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
+      lean: "Crystallographic.isLeast_dimension_twentyfour"
+      module: "Solution"
+      status: "proved"
+      note: "The least dimension with an element of order 2184, …, 5040 is 24."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_one"
+      module: "Solution"
+      status: "proved"
+      note: "The largest finite order in GL(1, ℤ) is 2."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_two"
+      module: "Solution"
+      status: "proved"
+      note: "6 in GL(2, ℤ)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_four"
+      module: "Solution"
+      status: "proved"
+      note: "12 in GL(4, ℤ)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_six"
+      module: "Solution"
+      status: "proved"
+      note: "30 in GL(6, ℤ)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_eight"
+      module: "Solution"
+      status: "proved"
+      note: "60 in GL(8, ℤ)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_ten"
+      module: "Solution"
+      status: "proved"
+      note: "120 in GL(10, ℤ)."
+    - source: "Bamberg-Cairns-Kilminster 2003, p. 204 (Table 1); OEIS A005417"
+      lean: "Crystallographic.isGreatest_finiteOrders_twelve"
+      module: "Solution"
+      status: "proved"
+      note: "210 in GL(12, ℤ)."
+
+acknowledgements: >-
+  Vaidyanathaswamy, Hiller, Kuzmanovich and Pavlichenkov, and Bamberg, Cairns and Kilminster for the theorem, its
+  additive totient and the tables; the OEIS editors for A080737, A080738, A080740, A005417 and A152455; Lean, Mathlib,
+  Comparator, lean4export, NanoDa, and the Palomar policy and verifier projects. AI assistance is disclosed above.

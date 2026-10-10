@@ -67,6 +67,12 @@ theorem exists_orderOf_eq_iff_rat {N m : ℕ} (hN : 0 < N) (hm : 0 < m) :
     (∃ A : Matrix.GeneralLinearGroup (Fin N) ℚ, orderOf A = m) ↔ psi m ≤ N :=
   exists_orderOf_eq_iff_rat_internal hN hm
 
+theorem finiteOrders_zero : finiteOrders 0 = {1} :=
+  finiteOrders_zero_internal
+
+theorem finiteOrders_mono {N N' : ℕ} (h : N ≤ N') : finiteOrders N ⊆ finiteOrders N' :=
+  finiteOrders_mono_internal h
+
 theorem finiteOrders_succ_of_even {N : ℕ} (hN : 0 < N) (hN2 : Even N) :
     finiteOrders (N + 1) = finiteOrders N :=
   finiteOrders_succ_of_even_internal hN hN2
@@ -126,6 +132,29 @@ theorem finiteOrders_twelve :
       28, 30, 33, 35, 36, 40, 42, 44, 45, 48, 56, 60, 63, 66, 70, 72, 80, 84, 90, 105, 120, 126, 140,
       168, 180, 210} :=
   finiteOrders_twelve_internal
+
+theorem psi_2520 : psi 2520 = 20 :=
+  psi_2520_internal
+
+theorem psi_2310 : psi 2310 = 22 :=
+  psi_2310_internal
+
+theorem psi_eq_twentyfour :
+    ∀ m ∈ ({2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040} : Finset ℕ), psi m = 24 :=
+  psi_eq_twentyfour_internal
+
+theorem isLeast_dimension_2520 :
+    IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = 2520} 20 :=
+  isLeast_dimension_2520_internal
+
+theorem isLeast_dimension_2310 :
+    IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = 2310} 22 :=
+  isLeast_dimension_2310_internal
+
+theorem isLeast_dimension_twentyfour :
+    ∀ m ∈ ({2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040} : Finset ℕ),
+      IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = m} 24 :=
+  isLeast_dimension_twentyfour_internal
 
 theorem isGreatest_finiteOrders_one : IsGreatest (finiteOrders 1) 2 :=
   isGreatest_finiteOrders_one_internal

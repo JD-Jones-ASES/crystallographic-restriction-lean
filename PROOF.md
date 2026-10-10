@@ -83,7 +83,8 @@ has an element of order `m` for `m ≠ 2` (`GL(0, ℤ)` has `1` for `m = 1`), `G
 `exists_orderOf_eq_iff_rat`: necessity is §2 over `ℚ`; the integer witness, mapped along the injective hom of §2, is
 the rational one. `finiteOrders_succ_of_even`: `ψ(m) ≤ N + 1` with `ψ(m)` and `N` even gives `ψ(m) ≤ N` (`even_psi`).
 `le_two_pow_of_mem_finiteOrders`: `m ≤ 2^(ψ(m) + 1) ≤ 2^(N + 1)` (`le_two_pow_psi`, `psi_orderOf_le`);
-`finiteOrders_finite` follows.
+`finiteOrders_finite` follows. `finiteOrders_zero` (`Crystallographic/Extra.lean`): every element of `GL(0, ℤ)` is `1`, of order `1`.
+`finiteOrders_mono`: an identity block pads an element of `GL(N, ℤ)` to `GL(N', ℤ)` (`exists_orderOf_eq_of_le`).
 
 ## 6. The tables (`Crystallographic/Compute.lean`, `Crystallographic/Tables.lean`)
 
@@ -96,6 +97,14 @@ smaller prime factor of `m` is prime; `stripPow_spec` removes it exactly). Each 
 `decide +kernel` checks `psiC m ≤ N ↔ m ∈ table` for every `m < 2^(N + 1)`. The maxima `isGreatest_finiteOrders_N` read
 off the tables.
 
+**Beyond dimension 12** (`Crystallographic/Erratum.lean`). `psi_2520 : ψ(2520) = 20`, `psi_2310 : ψ(2310) = 22` and
+`psi_eq_twentyfour` (ψ = 24 at 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040) are kernel computations of `psiC`;
+`isLeast_dimension_2520`, `isLeast_dimension_2310`, `isLeast_dimension_twentyfour` combine them with `isLeast_dimension`.
+Table 1 of Bamberg–Cairns–Kilminster prints `ψ⁻¹{n}` for even `n ≤ 24`; its rows `n ≤ 18` agree with `ψ`, while rows 20, 22
+and 24 omit exactly these eleven values, all above 2000 (the largest printed entry is 1980). The omission was found while
+checking the table against `ψ` and confirmed by two independent enumerations outside Lean (a sieve with the bound
+`m ≤ 2^(n + 1)`, and the structural enumeration of products of prime powers `q ≤ 2n`).
+
 ## 7. Relation to the sources
 
 The theorem is Vaidyanathaswamy's (1928), on the orders of integer matrices; Hiller (1985) rediscovered it in the
@@ -103,5 +112,9 @@ language of the crystallographic restriction, introduced the additive totient `�
 23; Kuzmanovich and Pavlichenkov (2002) give a proof; Bamberg, Cairns and Kilminster (2003) state it as their Theorem 1
 with Table 1 of the sets `Ord_n`. The proofs here are the standard ones through minimal and cyclotomic polynomials and
 companion blocks, written for Mathlib. The hypotheses `N ≥ 1` and `m ≥ 1` are made explicit: `GL(0, ℤ)` is trivial while
-`ψ(2) = 0`, and Lean's `orderOf` is `0` at infinite order. The two-dimensional case is already in public Lean
-(acprk/symmetry-graded-lean, 2026-09); nothing here claims a first formalization of the classical restriction.
+`ψ(2) = 0`, and Lean's `orderOf` is `0` at infinite order. The text read is the authors' PDF of Bamberg–Cairns–Kilminster
+(pp. 202–209, with the Monthly's pagination); Hiller and Kuzmanovich–Pavlichenkov were read in abstract only, and
+Vaidyanathaswamy's two 1928 notes not at all. In the OEIS, `ψ` is A080737, the least dimension A152455, the rows
+`ψ⁻¹{2k}` A080738, the number of finite orders A080740 and the largest finite order A005417. The two-dimensional case is
+already in public Lean (acprk/symmetry-graded-lean and akiselev/ferris-howard, 2026-08 and 2026-09, both unregistered);
+nothing here claims a first formalization of the classical restriction.

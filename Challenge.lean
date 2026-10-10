@@ -25,10 +25,14 @@ This file states, and `Solution.lean` proves (kernel-only):
   equivalence; the set of finite orders of `GL(N, ℤ)` is `{m | 0 < m ∧ ψ(m) ≤ N}`;
 * the least dimension carrying an element of order `m`: `ψ(m)`, except `1` for `m = 2`; an element of
   `GL(φ(n), ℤ)` of order `n` for every `n ≥ 1` (multiplication by a primitive `n`-th root of unity on
-  `ℤ[X]/(Φₙ)`); the same equivalence over `ℚ`; `GL(N + 1, ℤ)` has the same finite orders as
-  `GL(N, ℤ)` for even `N ≥ 2`; the set of finite orders is finite, bounded by `2^(N + 1)`;
+  `ℤ[X]/(Φₙ)`); the same equivalence over `ℚ`; `GL(0, ℤ)` has only the order `1` and the finite orders grow
+  with the dimension; `GL(N + 1, ℤ)` has the same finite orders as `GL(N, ℤ)` for even `N ≥ 2`; the set of
+  finite orders is finite, bounded by `2^(N + 1)`;
 * the tables: the finite orders of `GL(N, ℤ)` for `N = 1, …, 12` (OEIS A080738), and the largest finite
-  order `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`.
+  order `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`;
+* beyond dimension 12: the eleven orders `2520`, `2310`, `2184`, …, `5040` with `ψ = 20, 22, 24`, hence
+  least dimensions `20`, `22`, `24` — the values above `2000` missing from rows `20`, `22`, `24` of Table 1
+  of Bamberg–Cairns–Kilminster.
 
 Conventions: `orderOf` is Mathlib's (`0` at infinite order); `Matrix.GeneralLinearGroup (Fin N) ℤ`
 is the group of units of the matrix ring `Matrix (Fin N) (Fin N) ℤ`; `Nat.totient` is `φ`;
@@ -123,6 +127,12 @@ theorem exists_orderOf_eq_totient {n : ℕ} (hn : 0 < n) :
 theorem exists_orderOf_eq_iff_rat {N m : ℕ} (hN : 0 < N) (hm : 0 < m) :
     (∃ A : Matrix.GeneralLinearGroup (Fin N) ℚ, orderOf A = m) ↔ psi m ≤ N := sorry
 
+/-- `GL(0, ℤ)` is trivial: its only finite order is `1`. -/
+theorem finiteOrders_zero : finiteOrders 0 = {1} := sorry
+
+/-- The finite orders grow with the dimension (an identity block pads an element). -/
+theorem finiteOrders_mono {N N' : ℕ} (h : N ≤ N') : finiteOrders N ⊆ finiteOrders N' := sorry
+
 /-- Parity: for even `N ≥ 2`, `GL(N + 1, ℤ)` has the same finite orders as `GL(N, ℤ)`, since `ψ`
 is even. (`GL(1, ℤ)` has the order `2`, which `GL(0, ℤ)` lacks, so `N ≥ 1` is needed.) -/
 theorem finiteOrders_succ_of_even {N : ℕ} (hN : 0 < N) (hN2 : Even N) :
@@ -178,6 +188,34 @@ theorem finiteOrders_twelve :
     finiteOrders 12 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 22, 24, 26,
       28, 30, 33, 35, 36, 40, 42, 44, 45, 48, 56, 60, 63, 66, 70, 72, 80, 84, 90, 105, 120, 126, 140,
       168, 180, 210} := sorry
+
+/-! ### Beyond dimension 12
+
+Rows `n = 20, 22, 24` of Table 1 of Bamberg–Cairns–Kilminster (the orders of `GL(n, ℤ)` that are not
+orders of `GL(n − 1, ℤ)`, that is, `ψ⁻¹{n}`) omit their values above `2000`: `2520`; `2310`; and
+`2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040`. These values of `ψ`, and the least dimensions
+they give, are checked by the kernel. -/
+
+theorem psi_2520 : psi 2520 = 20 := sorry
+
+theorem psi_2310 : psi 2310 = 22 := sorry
+
+theorem psi_eq_twentyfour :
+    ∀ m ∈ ({2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040} : Finset ℕ), psi m = 24 := sorry
+
+/-- The least dimension with an element of order `2520` is `20`. -/
+theorem isLeast_dimension_2520 :
+    IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = 2520} 20 := sorry
+
+/-- The least dimension with an element of order `2310` is `22`. -/
+theorem isLeast_dimension_2310 :
+    IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = 2310} 22 := sorry
+
+/-- The least dimension with an element of order `2184`, `2340`, `2640`, `2730`, `2772`, `3080`,
+`3960`, `4620` or `5040` is `24`. -/
+theorem isLeast_dimension_twentyfour :
+    ∀ m ∈ ({2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040} : Finset ℕ),
+      IsLeast {N | ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = m} 24 := sorry
 
 /-! The largest finite order in dimensions `1, 2, 4, 6, 8, 10, 12`. -/
 
