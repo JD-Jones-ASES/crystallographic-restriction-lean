@@ -14,7 +14,7 @@ comparator judges the elaborated constants. `scripts/check_definitions.py` compa
 
 namespace Crystallographic
 
-/-- Hiller's additive totient `ψ`: the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
+/-- The additive totient `ψ` (Hiller's `Φ`): the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
 `m`, except that the prime power `2` (that is, `p = 2` with exponent `1`) contributes `0`. So
 `ψ(0) = ψ(1) = ψ(2) = 0`, `ψ(pᵏ) = φ(pᵏ)` for every other prime power, and `ψ(ab) = ψ(a) + ψ(b)`
 for coprime `a`, `b` (OEIS A080737). -/

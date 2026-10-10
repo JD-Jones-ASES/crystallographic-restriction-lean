@@ -285,8 +285,8 @@ theorem psi_term_mono {p a b : ℕ} (hp : p.Prime) (ha : 0 < a) (hab : a ≤ b) 
   exact Nat.le_of_dvd (Nat.totient_pos.mpr (pow_pos hp.pos _))
     (Nat.totient_dvd_of_dvd (Nat.pow_dvd_pow p hab))
 
-/-- The covering inequality, corrected: the members of `S` must be nonzero (with `0 ∈ S` the
-pinned form is false, e.g. `m = 3`, `S = {0}`). -/
+/-- The covering inequality; the members of `S` must be nonzero (for `S = {0}` and `m = 3` the cover
+holds, since `3 ∣ 0`, but `ψ 3 = 2 > φ 0 = 0`). -/
 theorem psi_le_sum_totient_of_zero_notMem {m : ℕ} {S : Finset ℕ} (hS : 0 ∉ S)
     (hcover : ∀ p ∈ m.primeFactors, ∃ d ∈ S, p ^ m.factorization p ∣ d) :
     psi m ≤ ∑ d ∈ S, Nat.totient d := by

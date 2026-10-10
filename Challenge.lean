@@ -3,14 +3,14 @@ module
 public import Mathlib
 
 /-!
-# The crystallographic restriction in every dimension: `GL(N, ℤ)` has an element of order `m` if and only if `ψ(m) ≤ N`
+# The crystallographic restriction in every dimension: for `N, m ≥ 1`, `GL(N, ℤ)` has an element of order `m` if and only if `ψ(m) ≤ N`
 
 For a positive integer `m`, let `ψ(m)` be the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly
 dividing `m`, except that the prime power `2` contributes `0` (`φ` is Euler's totient). So
 `ψ(1) = ψ(2) = 0`, `ψ(3) = ψ(4) = ψ(6) = 2`, `ψ(5) = ψ(8) = ψ(10) = ψ(12) = 4`, `ψ(7) = ψ(9) = 6`, and
 `ψ(ab) = ψ(a) + ψ(b)` for coprime `a`, `b` (OEIS A080737). The crystallographic restriction in every
-dimension (Vaidyanathaswamy 1928; independently Hiller 1985, who introduced `ψ` and the tables; a proof
-in Kuzmanovich–Pavlichenkov 2002; Theorem 1 of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of
+dimension (Vaidyanathaswamy 1928; independently Hiller 1985, with the additive totient — his `Φ` — and a
+table to dimension 23; a proof in Kuzmanovich–Pavlichenkov 2002; Theorem 1 of Bamberg–Cairns–Kilminster 2003): for `N ≥ 1`, the group `GL(N, ℤ)` of
 invertible integer `N × N` matrices has an element of order `m ≥ 1` if and only if `ψ(m) ≤ N`. In
 dimensions two and three this is the classical restriction: the finite orders are `1, 2, 3, 4, 6`.
 
@@ -46,7 +46,7 @@ prime divisors; sets of natural numbers are `Set ℕ` literals.
 
 namespace Crystallographic
 
-/-- Hiller's additive totient `ψ`: the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
+/-- The additive totient `ψ` (Hiller's `Φ`): the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
 `m`, except that the prime power `2` (that is, `p = 2` with exponent `1`) contributes `0`. So
 `ψ(0) = ψ(1) = ψ(2) = 0`, `ψ(pᵏ) = φ(pᵏ)` for every other prime power, and `ψ(ab) = ψ(a) + ψ(b)`
 for coprime `a`, `b` (OEIS A080737). -/
@@ -99,8 +99,8 @@ theorem psi_orderOf_le {N : ℕ} (A : Matrix.GeneralLinearGroup (Fin N) ℤ) :
 
 /-- Sufficiency: for `N ≥ 1`, `m ≥ 1` and `ψ(m) ≤ N`, `GL(N, ℤ)` has an element of order `m`: a
 block for each prime power `pᵏ ≠ 2` exactly dividing `m` (multiplication by the root of `Φ_{pᵏ}` on
-`ℤ[X]/(Φ_{pᵏ})`, of size `φ(pᵏ)`), the sign `−1` when `m ≡ 2 (mod 4)`, and an identity block; for `m = 2`
-the `1 × 1` block `−1`. -/
+`ℤ[X]/(Φ_{pᵏ})`, of size `φ(pᵏ)`), the sign `−1` when `m ≡ 2 (mod 4)`, and an identity block; for `m = 2`,
+`−1` itself. -/
 theorem exists_orderOf_eq {N m : ℕ} (hN : 0 < N) (hm : 0 < m) (h : psi m ≤ N) :
     ∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ, orderOf A = m := sorry
 

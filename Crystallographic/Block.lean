@@ -8,13 +8,14 @@ public import Crystallographic.Defs
 * The cyclotomic block: for `n ≥ 1`, multiplication by `root (cyclotomic n ℤ)` on
   `AdjoinRoot (cyclotomic n ℤ)` is a `ℤ`-linear automorphism of a free module of rank `φ n`
   (`AdjoinRoot.powerBasis'` with `cyclotomic.monic`, `natDegree_cyclotomic`); its matrix in the
-  power basis is an element of `GL (Fin (φ n)) ℤ` of order `n` (`root ^ n = 1` as
-  `Φₙ ∣ X ^ n − 1`; `root ^ d ≠ 1` for `0 < d < n` as `Φₙ ∤ X ^ d − 1`, by coprimality over `ℚ`
-  via `Polynomial.map_dvd_map` for monic polynomials, or by a degree argument for prime powers).
-  Route: `Algebra.lmul ℤ _` composed with `LinearMap.toMatrixAlgEquiv pb.basis` is an injective
-  ring hom into the matrix ring; `Units.map` and `orderOf_injective` carry the order.
-* Block sums: `Matrix.fromBlocks A 0 0 B` reindexed along `finSumFinEquiv`; commuting blocks of
-  coprime orders multiply (`Commute.orderOf_mul_eq_mul_orderOf_of_coprime`).
+  power basis (`Algebra.leftMulMatrix pb.basis`, injective by `Algebra.leftMulMatrix_injective`) is
+  an element of `GL (Fin (φ n)) ℤ` of order `n`: `root ^ n = 1` as `Φₙ ∣ X ^ n − 1`, and
+  `n ∣ orderOf root` because `AdjoinRoot.lift` sends the root to the primitive root `exp (2πi/n)`
+  of `ℂ` (`Complex.isPrimitiveRoot_exp`, `IsPrimitiveRoot.isRoot_cyclotomic`, `orderOf_map_dvd`);
+  `orderOf_injective` carries the order to the matrix.
+* Block sums: the injective monoid homs `P ↦ fromBlocks P 0 0 1` and `Q ↦ fromBlocks 1 0 0 Q`
+  (`blk_inl`, `blk_inr`) have commuting images, so coprime orders multiply
+  (`Commute.orderOf_mul_eq_mul_orderOf_of_coprime`); the result is reindexed along `finSumFinEquiv`.
 * Padding by an identity block, and the sign: `−A` has order `2u` when `A` has odd order `u` in a
   positive dimension (`orderOf_neg_one`, the two commute, `Nat.Coprime 2 u`).
 -/

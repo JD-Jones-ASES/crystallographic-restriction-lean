@@ -7,9 +7,9 @@ the `_internal` theorem of the same name in the module named in VERIFICATION.md,
 
 ## 1. The function ψ (`Crystallographic/Psi.lean`)
 
-`psi m = ∑ p ∈ m.primeFactors, if p ^ m.factorization p = 2 then 0 else φ (p ^ m.factorization p)`: Hiller's
-additive totient, the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing `m`, the term for `pᵏ = 2` being `0`
-(OEIS A080737; `ψ(0) = ψ(1) = ψ(2) = 0`).
+`psi m = ∑ p ∈ m.primeFactors, if p ^ m.factorization p = 2 then 0 else φ (p ^ m.factorization p)`: the additive
+totient (Hiller's `Φ`), the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing `m`, the term for `pᵏ = 2` being
+`0` (OEIS A080737; `ψ(0) = ψ(1) = ψ(2) = 0`).
 
 - `psi_prime_pow`: for a prime power `pᵏ ≠ 2` (`k ≥ 1`) the sum has the single term `φ(pᵏ)`
   (`Nat.primeFactors_prime_pow`, `Nat.Prime.factorization_pow`).
@@ -52,15 +52,19 @@ is injective, so it preserves `orderOf` (`orderOf_injective`).
 ## 3. The blocks (`Crystallographic/Block.lean`)
 
 - `exists_orderOf_eq_totient`: for `n ≥ 1`, `g := cyclotomic n ℤ` is monic of degree `φ(n)`; on `R := AdjoinRoot g`
-  the power basis `AdjoinRoot.powerBasis'` has `φ(n)` elements, and multiplication by `root g` (`Algebra.lmul`), written
-  in that basis (`LinearMap.toMatrixAlgEquiv`), is an injective ring hom `R → Matrix (Fin φ(n)) (Fin φ(n)) ℤ`. The root is
-  a unit of order `n`: `root^n = 1` because `Φ_n ∣ X^n − 1` (`AdjoinRoot.mk_eq_zero`,
-  `Polynomial.cyclotomic.dvd_X_pow_sub_one`), and `root^d ≠ 1` for `0 < d < n` because `Φ_n ∤ X^d − 1`: over `ℚ`
-  (`Polynomial.map_dvd_map`, `Polynomial.map_cyclotomic_int`) `Φ_n` is prime and would divide some `Φ_e` with `e ∣ d`,
-  `e < n`, contradicting coprimality. `Units.map` carries the unit to `GL(φ(n), ℤ)` with the same order.
-- `exists_orderOf_eq_mul`: block sums `fromBlocks A 0 0 B`, reindexed along `finSumFinEquiv : Fin a ⊕ Fin b ≃ Fin (a + b)`,
-  form an injective hom from `GL(a, ℤ) × GL(b, ℤ)`; `(A, 1)` and `(1, B)` commute, so for coprime orders the product has
-  order `uv` (`Commute.orderOf_mul_eq_mul_orderOf_of_coprime`).
+  the power basis `pb := AdjoinRoot.powerBasis'` has `φ(n)` elements, and `Φ := Algebra.leftMulMatrix pb.basis`, the
+  matrix of multiplication in that basis, is an injective algebra hom `R → Matrix (Fin φ(n)) (Fin φ(n)) ℤ`
+  (`Algebra.leftMulMatrix_injective`). The root has order `n`: `root^n = 1` because `Φ_n ∣ X^n − 1`
+  (`AdjoinRoot.mk_eq_zero`, `Polynomial.cyclotomic.dvd_X_pow_sub_one`); and `n ∣ orderOf root` because
+  `AdjoinRoot.lift (Int.castRingHom ℂ) ζ` sends the root to `ζ = exp(2πi/n)`, a primitive `n`-th root of unity
+  (`Complex.isPrimitiveRoot_exp`, `Polynomial.map_cyclotomic_int`, `IsPrimitiveRoot.isRoot_cyclotomic`), so
+  `n = orderOf ζ ∣ orderOf root` (`orderOf_map_dvd`, `IsPrimitiveRoot.eq_orderOf`). `Φ root` is a unit
+  (`IsUnit.of_pow_eq_one`) of the same order (`orderOf_injective`, `orderOf_units`), and `blk_cast` moves it to
+  `GL(φ(n), ℤ)`.
+- `exists_orderOf_eq_mul`: the injective monoid homs `P ↦ fromBlocks P 0 0 1` and `Q ↦ fromBlocks 1 0 0 Q` (`blk_inl`,
+  `blk_inr`) have commuting images (`blk_commute`), so for coprime orders their product has order `uv`
+  (`Commute.orderOf_mul_eq_mul_orderOf_of_coprime`, `blk_transfer`); `blk_reindex` moves it along
+  `finSumFinEquiv : Fin a ⊕ Fin b ≃ Fin (a + b)`.
 - `exists_orderOf_eq_of_le`: the block sum with an identity block.
 - `orderOf_neg_one_gl`, `exists_orderOf_eq_two_mul`: `−1` has order `2` in `GL(N, ℤ)` for `N ≥ 1`; it commutes with `A`,
   so `−A = (−1)·A` has order `2u` when `A` has odd order `u`.
@@ -88,22 +92,27 @@ the rational one. `finiteOrders_succ_of_even`: `ψ(m) ≤ N + 1` with `ψ(m)` an
 
 ## 6. The tables (`Crystallographic/Compute.lean`, `Crystallographic/Tables.lean`)
 
-`psi` is defined through `Nat.factorization`, which the kernel does not evaluate, so `Compute.lean` defines `psiC` by
+`psi` is defined through `Nat.factorization`, which the kernel evaluates only impractically slowly at the table sizes,
+so `Compute.lean` defines `psiC` by
 trial division with a fuel argument (`stripPow`, `psiAux`, structural recursion) and proves `psiC_eq_psi`
 (`psiAux_eq`: induction on the fuel under the invariant that `m` has no prime factor below the trial divisor `p` and
 `m < (p + fuel)²`; a number `1 < m < p²` with no prime factor below `p` is prime; a trial divisor `p ∣ m` with no
 smaller prime factor of `m` is prime; `stripPow_spec` removes it exactly). Each table `finiteOrders_N` then reads:
-`finiteOrders N = {m | 0 < m ∧ ψ(m) ≤ N}` (`finiteOrders_eq`), `ψ(m) ≤ N` forces `m ≤ 2^(N + 1)` (`le_two_pow_psi`), and
-`decide +kernel` checks `psiC m ≤ N ↔ m ∈ table` for every `m < 2^(N + 1)`. The maxima `isGreatest_finiteOrders_N` read
-off the tables.
+`finiteOrders N = {m | 0 < m ∧ ψ(m) ≤ N}` (`finiteOrders_eq`), and `ψ(m) ≤ N ≤ 12` forces `m ≤ 2^(N + 1) ≤ 8192`
+(`le_two_pow_psi`). Seventeen kernel checks (`tbl_chunk12_0`, …, `tbl_chunk12_16`, one declaration per block of `512`
+values so the kernel's caches are released between them; assembled by `tbl_chunks12` and `tbl_key12`) show that below
+`8193` the `m ≥ 1` with `psiC m ≤ 12` are exactly the 48 members of the list `tbl_L12`;
+each table `N ≤ 12` is then cut out of that list by a `decide +kernel` over its 48 members (`tbl_table`). The maxima
+`isGreatest_finiteOrders_N` read off the tables.
 
 **Beyond dimension 12** (`Crystallographic/Erratum.lean`). `psi_2520 : ψ(2520) = 20`, `psi_2310 : ψ(2310) = 22` and
 `psi_eq_twentyfour` (ψ = 24 at 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040) are kernel computations of `psiC`;
 `isLeast_dimension_2520`, `isLeast_dimension_2310`, `isLeast_dimension_twentyfour` combine them with `isLeast_dimension`.
 Table 1 of Bamberg–Cairns–Kilminster prints `ψ⁻¹{n}` for even `n ≤ 24`; its rows `n ≤ 18` agree with `ψ`, while rows 20, 22
-and 24 omit exactly these eleven values, all above 2000 (the largest printed entry is 1980). The omission was found while
-checking the table against `ψ` and confirmed by two independent enumerations outside Lean (a sieve with the bound
-`m ≤ 2^(n + 1)`, and the structural enumeration of products of prime powers `q ≤ 2n`).
+and 24 omit exactly these eleven values, all above 2000 (the largest printed entry is 1980). The Lean statements prove the
+eleven values and their least dimensions; that nothing else is missing is checked outside Lean by `scripts/check_tables.py`,
+which re-derives every row by the structural enumeration of the products of prime powers `q ≤ 2n` (every `q ≠ 2` with
+`φ(q) ≤ n` has `q ≤ 2n`), checks the enumeration against brute force for `n ≤ 14`, and compares each row with the printed one.
 
 ## 7. The special linear group (`Crystallographic/SL.lean`)
 
@@ -121,9 +130,9 @@ and identity padding keeps them (`sl_good_of_le`).
 
 ## 8. Relation to the sources
 
-The theorem is Vaidyanathaswamy's (1928), on the orders of integer matrices; Hiller (1985) rediscovered it in the
-language of the crystallographic restriction, introduced the additive totient `ψ` and tabulated the orders to dimension
-23; Kuzmanovich and Pavlichenkov (2002) give a proof; Bamberg, Cairns and Kilminster (2003) state it as their Theorem 1
+The theorem is Vaidyanathaswamy's (1928), on the orders of integer matrices; Hiller (1985) rediscovered it for the point
+groups of space groups, with the additive totient (his `Φ`) and a table of the orders to dimension 23 (as his abstract
+states); Kuzmanovich and Pavlichenkov (2002) give a proof; Bamberg, Cairns and Kilminster (2003) state it as their Theorem 1
 with Table 1 of the sets `Ord_n`. The proofs here are the standard ones through minimal and cyclotomic polynomials and
 companion blocks, written for Mathlib. The hypotheses `N ≥ 1` and `m ≥ 1` are made explicit: `GL(0, ℤ)` is trivial while
 `ψ(2) = 0`, and Lean's `orderOf` is `0` at infinite order. The text read is the authors' PDF of Bamberg–Cairns–Kilminster

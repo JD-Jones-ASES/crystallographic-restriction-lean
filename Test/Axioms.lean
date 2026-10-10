@@ -32,8 +32,8 @@ run_cmd do
         unless allowed.contains ax do
           rejected := rejected + 1
           logError m!"Unexpected axiom dependency: {name} -> {ax}"
-  unless checked ≥ 40 do
-    logError m!"Axiom audit matched only {checked} project constants; expected at least 40"
+  unless checked ≥ 200 do
+    logError m!"Axiom audit matched only {checked} project constants; expected at least 200"
   for n in [`Crystallographic.psi_eq_zero_iff, `Crystallographic.psi_prime_pow,
       `Crystallographic.psi_mul, `Crystallographic.psi_le_totient, `Crystallographic.even_psi,
       `Crystallographic.psi_eq_sum_divisors, `Crystallographic.le_two_pow_psi,

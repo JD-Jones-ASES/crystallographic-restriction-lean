@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "The crystallographic restriction in every dimension: GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
+  name: "The crystallographic restriction in every dimension: for N, m >= 1, GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the finite-order tables for N <= 12, the least dimension of each order, and the same equivalence over Q"
   description: >-
     A Lean 4 development of the crystallographic restriction in every dimension. For a positive integer m
     let psi(m) be the sum of phi(p^k) over the prime powers p^k exactly dividing m, except that the prime
@@ -18,8 +18,8 @@ project:
     Corollaries: the finite orders of GL(N, Z) are the positive m with psi(m) <= N; the least dimension
     carrying an element of order m is psi(m), or 1 for m = 2 (OEIS A152455); GL(phi(n), Z) has an element
     of order n for every n >= 1; the same equivalence holds for GL(N, Q); GL(0, Z) has only the order 1 and
-    the finite orders grow with the dimension; GL(N + 1, Z) has the finite orders of GL(N, Z) for even
-    N >= 2; the set of finite orders is finite and bounded by 2^(N + 1). The arithmetic of psi: psi(m) = 0
+    the finite orders grow with the dimension; GL(N + 1, Z) has the same finite orders as GL(N, Z) for
+    even N >= 2; the set of finite orders is finite and bounded by 2^(N + 1). The arithmetic of psi: psi(m) = 0
     iff m <= 2; psi(p^k) = phi(p^k) for a prime power p^k != 2; additivity on coprime factors; psi <= phi;
     psi is even; psi as a sum over the exact prime-power divisors; m <= 2^(psi(m) + 1). The tables of
     finite orders for N = 1, ..., 12 (OEIS A080738) and the largest finite order 2, 6, 12, 30, 60, 120, 210
@@ -29,9 +29,13 @@ project:
     omit, are checked with their least dimensions. The same equivalence holds in SL(N, Z) for N >= 2 (an
     element of odd order has determinant 1; the block for 2^k, k >= 2, has even size and determinant 1; -A
     keeps the determinant in even dimension), and SL(1, Z) is trivial. The hypotheses N >= 1 and m >= 1 are
-    necessary and explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. Not
-    claimed: any first formalization of the two-dimensional case (public Lean proofs exist), the wallpaper
-    or space groups, or isometry groups.
+    necessary and explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. The
+    theorem is the standard description of the finite orders of integer matrices, used in the crystallography
+    of higher-dimensional lattices and quasicrystals and in integral representation theory; Mathlib's
+    docs/1000.yaml (Q3527223) and mathlib4 issue #6091 (item 60) list it unformalized, and as of 2026-10-09 no
+    formalization in every dimension, in either direction, was located in the registry, Mathlib, the Lean
+    repositories searched, the Isabelle AFP or arXiv. Not claimed: priority for the two- and three-dimensional
+    cases (public Lean proofs of the case N = 2 exist), the wallpaper or space groups, or isometry groups.
   authors: ["JD Jones"]
   responsible_maintainers: ["JD Jones"]
   license: "MIT"
@@ -89,7 +93,8 @@ sources:
       An independent rediscovery in the lattice form: m is the order of an element of the point group of
       an n-dimensional space group iff Phi(m) <= n, for Hiller's additive totient Phi (the psi of this
       development), with a table of the allowable orders in dimensions <= 23. Only the abstract was read;
-      Bamberg-Cairns-Kilminster quote its Proposition 2.2. Nothing from it is formalized.
+      Bamberg-Cairns-Kilminster cite its Proposition 2.2 for their formula (1) and report its computation of
+      Ord_n minus Ord_{n-1} for n <= 22. Nothing from it is formalized.
   - title: "Finite Groups of Matrices Whose Entries Are Integers"
     authors: ["James Kuzmanovich", "Andrey Pavlichenkov"]
     id: "doi:10.1080/00029890.2002.11919850"
@@ -110,7 +115,7 @@ sources:
     note: >-
       The function psi; its values agree with the pinned definition for every n <= 10000 (checked outside
       Lean). Background only.
-  - title: "A152455: minimal integer m such that there exists an m X m integer matrix of order n"
+  - title: "A152455: a(n) = minimal integer m such that there exists an m X m integer matrix of order n"
     authors: ["W. R. Unger"]
     id: "https://oeis.org/A152455"
     type: "other"
@@ -118,7 +123,7 @@ sources:
     relationship: "background"
     author_endorsement: "n/a"
     note: "The least dimension (1 at n = 2, psi(n) otherwise) of isLeast_dimension; agrees for n <= 10000. Background only."
-  - title: "A080738: irregular triangle read by rows, the orders of GL(2n, Z) that are not orders of GL(2n - 1, Z)"
+  - title: "A080738: Array read by rows in which 0th row is {1,2}; for n>0, n-th row gives finite orders of 2n X 2n integer matrices that are not orders of 2n-1 X 2n-1 integer matrices"
     authors: ["N. J. A. Sloane"]
     id: "https://oeis.org/A080738"
     type: "other"
@@ -126,7 +131,7 @@ sources:
     relationship: "background"
     author_endorsement: "n/a"
     note: "Its rows for 2n <= 12 are the differences of the tables for N = 1, ..., 12 (checked outside Lean). Background only."
-  - title: "A080740: number of m with A080737(m) <= 2n"
+  - title: "A080740: a(n) = number of m such that A080737(m) <= 2n"
     authors: ["N. J. A. Sloane"]
     id: "https://oeis.org/A080740"
     type: "other"
@@ -134,47 +139,14 @@ sources:
     relationship: "background"
     author_endorsement: "n/a"
     note: "The sizes 2, 5, 9, 17, 24, 35, 48 of the tables for N = 1, 2, 4, 6, 8, 10, 12 (checked outside Lean). Background only."
-  - title: "A005417: maximal period of an n-stage shift register (the largest finite order in GL(2n, Z) and GL(2n + 1, Z))"
+  - title: "A005417: Maximal period of an n-stage shift register"
     authors: ["N. J. A. Sloane"]
     id: "https://oeis.org/A005417"
     type: "other"
     location: "The On-Line Encyclopedia of Integer Sequences, A005417 (read 2026-10-09)"
     relationship: "background"
     author_endorsement: "n/a"
-    note: "The maxima 2, 6, 12, 30, 60, 120, 210 for N = 1, 2, 4, 6, 8, 10, 12 (checked outside Lean). Background only."
-  - title: "Crystallographic restriction in rank two (SymmetryGraded/Crystallographic.lean)"
-    authors: ["acprk"]
-    id: "https://github.com/acprk/symmetry-graded-lean/tree/25fa230bf8bf0e5f1b33d6ed5ddac58bb0c76aea"
-    type: "other"
-    location: "SymmetryGraded/Crystallographic.lean: orderOf_mem, no_order_five_or_ge_seven, classification, MA_orderOf_three/four/six (read 2026-10-09)"
-    relationship: "background"
-    author_endorsement: "not-contacted"
-    note: >-
-      Prior Lean formalization (Lean v4.31.0-rc2, no sorry, unregistered, no license file) of the case
-      N = 2: an integer 2 x 2 matrix of finite order has order in {1, 2, 3, 4, 6}, and 3, 4, 6 occur.
-      The tables for N = 2 and N = 3 here are corollaries of the general theorem and are not new.
-      Nothing from it is used.
-  - title: "Crystallographic restriction in dimension two (ferris-howard, lean/Crystal/Wallpaper/Restriction.lean)"
-    authors: ["Alexander Kiselev"]
-    id: "https://github.com/akiselev/ferris-howard/tree/0f1eacdaa0644a2a93cc35a6999e9e6d5127b068"
-    type: "other"
-    location: "lean/Crystal/Wallpaper/Restriction.lean (crystallographic_restriction, orderOf_rot4, orderOf_rot6); lean/Challenge.lean (read 2026-10-09)"
-    relationship: "background"
-    author_endorsement: "not-contacted"
-    note: >-
-      A second prior Lean formalization of the case N = 2, stated for GL (Fin 2) Z and IsOfFinOrder, with
-      witnesses of orders 4 and 6; prepared for the registry (Apache-2.0 per its formalization.yaml) and
-      not registered as of 2026-10-09. Nothing from it is used.
-  - title: "CrystallographicRestriction.v (theory-of-systems-coq)"
-    authors: ["Horsocrates"]
-    id: "https://github.com/Horsocrates/theory-of-systems-coq/blob/90ff5c2031/src/stdlib/CrystallographicRestriction.v"
-    type: "other"
-    location: "src/stdlib/CrystallographicRestriction.v (commit 90ff5c2031, 2026-06-03; MIT)"
-    relationship: "background"
-    author_endorsement: "not-contacted"
-    note: >-
-      A Rocq development of a trace form of the restriction for rotations of Q^3 (orders 1, 2, 3, 4, 6).
-      Adjacent prior art named in the prior-art statement; nothing from it is used.
+    note: "For n >= 1, a(n) is the largest finite order in GL(2n, Z) and GL(2n + 1, Z), and a(0) = 2 is that of GL(1, Z): the maxima 2, 6, 12, 30, 60, 120, 210 for N = 1, 2, 4, 6, 8, 10, 12 (checked outside Lean). Background only."
   - title: "My 100 theorems (mathlib4 issue #6091), item 60: Generalised crystallographic restriction theorem"
     authors: ["Parcly Taxel"]
     id: "https://github.com/leanprover-community/mathlib4/issues/6091"
@@ -185,7 +157,7 @@ sources:
     note: "Lists the necessity direction as a formalization target. Named in the prior-art statement; nothing from it is used."
   - title: "Mathlib docs/1000.yaml, entry Q3527223 (Crystallographic restriction theorem)"
     authors: ["The mathlib Community"]
-    id: "https://github.com/leanprover-community/mathlib4/blob/master/docs/1000.yaml"
+    id: "https://github.com/leanprover-community/mathlib4/blob/a02a63c2100af866343c74550041885f8f39f099/docs/1000.yaml"
     type: "other"
     location: "docs/1000.yaml, Q3527223 (read 2026-10-09 at master a02a63c: no declaration, no URL)"
     relationship: "background"
@@ -208,6 +180,28 @@ sources:
     author_endorsement: "n/a"
     note: "The library the development imports (tag v4.35.0-rc2): cyclotomic polynomials, minimal polynomials, AdjoinRoot, Nat.totient, Nat.factorization, the general linear group."
 
+related_formalizations:
+  - id: "https://github.com/acprk/symmetry-graded-lean/tree/25fa230bf8bf0e5f1b33d6ed5ddac58bb0c76aea"
+    relationship: "independent"
+    note: >-
+      Prior Lean formalization (SymmetryGraded/Crystallographic.lean: orderOf_mem, no_order_five_or_ge_seven,
+      classification, MA_orderOf_three/four/six; Lean v4.31.0-rc2, no sorry, unregistered, no license file) of
+      the case N = 2: an integer 2 x 2 matrix of finite order has order in {1, 2, 3, 4, 6}, and 3, 4, 6 occur.
+      The tables for N = 2 and N = 3 here are corollaries of the general theorem and are not new. Nothing from
+      it is used.
+  - id: "https://github.com/akiselev/ferris-howard/tree/0f1eacdaa0644a2a93cc35a6999e9e6d5127b068"
+    relationship: "independent"
+    note: >-
+      A second prior Lean formalization of the case N = 2 (lean/Crystal/Wallpaper/Restriction.lean:
+      crystallographic_restriction for GL (Fin 2) Z and IsOfFinOrder, with witnesses of orders 4 and 6;
+      lean/Challenge.lean), prepared for the registry (Apache-2.0 per its formalization.yaml) and not registered
+      as of 2026-10-09. Nothing from it is used.
+  - id: "https://github.com/Horsocrates/theory-of-systems-coq/blob/90ff5c20314d30d8baf5de26de431b43b685f65f/src/stdlib/CrystallographicRestriction.v"
+    relationship: "other"
+    note: >-
+      A Rocq development (MIT, 2026-06-03) of a trace form of the restriction for rotations of Q^3 (orders
+      1, 2, 3, 4, 6). Adjacent, named in the prior-art statement; nothing from it is used.
+
 status:
   scope: >-
     Forty-six compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
@@ -220,7 +214,8 @@ status:
     twelve tables N = 1, ..., 12 as explicit sets; the maxima in dimensions 1, 2, 4, 6, 8, 10, 12; the
     values psi(2520) = 20, psi(2310) = 22 and psi = 24 at nine further integers, with the least dimensions
     20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Not claimed:
-    the wallpaper or space groups; isometry groups; novelty of the two- and three-dimensional cases. The intentional placeholders of
+    priority for the two- and three-dimensional cases (public Lean proofs of the case N = 2 exist); the
+    wallpaper or space groups; isometry groups. The intentional placeholders of
     Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -468,7 +463,7 @@ automation:
         statements and their fidelity check against Bamberg-Cairns-Kilminster, the Lean proofs, the
         standard-library replay of the tables, the literature and prior-art searches, and the repository
         text; Claude Fable 5.1 pinned the statements, merged the proof files and wrote the documents, Claude
-        Opus 5.5 subagents wrote the proofs, the checkers and the drafts. Lean v4.35.0-rc2 and Mathlib
+        Opus 5.5 subagents wrote the proofs, the checkers and the audits. Lean v4.35.0-rc2 and Mathlib
         v4.35.0-rc2 (commit 065356127b1dc0016f66b7283ce0ce2c4055aa55) are pinned by the committed manifest
         and lake update is never run; there are no GitHub Actions workflows. There is no native_decide. The
         proofs use Mathlib's minimal and cyclotomic polynomials over Q, AdjoinRoot with its power basis and
@@ -509,42 +504,42 @@ alignment:
       lean: "Crystallographic.psi_eq_zero_iff"
       module: "Solution"
       status: "proved"
-      note: "Ψ(m) = 0 iff m ≤ 2."
+      note: "ψ(m) = 0 iff m ≤ 2."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (the definition of psi)"
       lean: "Crystallographic.psi_prime_pow"
       module: "Solution"
       status: "proved"
-      note: "Ψ(pᵏ) = φ(pᵏ) for a prime power pᵏ ≠ 2."
+      note: "ψ(pᵏ) = φ(pᵏ) for a prime power pᵏ ≠ 2."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (the definition of psi)"
       lean: "Crystallographic.psi_mul"
       module: "Solution"
       status: "proved"
-      note: "Ψ(ab) = ψ(a) + ψ(b) for coprime a, b."
+      note: "ψ(ab) = ψ(a) + ψ(b) for coprime a, b."
     - source: "this development"
       lean: "Crystallographic.psi_le_totient"
       module: "Solution"
       status: "proved"
-      note: "Ψ(m) ≤ φ(m)."
+      note: "ψ(m) ≤ φ(m)."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 203 (parity)"
       lean: "Crystallographic.even_psi"
       module: "Solution"
       status: "proved"
-      note: "Ψ(m) is even."
+      note: "ψ(m) is even."
     - source: "this development"
       lean: "Crystallographic.psi_eq_sum_divisors"
       module: "Solution"
       status: "proved"
-      note: "Ψ(m) as the sum of φ(d) over the exact prime-power divisors d ≠ 2 of m."
+      note: "ψ(m) as the sum of φ(d) over the exact prime-power divisors d ≠ 2 of m."
     - source: "this development"
       lean: "Crystallographic.le_two_pow_psi"
       module: "Solution"
       status: "proved"
-      note: "M ≤ 2^(ψ(m) + 1) for m ≥ 1."
+      note: "m ≤ 2^(ψ(m) + 1) for m ≥ 1."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
       lean: "Crystallographic.psi_orderOf_le"
       module: "Solution"
       status: "proved"
-      note: "Ψ(orderOf A) ≤ N for every A ∈ GL(N, ℤ) (necessity)."
+      note: "ψ(orderOf A) ≤ N for every A ∈ GL(N, ℤ) (necessity)."
     - source: "Bamberg-Cairns-Kilminster 2003, p. 202 (Theorem 1)"
       lean: "Crystallographic.exists_orderOf_eq"
       module: "Solution"
@@ -564,7 +559,7 @@ alignment:
       lean: "Crystallographic.isLeast_dimension"
       module: "Solution"
       status: "proved"
-      note: "The least N carrying an element of order m is ψ(m), or 1 for m = 2."
+      note: "The least N carrying an element of order m ≥ 1 is ψ(m), or 1 for m = 2."
     - source: "this development"
       lean: "Crystallographic.exists_orderOf_eq_totient"
       module: "Solution"
@@ -589,7 +584,7 @@ alignment:
       lean: "Crystallographic.finiteOrders_succ_of_even"
       module: "Solution"
       status: "proved"
-      note: "GL(N + 1, ℤ) has the finite orders of GL(N, ℤ) for even N ≥ 2."
+      note: "GL(N + 1, ℤ) has the same finite orders as GL(N, ℤ) for even N ≥ 2."
     - source: "this development"
       lean: "Crystallographic.le_two_pow_of_mem_finiteOrders"
       module: "Solution"
@@ -674,17 +669,17 @@ alignment:
       lean: "Crystallographic.psi_2520"
       module: "Solution"
       status: "proved"
-      note: "Ψ(2520) = 20."
+      note: "ψ(2520) = 20."
     - source: "this development (a value omitted from row 22 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
       lean: "Crystallographic.psi_2310"
       module: "Solution"
       status: "proved"
-      note: "Ψ(2310) = 22."
+      note: "ψ(2310) = 22."
     - source: "this development (the values omitted from row 24 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
       lean: "Crystallographic.psi_eq_twentyfour"
       module: "Solution"
       status: "proved"
-      note: "Ψ = 24 at 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040."
+      note: "ψ = 24 at 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040."
     - source: "this development (row 20 of Table 1 of Bamberg-Cairns-Kilminster 2003)"
       lean: "Crystallographic.isLeast_dimension_2520"
       module: "Solution"

@@ -6,14 +6,14 @@ public import Crystallographic
 # Solution
 
 Each statement of `Challenge.lean`, restated verbatim and closed by the internal theorem of the same
-name with the suffix `_internal` (the modules of `Crystallographic/`; VERIFICATION.md names the module of each theorem). This module does not import `Challenge.lean`; the definitions come from
+name with the suffix `_internal` (the modules of `Crystallographic/`; VERIFICATION.md names the module of
+each theorem). This module does not import `Challenge.lean`; the definitions come from
 `Crystallographic/Defs.lean`, which restates those of the Challenge character for character.
 -/
 
 @[expose] public section
 
 namespace Crystallographic
-
 
 theorem psi_eq_zero_iff (m : ℕ) : psi m = 0 ↔ m ≤ 2 :=
   psi_eq_zero_iff_internal m

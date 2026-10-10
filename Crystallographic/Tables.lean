@@ -7,10 +7,11 @@ public import Crystallographic.Compute
 # The tables
 
 `finiteOrders N = {m | 0 < m ∧ psi m ≤ N}` (`finiteOrders_eq_internal`), `m ≤ 2 ^ (N + 1)` for
-`psi m ≤ N` (`le_two_pow_psi_internal`), and `psi = psiC` (`psiC_eq_psi`). One kernel check
-(`tbl_chunks12`, chunked to bound the kernel's recursion depth) shows that below `8193` the orders
-with `psiC m ≤ 12` are exactly the `48` members of `tbl_L12`; every table `N ≤ 12` is then cut out
-of that list by a `decide +kernel` over its `48` members (`tbl_table`), and each maximum reads off
+`psi m ≤ N` (`le_two_pow_psi_internal`), and `psi = psiC` (`psiC_eq_psi`). Seventeen kernel checks
+(`tbl_chunk12_0`, …, `tbl_chunk12_16`, one declaration per block of `512` values so the kernel's caches
+are released between them; assembled by `tbl_chunks12` and `tbl_key12`) show that below `8193` the
+orders with `psiC m ≤ 12` are exactly the `48` members of `tbl_L12`; every table `N ≤ 12` is then cut
+out of that list by a `decide +kernel` over its `48` members (`tbl_table`), and each maximum reads off
 its list.
 -/
 

@@ -5,7 +5,7 @@ public import Crystallographic.Psi
 /-!
 # A kernel-computable `ψ`
 
-`psi` is defined through `Nat.factorization`, which the kernel cannot evaluate. `psiC` computes the
+`psi` is defined through `Nat.factorization`, which the kernel does not evaluate efficiently. `psiC` computes the
 same function by trial division with a fuel argument (structural recursion, so `decide +kernel`
 reduces it): `psiAux fuel p m` sums the `ψ`-terms of the prime powers of `m` whose primes are
 `≥ p`, under the invariant that `m` has no prime factor below `p` and `m < (p + fuel)²`. If `m ≤ 1`
