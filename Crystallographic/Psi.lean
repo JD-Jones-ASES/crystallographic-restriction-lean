@@ -215,7 +215,62 @@ theorem le_two_pow_psi_internal {m : ℕ} (hm : 0 < m) : m ≤ 2 ^ (psi m + 1) :
 theorem psi_eq_sum_divisors_internal (m : ℕ) :
     psi m = ∑ d ∈ m.divisors,
       if IsPrimePow d ∧ Nat.Coprime d (m / d) ∧ d ≠ 2 then Nat.totient d else 0 := by
-  sorry
+  classical
+  rcases eq_or_ne m 0 with rfl | hm
+  · simp [psi_zero]
+  set g : ℕ → ℕ := fun d =>
+    if IsPrimePow d ∧ Nat.Coprime d (m / d) ∧ d ≠ 2 then Nat.totient d else 0 with hg
+  have hinj : Set.InjOn (fun p => p ^ m.factorization p) (m.primeFactors : Set ℕ) := by
+    intro p hp p' hp' h
+    have hp1 := Nat.prime_of_mem_primeFactors hp
+    have hp1' := Nat.prime_of_mem_primeFactors hp'
+    have h' := congrArg Nat.primeFactors h
+    simp only at h'
+    rw [Nat.primeFactors_prime_pow (psi_factorization_pos hp).ne' hp1,
+      Nat.primeFactors_prime_pow (psi_factorization_pos hp').ne' hp1'] at h'
+    exact Finset.singleton_injective h'
+  have hsub : m.primeFactors.image (fun p => p ^ m.factorization p) ⊆ m.divisors := by
+    intro d hd
+    obtain ⟨p, hp, rfl⟩ := Finset.mem_image.mp hd
+    exact Nat.mem_divisors.mpr ⟨Nat.ordProj_dvd m p, hm⟩
+  have hz : ∀ d ∈ m.divisors,
+      d ∉ m.primeFactors.image (fun p => p ^ m.factorization p) → g d = 0 := by
+    intro d hd hnot
+    simp only [hg]
+    split_ifs with h
+    · exfalso
+      obtain ⟨hpp, hcop, -⟩ := h
+      obtain ⟨p, j, hp, hj, rfl⟩ := (isPrimePow_nat_iff _).mp hpp
+      have hdm : p ^ j ∣ m := Nat.dvd_of_mem_divisors hd
+      apply hnot
+      refine Finset.mem_image.mpr ⟨p, Nat.mem_primeFactors.mpr
+        ⟨hp, dvd_trans (dvd_pow_self p hj.ne') hdm, hm⟩, ?_⟩
+      have hcp : Nat.Coprime p (m / p ^ j) :=
+        Nat.Coprime.coprime_dvd_left (dvd_pow_self p hj.ne') hcop
+      have h0 : (m / p ^ j).factorization p = 0 :=
+        Nat.factorization_eq_zero_of_not_dvd ((Nat.Prime.coprime_iff_not_dvd hp).mp hcp)
+      have hmul : m = p ^ j * (m / p ^ j) := (Nat.mul_div_cancel' hdm).symm
+      have hj' : m.factorization p = j := by
+        rw [hmul, Nat.factorization_mul_apply_of_coprime hcop, hp.factorization_pow,
+          Finsupp.single_eq_same, h0, add_zero]
+      simp only [hj']
+    · rfl
+  rw [← Finset.sum_subset hsub hz, Finset.sum_image hinj, psi_eq_sum_term]
+  refine Finset.sum_congr rfl fun p hp => ?_
+  have hpr := Nat.prime_of_mem_primeFactors hp
+  have hk := psi_factorization_pos hp
+  have hpp : IsPrimePow (p ^ m.factorization p) :=
+    (isPrimePow_nat_iff _).mpr ⟨p, _, hpr, hk, rfl⟩
+  have hcop : Nat.Coprime (p ^ m.factorization p) (m / p ^ m.factorization p) :=
+    Nat.Coprime.pow_left _ (Nat.coprime_ordCompl hpr hm)
+  simp only [hg, psi_term]
+  by_cases h : p ^ m.factorization p = 2
+  · simp only [h, ne_eq, not_true_eq_false, and_false, ↓reduceIte]
+  · have hy : IsPrimePow (p ^ m.factorization p) ∧
+        Nat.Coprime (p ^ m.factorization p) (m / p ^ m.factorization p) ∧
+        p ^ m.factorization p ≠ 2 := ⟨hpp, hcop, h⟩
+    simp only [h, ↓reduceIte]
+    exact (ite_eq_left_iff.mpr fun hn => absurd hy hn).symm
 
 theorem psi_term_mono {p a b : ℕ} (hp : p.Prime) (ha : 0 < a) (hab : a ≤ b) :
     (if p ^ a = 2 then 0 else Nat.totient (p ^ a)) ≤
