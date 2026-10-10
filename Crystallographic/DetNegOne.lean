@@ -297,4 +297,26 @@ theorem isLeast_dimension_det_neg_one_internal {m : ℕ} (hm : Even m) (h0 : 0 <
   · rintro N ⟨A, hA, hdet⟩
     exact (det_neg_one_imp_internal A hA h0 hdet).2
 
+/-- The same classification over `ℚ`: necessity is `dn_nec_rat`; sufficiency maps the integer witness
+along the injective `Units.map (RingHom.mapMatrix (Int.castRingHom ℚ))`. -/
+theorem exists_orderOf_eq_det_neg_one_iff_rat_internal {N m : ℕ} (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℚ,
+      orderOf A = m ∧ (A : Matrix (Fin N) (Fin N) ℚ).det = -1) ↔
+      Even m ∧ psi m + 1 ≤ N := by
+  constructor
+  · rintro ⟨A, hA, hdet⟩
+    exact dn_nec_rat _ hm (by rw [orderOf_units, hA]) hdet
+  · rintro ⟨he, h⟩
+    obtain ⟨A, hA, hdet⟩ := exists_orderOf_eq_det_neg_one_internal he hm h
+    let φ : Matrix.GeneralLinearGroup (Fin N) ℤ →* Matrix.GeneralLinearGroup (Fin N) ℚ :=
+      Units.map ((Int.castRingHom ℚ).mapMatrix : Matrix (Fin N) (Fin N) ℤ →+* _).toMonoidHom
+    have hφ : Function.Injective φ := by
+      apply Units.map_injective
+      intro P R hPR
+      exact Matrix.map_injective Int.cast_injective hPR
+    refine ⟨φ A, by rw [orderOf_injective φ hφ A, hA], ?_⟩
+    show ((Int.castRingHom ℚ).mapMatrix (A : Matrix (Fin N) (Fin N) ℤ)).det = -1
+    rw [← RingHom.map_det, hdet]
+    simp
+
 end Crystallographic
