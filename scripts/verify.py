@@ -95,10 +95,9 @@ def check_yaml():
         mains = [m["declaration"] for m in data["status"]["main_results"]]
         if mains != config["theorem_names"]:
             problems.append("status.main_results differ from comparator.json theorem_names")
-        aligned = {a["lean"] for a in data.get("alignment", {}).get("statements", [])}
-        gap = set(config["theorem_names"]) - aligned
-        if gap:
-            problems.append("alignment.statements misses " + ", ".join(sorted(gap)))
+        aligned = [a["lean"] for a in data.get("alignment", {}).get("statements", [])]
+        if aligned != config["theorem_names"]:
+            problems.append("alignment.statements differ from comparator.json theorem_names in order")
         if config.get("definition_names"):
             problems.append("comparator.json lists definition holes; this entry's definitions are "
                             "fully specified")

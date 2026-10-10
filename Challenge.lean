@@ -34,7 +34,11 @@ This file states, and `Solution.lean` proves (kernel-only):
   order `2, 6, 12, 30, 60, 120, 210` in dimensions `1, 2, 4, 6, 8, 10, 12`;
 * beyond dimension 12: the eleven orders `2520`, `2310`, `2184`, …, `5040` with `ψ = 20, 22, 24`, hence
   least dimensions `20`, `22`, `24` — the values above `2000` missing from rows `20`, `22`, `24` of Table 1
-  of Bamberg–Cairns–Kilminster.
+  of Bamberg–Cairns–Kilminster;
+* every even value of `ψ` has a positive odd squarefree witness; exact inclusion and equality of the
+  spectra in positive dimensions, determined by integer half-dimensions;
+* an integral symmetric positive definite form preserved by each finite-order integral matrix,
+  positive definite also on real vectors, and the resulting order criterion for suitable lattice forms.
 
 Conventions: `orderOf` is Mathlib's (`0` at infinite order); `Matrix.GeneralLinearGroup (Fin N) ℤ`
 is the group of units of the matrix ring `Matrix (Fin N) (Fin N) ℤ`; `Nat.totient` is `φ`;
@@ -46,7 +50,7 @@ prime divisors; sets of natural numbers are `Set ℕ` literals.
 
 namespace Crystallographic
 
-/-- The additive totient `ψ` (Hiller's `Φ`): the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
+/-- The additive totient `ψ` of Bamberg–Cairns–Kilminster (2003), p. 202: the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing
 `m`, except that the prime power `2` (that is, `p = 2` with exponent `1`) contributes `0`. So
 `ψ(0) = ψ(1) = ψ(2) = 0`, `ψ(pᵏ) = φ(pᵏ)` for every other prime power, and `ψ(ab) = ψ(a) + ψ(b)`
 for coprime `a`, `b` (OEIS A080737). -/
@@ -248,5 +252,44 @@ theorem isGreatest_finiteOrders_eight : IsGreatest (finiteOrders 8) 60 := sorry
 theorem isGreatest_finiteOrders_ten : IsGreatest (finiteOrders 10) 120 := sorry
 
 theorem isGreatest_finiteOrders_twelve : IsGreatest (finiteOrders 12) 210 := sorry
+
+/-! ### Every even minimum dimension occurs, and integral invariant forms -/
+
+/-- Every even value is attained by a positive odd squarefree order (BCK Proposition 3(2) and its proof). -/
+theorem exists_odd_squarefree_psi_eq (n : ℕ) :
+    ∃ m : ℕ, 0 < m ∧ Odd m ∧ Squarefree m ∧ psi m = 2 * n := sorry
+
+/-- The image of psi is exactly the even natural numbers. -/
+theorem range_psi : Set.range psi = {n : ℕ | Even n} := sorry
+
+/-- In positive dimensions, spectrum inclusion is equivalent to comparison of integer half-dimensions. -/
+theorem finiteOrders_subset_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
+    finiteOrders N ⊆ finiteOrders M ↔ N / 2 ≤ M / 2 := sorry
+
+/-- Two positive dimensions have identical finite-order spectra exactly when their integer halves agree. -/
+theorem finiteOrders_eq_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
+    finiteOrders N = finiteOrders M ↔ N / 2 = M / 2 := sorry
+
+/-- An odd squarefree order first appears at each positive even dimension. -/
+theorem exists_new_odd_squarefree_order (n : ℕ) :
+    ∃ m : ℕ, Odd m ∧ Squarefree m ∧
+      m ∈ finiteOrders (2 * n + 2) ∧ m ∉ finiteOrders (2 * n + 1) := sorry
+
+/-- Every finite-order integral matrix preserves an integral symmetric positive definite form, also positive definite on real vectors. -/
+theorem exists_integral_invariant_posDef {N m : ℕ}
+    (A : Matrix.GeneralLinearGroup (Fin N) ℤ) (hm : 0 < m) (hA : orderOf A = m) :
+    ∃ Q : Matrix (Fin N) (Fin N) ℤ,
+      Q.IsSymm ∧ Q.PosDef ∧ ((Int.castRingHom ℝ).mapMatrix Q).PosDef ∧
+        Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
+          (A : Matrix (Fin N) (Fin N) ℤ) = Q := sorry
+
+/-- The crystallographic criterion is realized by an isometry of a suitable positive definite integral form in the same dimension. -/
+theorem exists_integral_posDef_isometry_iff {N m : ℕ} (hN : 0 < N) (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      ∃ Q : Matrix (Fin N) (Fin N) ℤ,
+        orderOf A = m ∧ Q.IsSymm ∧ Q.PosDef ∧
+          ((Int.castRingHom ℝ).mapMatrix Q).PosDef ∧
+          Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
+            (A : Matrix (Fin N) (Fin N) ℤ) = Q) ↔ psi m ≤ N := sorry
 
 end Crystallographic

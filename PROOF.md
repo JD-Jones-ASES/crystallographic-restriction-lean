@@ -8,7 +8,7 @@ the `_internal` theorem of the same name in the module named in VERIFICATION.md,
 ## 1. The function ψ (`Crystallographic/Psi.lean`)
 
 `psi m = ∑ p ∈ m.primeFactors, if p ^ m.factorization p = 2 then 0 else φ (p ^ m.factorization p)`: the additive
-totient (Hiller's `Φ`), the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing `m`, the term for `pᵏ = 2` being
+totient defined on p. 202 of Bamberg–Cairns–Kilminster, the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing `m`, the term for `pᵏ = 2` being
 `0` (OEIS A080737; `ψ(0) = ψ(1) = ψ(2) = 0`).
 
 - `psi_prime_pow`: for a prime power `pᵏ ≠ 2` (`k ≥ 1`) the sum has the single term `φ(pᵏ)`
@@ -130,14 +130,89 @@ and identity padding keeps them (`sl_good_of_le`).
 
 ## 8. Relation to the sources
 
-The theorem is Vaidyanathaswamy's (1928), on the orders of integer matrices; Hiller (1985) rediscovered it for the point
-groups of space groups, with the additive totient (his `Φ`) and a table of the orders to dimension 23 (as his abstract
-states); Kuzmanovich and Pavlichenkov (2002) give a proof; Bamberg, Cairns and Kilminster (2003) state it as their Theorem 1
-with Table 1 of the sets `Ord_n`. The proofs here are the standard ones through minimal and cyclotomic polynomials and
-companion blocks, written for Mathlib. The hypotheses `N ≥ 1` and `m ≥ 1` are made explicit: `GL(0, ℤ)` is trivial while
-`ψ(2) = 0`, and Lean's `orderOf` is `0` at infinite order. The text read is the authors' PDF of Bamberg–Cairns–Kilminster
-(pp. 202–209, with the Monthly's pagination); Hiller and Kuzmanovich–Pavlichenkov were read in abstract only, and
-Vaidyanathaswamy's two 1928 notes not at all. In the OEIS, `ψ` is A080737, the least dimension A152455, the rows
-`ψ⁻¹{2k}` A080738, the number of finite orders A080740 and the largest finite order A005417. The two-dimensional case is
-already in public Lean (acprk/symmetry-graded-lean and akiselev/ferris-howard, 2026-08 and 2026-09, both unregistered);
-nothing here claims a first formalization of the classical restriction.
+The direct original statement of the additive-totient criterion is **Theorem I, p. 268**, of
+Vaidyanathaswamy's *On the Possible Periods of Integer-Matrices*, J. London Math. Soc. 3 (1928),
+268–272, proved on pp. 269–271. His earlier *Integer-Roots of the Unit Matrix*, pp. 121–124 of the
+same volume, supplies the cyclotomic characteristic-polynomial/LCM criterion and companion-block
+construction on pp. 122–123. Both notes were read in full during the pre-submission consult from
+the [original volume in the Central University Library, Iași](https://dspace.bcu-iasi.ro/handle/123456789/43233).
+The later paper's p. 272 footnote corrects the earlier paper's omission of order 6 in dimension 2.
+Its Theorem II (minimum totient sum for a fixed LCM) needs order 2 handled separately if stated
+literally for every positive order; the repository already does this in `isLeast_dimension`.
+
+Bamberg–Cairns–Kilminster (2003), Theorem 1 on p. 202, is the directly read modern source for the
+precise `psi` convention and the main statement. Their published author PDF, pp. 202–209, was read
+in full. Proposition 3(2) and its proof on p. 207 are the source for the odd squarefree witnesses
+in §9. The invariant integral Gram form in §10 is the standard finite-group averaging construction,
+written without division.
+
+Hiller (1985) and Kuzmanovich–Pavlichenkov (2002) **remain unread in full** in this consult. Hiller's
+abstract and the references in Bamberg–Cairns–Kilminster establish the related higher-dimensional
+lattice result; the latter paper cites Kuzmanovich–Pavlichenkov for a proof. An indexed public
+scan of Hiller was located but could not be retrieved. No full-text reading or unchecked small-argument
+convention for Hiller's `Phi` is claimed. [SOURCES.md](SOURCES.md) records exact access status,
+page references, and the original papers' boundary conventions.
+
+The hypotheses `N ≥ 1` and `m ≥ 1` remain explicit: `GL(0, ℤ)` is trivial while `psi(2) = 0`, and
+Mathlib's `orderOf` is `0` at infinite order. In the OEIS, `psi` is A080737, the least dimension
+A152455 (including its value 0 at order 1), the rows `psi⁻¹{2k}` A080738, the number of finite orders
+A080740 and the largest finite order A005417. The two-dimensional case is already in public Lean
+(acprk/symmetry-graded-lean and akiselev/ferris-howard, both unregistered at the original review);
+nothing here claims a first formalization of the classical two-dimensional restriction.
+
+## 9. Every even minimum dimension occurs (`Crystallographic/Extensions.lean`)
+
+`exists_odd_squarefree_psi_eq`: for every `n`, some positive odd squarefree `m` has `psi(m) = 2n`.
+This formalizes the witness constructed in the proof of BCK Proposition 3(2), p. 207. The proof
+uses strong induction on `n`. The base case is `m = 1`. For `n > 0`, Bertrand's postulate supplies
+an odd prime `p` with `n + 1 < p < 2(n + 1)`, hence `p ≤ 2n + 1`. Write `p = 2j + 1` and apply
+the induction hypothesis at `n - j`. An odd prime divisor `p` of an integer `m' > 0` would force
+`p - 1 ≤ psi(m')` (`prime_sub_one_le_psi_internal`), but here
+`psi(m') = 2(n - j) < p - 1`. Thus `p` and `m'` are coprime, their product is odd and squarefree,
+and additivity gives `psi(p * m') = (p - 1) + 2(n - j) = 2n`.
+
+`range_psi` combines this with `even_psi`. For positive `N, M`,
+`finiteOrders_subset_iff` proves that inclusion of the two finite-order sets is equivalent to
+`N / 2 ≤ M / 2`. The forward implication applies the inclusion to a witness with
+`psi(m) = 2 * (N / 2)`; the reverse implication uses parity of `psi`. Antisymmetry gives
+`finiteOrders_eq_iff`. Finally, `exists_new_odd_squarefree_order` puts a witness of value
+`2n + 2` in dimension `2n + 2` and excludes it from dimension `2n + 1`.
+
+## 10. Integral invariant forms (`Crystallographic/InvariantForm.lean`)
+
+For a matrix `A` over a commutative ring, define
+
+```text
+invariantGram A m = sum_{0 <= k < m} (A^k)^T * A^k.
+```
+
+`invariantGram_isSymm` proves symmetry. If `A^m = I`, multiplying on the left by `A^T` and on
+the right by `A` shifts the sum to the powers `1, ..., m`; the two endpoint terms are both the
+identity. This is `invariantGram_invariant`. `invariantGram_map` proves compatibility with
+every coefficient-ring homomorphism.
+
+For `m > 0`, the first summand is the identity, and the remaining Gram matrices are positive
+semidefinite. `invariantGram_posDef` proves positive definiteness in Mathlib's ordered-star-ring
+setting; `invariantGram_posDef_real` additionally proves that an integer Gram sum remains
+positive definite after casting to the reals. In conventional notation, for a nonzero real vector,
+
+```text
+x^T Q x = sum_{k < m} ||A^k x||^2 >= ||x||^2 > 0.
+```
+
+`exists_integral_invariant_posDef` specializes the construction to any integer matrix of positive
+finite order. There is no division, so every entry of `Q` is an integer. Combining this with the
+existing existence criterion gives `exists_integral_posDef_isometry_iff`: for `N, m > 0`, an
+integer matrix of order `m` preserving a suitable positive definite integral form exists exactly
+when `psi(m) ≤ N`. The form is existentially chosen along with the matrix; unimodularity of the
+form, the automorphism group of a fixed lattice, and classification of whole isometry groups are
+not conclusions of these statements.
+
+## 11. Further handwritten results
+
+`MATHEMATICAL-EXTENSIONS.md` proves the determinant-minus-one minimum dimension and the exact
+classification/count of rational conjugacy classes at minimum dimension. It analyzes equality in
+the additive-totient inequalities, including the cost-free exponent-one factor 2 and the exceptional
+combination of prime powers 3 and 4. These arguments are not Lean theorems in this submission.
+The independent finite enumerator `scripts/check_minimal_classes.py` checks them through order
+500; finite enumeration is evidence for the argument, not a proof for all orders.

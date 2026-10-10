@@ -59,7 +59,12 @@ run_cmd do
       `Crystallographic.isGreatest_finiteOrders_six,
       `Crystallographic.isGreatest_finiteOrders_eight,
       `Crystallographic.isGreatest_finiteOrders_ten,
-      `Crystallographic.isGreatest_finiteOrders_twelve] do
+      `Crystallographic.isGreatest_finiteOrders_twelve,
+      `Crystallographic.exists_odd_squarefree_psi_eq, `Crystallographic.range_psi,
+      `Crystallographic.finiteOrders_subset_iff, `Crystallographic.finiteOrders_eq_iff,
+      `Crystallographic.exists_new_odd_squarefree_order,
+      `Crystallographic.exists_integral_invariant_posDef,
+      `Crystallographic.exists_integral_posDef_isometry_iff] do
     unless env.contains n do
       logError m!"Compared theorem is missing from the environment: {n}"
   logInfo m!"Audited {checked} project constants; unexpected axiom dependencies: {rejected}."

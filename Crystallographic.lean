@@ -11,3 +11,5 @@ public import Crystallographic.Compute
 public import Crystallographic.Tables
 public import Crystallographic.Erratum
 public import Crystallographic.SL
+public import Crystallographic.Extensions
+public import Crystallographic.InvariantForm

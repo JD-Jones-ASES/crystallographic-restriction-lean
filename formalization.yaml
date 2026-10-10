@@ -28,14 +28,18 @@ project:
     3080, 3960, 4620, 5040 (psi = 24), which rows 20, 22 and 24 of Table 1 of Bamberg-Cairns-Kilminster
     omit, are checked with their least dimensions. The same equivalence holds in SL(N, Z) for N >= 2 (an
     element of odd order has determinant 1; the block for 2^k, k >= 2, has even size and determinant 1; -A
-    keeps the determinant in even dimension), and SL(1, Z) is trivial. The hypotheses N >= 1 and m >= 1 are
+    keeps the determinant in even dimension), and SL(1, Z) is trivial. The development also formalizes
+    BCK Proposition 3(2), including odd squarefree witnesses for every even value of psi; exact spectrum
+    inclusion and equality by half-dimension; and an integral symmetric positive definite form preserved
+    by every finite-order matrix, positive definite also after casting to R. Thus the same psi criterion
+    is realized by isometries of suitable integral positive definite forms. The hypotheses N >= 1 and m >= 1 are
     necessary and explicit: GL(0, Z) is trivial while psi(2) = 0, and orderOf is 0 at infinite order. The
     theorem is the standard description of the finite orders of integer matrices, used in the crystallography
     of higher-dimensional lattices and quasicrystals and in integral representation theory; Mathlib's
     docs/1000.yaml (Q3527223) and mathlib4 issue #6091 (item 60) list it unformalized, and as of 2026-10-09 no
     formalization in every dimension, in either direction, was located in the registry, Mathlib, the Lean
     repositories searched, the Isabelle AFP or arXiv. Not claimed: priority for the two- and three-dimensional
-    cases (public Lean proofs of the case N = 2 exist), the wallpaper or space groups, or isometry groups.
+    cases (public Lean proofs of the case N = 2 exist), the wallpaper or space groups, or classification of full isometry groups.
   authors: ["JD Jones"]
   responsible_maintainers: ["JD Jones"]
   license: "MIT"
@@ -49,7 +53,7 @@ sources:
     authors: ["John Bamberg", "Grant Cairns", "Devin Kilminster"]
     id: "doi:10.1080/00029890.2003.11919956"
     type: "paper"
-    location: "The American Mathematical Monthly 110 (2003), no. 3, 202-209 (JSTOR 3647934): p. 202 (Ord_n, the finite orders of GL(n, Z); the definition of psi with psi(2) = 0 and psi(1) = 0; Theorem 1, Ord_n = {m in N | psi(m) <= n}); p. 203 (psi is even, so Ord_{2k+1} = Ord_{2k}); p. 204 (Table 1, the rows psi^{-1}{n} for even n <= 24). The text read is the authors' PDF at cage.ugent.be, which carries the Monthly's page numbers."
+    location: "The American Mathematical Monthly 110 (2003), no. 3, 202-209 (JSTOR 3647934): p. 202 (Ord_n, the finite orders of GL(n, Z); the definition of psi with psi(2) = 0 and psi(1) = 0; Theorem 1, Ord_n = {m in N | psi(m) <= n}); p. 203 (psi is even, so Ord_{2k+1} = Ord_{2k}); p. 204 (Table 1, the rows psi^{-1}{n} for even n <= 24); p. 207 (Proposition 3(2) and its odd squarefree witness construction). The text read is the authors' PDF at cage.ugent.be, which carries the Monthly's page numbers."
     relationship: "formalizes"
     author_endorsement: "not-contacted"
     note: >-
@@ -61,7 +65,11 @@ sources:
       (1928) for it and Kuzmanovich-Pavlichenkov (2002) for a proof; the proof here (the minimal polynomial
       over Q is a product of distinct cyclotomic polynomials, psi <= phi and additivity; for sufficiency,
       multiplication by a root on Z[X]/(Phi_{p^k}) and block sums) is the standard argument and is not
-      taken from a text read for this development. Rows n = 20, 22 and 24 of Table 1 omit their values
+      taken from a proof source read during the initial development. The pre-submission consult later
+      recovered both original 1928 papers and verified the correspondence directly (see SOURCES.md).
+      Proposition 3(2), p. 207, and its proof supply the odd squarefree witnesses for every even value
+      of psi, now formalized together with exact spectrum inclusion and equality consequences.
+      Rows n = 20, 22 and 24 of Table 1 omit their values
       above 2000 (2520; 2310; 2184, 2340, 2640, 2730, 2772, 3080, 3960, 4620, 5040; the largest printed
       entry is 1980); these values of psi and the least dimensions they give are theorems here.
   - title: "Integer-Roots of the Unit Matrix"
@@ -72,8 +80,11 @@ sources:
     relationship: "background"
     author_endorsement: "n/a"
     note: >-
-      Cited by Bamberg-Cairns-Kilminster, with the next entry, as the original correct description of
-      the finite orders of integer matrices. Not read for this development.
+      Read in full from the original 1928 volume in the Central University Library, Iasi,
+      https://dspace.bcu-iasi.ro/handle/123456789/43233 (PDF pages 131-134). Companion matrices on
+      p. 122; cyclotomic characteristic-polynomial and dimension/LCM criterion and block construction
+      on pp. 122-123. Its p. 123 omission of order 6 in dimension 2 is explicitly corrected in the
+      later note's p. 272 footnote. The explicit additive-totient threshold is in the next entry.
   - title: "On the Possible Periods of Integer-Matrices"
     authors: ["R. Vaidyanathaswamy"]
     id: "doi:10.1112/jlms/s1-3.4.268"
@@ -81,7 +92,13 @@ sources:
     location: "Journal of the London Mathematical Society s1-3 (1928), no. 4, 268-272"
     relationship: "background"
     author_endorsement: "n/a"
-    note: "The second of the two 1928 notes cited for Theorem 1 by Bamberg-Cairns-Kilminster. Not read for this development."
+    note: >-
+      Read in full from the same original volume (PDF pages 278-282). Theorem I, p. 268, is the direct
+      original statement of the exact additive-totient threshold; proof pp. 269-271. Theorem II,
+      pp. 270-271, minimizes the totient sum for fixed LCM (the isolated order 2 must be handled
+      separately). Theorem III, p. 272, gives even-to-odd stability; its footnote corrects the earlier
+      note. Theorems IV-V give coprime multiplicativity and prime-power decomposition. See SOURCES.md
+      for exact page correspondence and boundary conventions.
   - title: "The crystallographic restriction in higher dimensions"
     authors: ["H. Hiller"]
     id: "doi:10.1107/S0108767385001180"
@@ -91,8 +108,10 @@ sources:
     author_endorsement: "not-contacted"
     note: >-
       An independent rediscovery in the lattice form: m is the order of an element of the point group of
-      an n-dimensional space group iff Phi(m) <= n, for Hiller's additive totient Phi (the psi of this
-      development), with a table of the allowable orders in dimensions <= 23. Only the abstract was read;
+      an n-dimensional space group iff Phi(m) <= n, for Hiller's additive totient Phi, with a table of
+      the allowable orders in dimensions <= 23. Only the abstract was read; the exact small-argument
+      conventions for Phi have not been independently checked. A public scan was indexed but failed
+      to download in the consult. The full-text caveat remains;
       Bamberg-Cairns-Kilminster cite its Proposition 2.2 for their formula (1) and report its computation of
       Ord_n minus Ord_{n-1} for n <= 22. Nothing from it is formalized.
   - title: "Finite Groups of Matrices Whose Entries Are Integers"
@@ -204,7 +223,7 @@ related_formalizations:
 
 status:
   scope: >-
-    Forty-six compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
+    Fifty-three compared theorems over the two definitions of Challenge.lean (psi and finiteOrders), neither
     a hole. The arithmetic of psi (zero set, prime powers, additivity, psi <= phi, parity, the divisor-sum
     form, m <= 2^(psi(m) + 1)); necessity, psi(orderOf A) <= N for every element of GL(N, Z); sufficiency
     for N >= 1, m >= 1, psi(m) <= N; the equivalence; finiteOrders N = {m | 0 < m and psi m <= N} for
@@ -213,9 +232,15 @@ status:
     finiteOrders N for even N >= 2; every finite order is at most 2^(N + 1) and the set is finite; the
     twelve tables N = 1, ..., 12 as explicit sets; the maxima in dimensions 1, 2, 4, 6, 8, 10, 12; the
     values psi(2520) = 20, psi(2310) = 22 and psi = 24 at nine further integers, with the least dimensions
-    20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Not claimed:
+    20, 22, 24 they give; the same equivalence in SL(N, Z) for N >= 2, and SL(1, Z) trivial. Also formalized: odd squarefree witnesses for every even value of psi;
+    the image of psi; exact spectrum inclusion and equality by half-dimension; an odd squarefree new
+    order at every positive even dimension; an integral symmetric positive definite invariant form
+    for each finite-order matrix, including positive definiteness after casting to R; and the same
+    psi criterion realized by isometries of suitable integral positive definite forms. The determinant
+    -1 and minimum rational conjugacy results of MATHEMATICAL-EXTENSIONS.md are handwritten and
+    explicitly outside the compared Lean scope. Not claimed:
     priority for the two- and three-dimensional cases (public Lean proofs of the case N = 2 exist); the
-    wallpaper or space groups; isometry groups. The intentional placeholders of
+    wallpaper or space groups; classification of full isometry groups. The intentional placeholders of
     Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -453,6 +478,42 @@ status:
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "comparator.json"
 
+    - declaration: "Crystallographic.exists_odd_squarefree_psi_eq"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.range_psi"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_subset_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.finiteOrders_eq_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_new_odd_squarefree_order"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_integral_invariant_posDef"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Crystallographic.exists_integral_posDef_isometry_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
 automation:
   methods:
     - method: "agent"
@@ -471,6 +532,17 @@ automation:
         factorization, and decide +kernel over a structurally recursive trial-division computation of psi
         (proved equal to psi) for the tables and the values beyond dimension 12.
       spend_usd: "not tracked"
+    - method: "agent"
+      models: ["GPT-6 Astra (OpenAI)"]
+      framework: "ChatGPT with parallel review and proof-development agents"
+      tool_setup: >-
+        A pre-submission consult inspected the original commit 3b1c237f18122450e1ede1e9f11ea099dd7f28ba,
+        read both recovered 1928 originals, corrected source attribution, and added Extensions.lean
+        and InvariantForm.lean with seven compared theorems. It separately supplied the explicitly
+        unformalized mathematical derivations in MATHEMATICAL-EXTENSIONS.md and an independent finite
+        enumeration script. The pinned Lean and Mathlib versions were retained; the expanded build,
+        axiom audit and comparison checks were rerun. See VERIFICATION.md for environment details.
+      spend_usd: "not tracked"
 
 fidelity:
   divergences: >-
@@ -483,6 +555,12 @@ fidelity:
     its rows n <= 12. The values beyond dimension 12 (psi(2520) = 20, psi(2310) = 22, nine values with
     psi = 24) are not in the source: they are the values above 2000 that rows 20, 22, 24 of its Table 1
     omit, found while checking the table, and are stated here as values of psi and as least dimensions.
+    BCK Proposition 3(2) and its proof already supply the odd squarefree witnesses added in the consult;
+    the exact spectrum inclusion/equality statements are consequences. The invariant-form theorems
+    additionally formalize the standard finite cyclic averaging construction, with an existential
+    integral form whose real cast is positive definite. They do not classify the automorphism group
+    of a specified form. The determinant -1 criterion and rational conjugacy class counts in
+    MATHEMATICAL-EXTENSIONS.md are not compared theorems and are not claimed Lean-verified.
     GL(N, Z) is Matrix.GeneralLinearGroup (Fin N) Z, the units of the matrix ring, and orderOf is
     Mathlib's order of a unit. The equivalence over Q, the dimension-0 and monotonicity statements, the
     block of size phi(n) for every n, the arithmetic lemmas on psi and the SL(N, Z) version are additions of
@@ -493,7 +571,9 @@ review:
   notes: >-
     No independent human expert review and no source-author endorsement is claimed; AI agents developed
     the proofs and audited them in separate passes, the statements were checked against the authors' PDF of
-    Bamberg-Cairns-Kilminster (pp. 202-204), and psi, the twelve tables and the maxima were recomputed
+    Bamberg-Cairns-Kilminster (pp. 202-204, and p. 207 for the added surjectivity proof). Both original
+    Vaidyanathaswamy notes were read during the consult; Hiller and Kuzmanovich-Pavlichenkov remain
+    unread in full (SOURCES.md). psi, the twelve tables and the maxima were recomputed
     outside Lean by two independent routes and against OEIS A080737, A080738, A080740, A005417 and A152455.
     Mechanical correctness and agreement of formal statements do not establish priority or significance.
 
@@ -730,6 +810,42 @@ alignment:
       module: "Solution"
       status: "proved"
       note: "210 in GL(12, ℤ)."
+
+    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      lean: "Crystallographic.exists_odd_squarefree_psi_eq"
+      module: "Solution"
+      status: "proved"
+      note: "Every even value is attained by a positive odd squarefree order (BCK Proposition 3(2) and its proof)."
+    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      lean: "Crystallographic.range_psi"
+      module: "Solution"
+      status: "proved"
+      note: "The image of psi is exactly the even natural numbers."
+    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      lean: "Crystallographic.finiteOrders_subset_iff"
+      module: "Solution"
+      status: "proved"
+      note: "In positive dimensions, spectrum inclusion is equivalent to comparison of integer half-dimensions."
+    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      lean: "Crystallographic.finiteOrders_eq_iff"
+      module: "Solution"
+      status: "proved"
+      note: "Two positive dimensions have identical finite-order spectra exactly when their integer halves agree."
+    - source: "Bamberg-Cairns-Kilminster 2003, Proposition 3(2), p. 207, and its proof"
+      lean: "Crystallographic.exists_new_odd_squarefree_order"
+      module: "Solution"
+      status: "proved"
+      note: "An odd squarefree order first appears at each positive even dimension."
+    - source: "Standard finite-group averaging, specialized to cyclic groups; this development"
+      lean: "Crystallographic.exists_integral_invariant_posDef"
+      module: "Solution"
+      status: "proved"
+      note: "Every finite-order integral matrix preserves an integral symmetric positive definite form, also positive definite on real vectors."
+    - source: "Standard finite-group averaging, specialized to cyclic groups; this development"
+      lean: "Crystallographic.exists_integral_posDef_isometry_iff"
+      module: "Solution"
+      status: "proved"
+      note: "The crystallographic criterion is realized by an isometry of a suitable positive definite integral form in the same dimension."
 
 acknowledgements: >-
   Vaidyanathaswamy, Hiller, Kuzmanovich and Pavlichenkov, and Bamberg, Cairns and Kilminster for the theorem, its

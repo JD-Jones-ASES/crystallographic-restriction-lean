@@ -184,4 +184,41 @@ theorem isGreatest_finiteOrders_ten : IsGreatest (finiteOrders 10) 120 :=
 theorem isGreatest_finiteOrders_twelve : IsGreatest (finiteOrders 12) 210 :=
   isGreatest_finiteOrders_twelve_internal
 
+theorem exists_odd_squarefree_psi_eq (n : ℕ) :
+    ∃ m : ℕ, 0 < m ∧ Odd m ∧ Squarefree m ∧ psi m = 2 * n :=
+  exists_odd_squarefree_psi_eq_internal n
+
+theorem range_psi : Set.range psi = {n : ℕ | Even n} :=
+  range_psi_internal
+
+theorem finiteOrders_subset_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
+    finiteOrders N ⊆ finiteOrders M ↔ N / 2 ≤ M / 2 :=
+  finiteOrders_subset_iff_internal hN hM
+
+theorem finiteOrders_eq_iff {N M : ℕ} (hN : 0 < N) (hM : 0 < M) :
+    finiteOrders N = finiteOrders M ↔ N / 2 = M / 2 :=
+  finiteOrders_eq_iff_internal hN hM
+
+theorem exists_new_odd_squarefree_order (n : ℕ) :
+    ∃ m : ℕ, Odd m ∧ Squarefree m ∧
+      m ∈ finiteOrders (2 * n + 2) ∧ m ∉ finiteOrders (2 * n + 1) :=
+  exists_new_odd_squarefree_order_internal n
+
+theorem exists_integral_invariant_posDef {N m : ℕ}
+    (A : Matrix.GeneralLinearGroup (Fin N) ℤ) (hm : 0 < m) (hA : orderOf A = m) :
+    ∃ Q : Matrix (Fin N) (Fin N) ℤ,
+      Q.IsSymm ∧ Q.PosDef ∧ ((Int.castRingHom ℝ).mapMatrix Q).PosDef ∧
+        Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
+          (A : Matrix (Fin N) (Fin N) ℤ) = Q :=
+  exists_integral_invariant_posDef_internal A hm hA
+
+theorem exists_integral_posDef_isometry_iff {N m : ℕ} (hN : 0 < N) (hm : 0 < m) :
+    (∃ A : Matrix.GeneralLinearGroup (Fin N) ℤ,
+      ∃ Q : Matrix (Fin N) (Fin N) ℤ,
+        orderOf A = m ∧ Q.IsSymm ∧ Q.PosDef ∧
+          ((Int.castRingHom ℝ).mapMatrix Q).PosDef ∧
+          Matrix.transpose (A : Matrix (Fin N) (Fin N) ℤ) * Q *
+            (A : Matrix (Fin N) (Fin N) ℤ) = Q) ↔ psi m ≤ N :=
+  exists_integral_posDef_isometry_iff_internal hN hm
+
 end Crystallographic

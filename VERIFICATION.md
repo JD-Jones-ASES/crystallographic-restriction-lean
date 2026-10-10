@@ -1,10 +1,11 @@
 # Verification
 
-All forty-six statements of Challenge.lean have proofs. The local build, the axiom audit, the source guard, the
+All fifty-three statements of Challenge.lean have proofs. The local build, the axiom audit, the source guard, the
 definition and statement checks, the standard-library replay of the tables, the metadata check, the module-resolution
 check, the elaboration check and Palomar's core-notation audit of the statements pass; `python scripts/verify.py` runs
-them all and ends with `VERIFY: PASS`. The checks below were last run on the tree of the final commit (221
-project constants audited; 48 declarations, the 46 theorems and the 2 definitions, printed by the core-notation audit); a build log is evidence for that tree only. Theorems are numbered
+them all and ends with `VERIFY: PASS`. The expanded pre-submission tree was replayed under the pinned toolchain on 2026-10-10 UTC
+(243 project constants audited; 55 declarations, the 53 theorems and the 2 definitions, printed by
+the core-notation audit). A build log is evidence for its exact source tree only. Theorems are numbered
 as in `comparator.json`, which is also their order in Challenge.lean. `comparator.json` lists no `definition_names`: a
 name there is a definition hole whose value the Solution supplies; the two definitions here (`psi`, `finiteOrders`) are
 fully specified in the Challenge, so the comparator checks the Solution's values against them.
@@ -59,6 +60,13 @@ fully specified in the Challenge, so the comparator checks the Solution's values
 | 44 | `isGreatest_finiteOrders_eight` — 60 in GL(8, ℤ) | Crystallographic/Tables.lean |
 | 45 | `isGreatest_finiteOrders_ten` — 120 in GL(10, ℤ) | Crystallographic/Tables.lean |
 | 46 | `isGreatest_finiteOrders_twelve` — 210 in GL(12, ℤ) | Crystallographic/Tables.lean |
+| 47 | `exists_odd_squarefree_psi_eq` — every even value of ψ has a positive odd squarefree witness | Crystallographic/Extensions.lean |
+| 48 | `range_psi` — the image of ψ is exactly the even naturals | Crystallographic/Extensions.lean |
+| 49 | `finiteOrders_subset_iff` — positive-dimensional spectra are included exactly when the integer half-dimensions are ordered | Crystallographic/Extensions.lean |
+| 50 | `finiteOrders_eq_iff` — positive-dimensional spectra agree exactly when their integer half-dimensions agree | Crystallographic/Extensions.lean |
+| 51 | `exists_new_odd_squarefree_order` — an odd squarefree order first appears at each positive even dimension | Crystallographic/Extensions.lean |
+| 52 | `exists_integral_invariant_posDef` — every finite-order integral matrix preserves an integral symmetric positive definite form, positive definite also over ℝ | Crystallographic/InvariantForm.lean |
+| 53 | `exists_integral_posDef_isometry_iff` — ψ(m) ≤ N is realized by an isometry of a suitable integral positive definite form | Crystallographic/InvariantForm.lean |
 
 ## The checks and their limits
 
@@ -79,7 +87,7 @@ fully specified in the Challenge, so the comparator checks the Solution's values
 - **Palomar's core-notation audit** (`scripts/core_notation_audit.lean`, unmodified apart from a three-line provenance
   comment): every compared declaration renders with Mathlib's constants as opaque axioms.
 - **Metadata** (`scripts/verify.py`): formalization.yaml parses; the title is at most 300 characters; `main_results` and
-  `alignment` follow comparator.json in order; no definition holes; no original-proof source.
+  `alignment.statements` match comparator.json in exact order (the consult tightened the latter check); no definition holes; no original-proof source.
 - **Standard-library replay** (`scripts/check_tables.py`): ψ from the factorization against the divisor-sum form to
   3000; the zero set, parity, `ψ ≤ φ` and `m ≤ 2^(ψ(m) + 1)` to 10⁵; additivity for coprime `a, b < 2000` with
   `ab ≤ 10⁵`; the twelve order sets by the bound and by brute force to 10⁵ against the literals of Challenge.lean; the
@@ -90,3 +98,31 @@ fully specified in the Challenge, so the comparator checks the Solution's values
 - **Not checked here**: literature status or priority (the registry certifies statement matching and kernel replay
   only); the statements of the sources beyond the pages cited in formalization.yaml; that the eleven values are the only
   omissions from Table 1 is a computation outside Lean, not a theorem.
+
+## Consult replay and additional mathematical notes
+
+The full local entry point `python scripts/verify.py` passed after the seven compared theorems were
+integrated, including the build of all four targets, the axiom audit, definition elaboration and
+core-notation audit. The original mathematical results were retained. The isolated intentional
+placeholders in `Challenge.lean` are excluded from proof counts and from `Solution.lean`'s proof
+dependency graph; `Solution.lean` never imports it.
+
+This hosted runner virtualizes process IDs while exposing the standard `/proc/self/exe` alias.
+The unchanged Linux Lean executable initially failed when its runtime queried `/proc/<getpid()>/exe`.
+The consult used a small libc `readlink` adapter mapping only that own-process executable-path
+query to `/proc/self/exe`. It did not intercept Lean functions or proof operations, and no compiler,
+kernel, Mathlib source, or proof-checking option was changed. Its source and the replay log are
+included in the consult package for reproducibility; ordinary local Lean installations do not need
+this runner-specific adapter.
+
+`MATHEMATICAL-EXTENSIONS.md` is explicitly outside the compared Lean scope. Its standard-library
+verifier `python scripts/check_minimal_classes.py` and its `python -O` replay both pass for orders
+1 through 500: 869 minimum-dimensional rational conjugacy classes in total, with every proposed
+class construction and determinant-minus-one minimum dimension agreeing with exhaustive cyclotomic
+multiset enumeration. This finite check does not certify the statements for all orders; the
+all-orders evidence supplied there is the written mathematical proof.
+
+[SOURCES.md](SOURCES.md) gives the direct source-reading audit. Reading the recovered originals
+changes the bibliographic evidence, rather than the Lean verification gate. The Palomar submission
+service's own comparator and independent checker remain part of the registry's submission process;
+the local script does not claim to have run that hosted process.

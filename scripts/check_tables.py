@@ -6,7 +6,7 @@ through the exact prime-power divisors), the sets {m >= 1 : psi(m) <= N} for N =
 bound m <= 2^(N+1) and again by brute force to 10^5, the largest element of each, and the comparison
 against the set literals of the theorems finiteOrders_<N> and the values of isGreatest_finiteOrders_<N> in
 Challenge.lean. Also checks, to 10^5, the arithmetic the Challenge states: psi(m) = 0 iff m <= 2, psi is
-even, psi <= phi, m <= 2^(psi m + 1), and additivity on coprime pairs a, b < 2000. Finally it re-derives the
+even, psi <= phi, m <= 2^(psi m + 1), and additivity on coprime pairs a, b < 2000 with ab <= 100000. Finally it re-derives the
 rows psi^{-1}{n} of Table 1 of Bamberg-Cairns-Kilminster (2003) for even n <= 24 by the structural
 enumeration (products of prime powers q <= 2n with distinct primes, since phi(q) <= n forces q <= 2n), checks
 the enumeration against brute force for n <= 14, compares each row with the printed one (transcribed below from
@@ -143,7 +143,7 @@ def main():
     check("psi is even", all(psi[m] % 2 == 0 for m in range(BOUND + 1)))
     check("psi <= phi", all(psi[m] <= totient(m) for m in range(1, BOUND + 1)))
     check("m <= 2^(psi m + 1)", all(m <= 2 ** (psi[m] + 1) for m in range(1, BOUND + 1)))
-    check("psi(ab) = psi(a) + psi(b) for coprime a, b < 2000",
+    check("psi(ab) = psi(a) + psi(b) for coprime a, b < 2000 with ab <= 100000",
           all(psi[a * b] == psi[a] + psi[b] for a in range(1, 2000) for b in range(1, 2000)
               if gcd(a, b) == 1 and a * b <= BOUND))
 

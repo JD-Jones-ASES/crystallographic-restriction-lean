@@ -4,13 +4,13 @@ For a positive integer `m` let `ψ(m)` be the sum of `φ(pᵏ)` over the prime p
 the prime power `2` contributes `0` (`φ` is Euler's totient; `ψ(1) = ψ(2) = 0`, `ψ(3) = ψ(4) = ψ(6) = 2`,
 `ψ(5) = ψ(8) = ψ(10) = ψ(12) = 4`, `ψ(ab) = ψ(a) + ψ(b)` for coprime `a, b`; OEIS A080737). The crystallographic
 restriction in every dimension states that for `N ≥ 1` the group `GL(N, ℤ)` of invertible integer `N × N` matrices has an
-element of order `m ≥ 1` if and only if `ψ(m) ≤ N` (Vaidyanathaswamy, J. London Math. Soc. 3 (1928) 121–124; Hiller,
+element of order `m ≥ 1` if and only if `ψ(m) ≤ N` (Vaidyanathaswamy, J. London Math. Soc. 3 (1928) 268–272, Theorem I; Hiller,
 Acta Cryst. A41 (1985) 541–544; a proof in Kuzmanovich–Pavlichenkov, Amer. Math. Monthly 109 (2002) 173–186; Theorem 1 of
 Bamberg–Cairns–Kilminster, Amer. Math. Monthly 110 (2003) 202–209). In dimensions two and three this is the classical
 restriction: the finite orders are `1, 2, 3, 4, 6`.
 
 [Challenge.lean](Challenge.lean) defines `ψ` (`psi`) and the set `finiteOrders N` of finite orders of elements of
-`GL(N, ℤ)` and states forty-six theorems; [Solution.lean](Solution.lean) proves them, kernel-only; the table in
+`GL(N, ℤ)` and states fifty-three theorems; [Solution.lean](Solution.lean) proves them, kernel-only; the table in
 [VERIFICATION.md](VERIFICATION.md) names each:
 
 - the arithmetic of `ψ`: `ψ(m) = 0` iff `m ≤ 2`; `ψ(pᵏ) = φ(pᵏ)` for a prime power `pᵏ ≠ 2`; additivity on coprime
@@ -27,13 +27,21 @@ restriction: the finite orders are `1, 2, 3, 4, 6`.
   `k ≥ 2`, has even size and determinant `1`; `−A` keeps the determinant in even dimension), and `SL(1, ℤ)` is trivial;
 - the tables of finite orders for `N = 1, …, 12` (OEIS A080738) and the largest finite order `2, 6, 12, 30, 60, 120, 210`
   in dimensions `1, 2, 4, 6, 8, 10, 12`, by the bound and a kernel computation of `ψ`; beyond dimension 12, the eleven
-  orders with `ψ = 20, 22, 24` missing from Table 1 of Bamberg–Cairns–Kilminster, with their least dimensions.
+  orders with `ψ = 20, 22, 24` missing from Table 1 of Bamberg–Cairns–Kilminster, with their least dimensions;
+- every even value of `ψ` has a positive odd squarefree witness (BCK Proposition 3(2) and its proof);
+  for positive `N, M`, `finiteOrders N ⊆ finiteOrders M` iff `N / 2 ≤ M / 2`, and equality iff the
+  integer halves agree; an odd squarefree order first appears in each positive even dimension;
+- every finite-order integral matrix `A` preserves the integral Gram form
+  `Q = ∑ k < m, (A^k)ᵀ A^k`, which is symmetric and positive definite also on real vectors;
+  consequently `ψ(m) ≤ N` is also the exact criterion for order `m` to be realized by an isometry of
+  some positive definite integral form in dimension `N`.
 
 The hypotheses `N ≥ 1` and `m ≥ 1` are necessary and made explicit: `GL(0, ℤ)` is trivial while `ψ(2) = 0`, and Mathlib's
 `orderOf` is `0` at infinite order.
 
 Not claimed: priority for the two- and three-dimensional cases (public Lean proofs of the case `N = 2` exist:
-acprk/symmetry-graded-lean, akiselev/ferris-howard); the wallpaper or space groups; isometry groups.
+acprk/symmetry-graded-lean, akiselev/ferris-howard); the wallpaper or space groups; classification of
+full isometry groups or of the automorphism group of a specified lattice.
 
 The theorem is the standard description of the finite orders of integer matrices, used in the crystallography of
 higher-dimensional lattices and quasicrystals and in integral representation theory; Mathlib's `docs/1000.yaml`
@@ -65,3 +73,18 @@ name of every step, and [DISCLOSURE.md](DISCLOSURE.md) the assistance statement.
 
 License: [MIT](LICENSE) for the Lean files and scripts; `scripts/core_notation_audit.lean` is Palomar's, under its MIT
 licence ([LICENSES/PalomarSubmission-MIT.txt](LICENSES/PalomarSubmission-MIT.txt)).
+
+## Pre-submission consult
+
+[SOURCES.md](SOURCES.md) records a direct reading of both original Vaidyanathaswamy notes, recovered
+from the public Central University Library archive in Iași. The explicit additive-totient threshold
+is Theorem I on p. 268 of the later note; its p. 272 footnote corrects an omitted order-6 example
+in the earlier paper. Hiller 1985 and Kuzmanovich–Pavlichenkov 2002 remain unread in full; the
+corresponding caveat has been narrowed, not removed.
+
+The two new proof modules add seven compared statements. They formalize classical mathematics;
+no literature-priority claim is made for these additions. [MATHEMATICAL-EXTENSIONS.md](MATHEMATICAL-EXTENSIONS.md)
+also supplies complete handwritten derivations of the exact determinant-minus-one threshold
+`m even` and `N ≥ ψ(m) + 1`, and a classification/count of rational conjugacy classes in minimum
+dimension. Those two further results are **not Lean-verified** and are outside the comparator scope;
+`scripts/check_minimal_classes.py` provides independent finite enumeration through order 500.
