@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "The crystallographic restriction in every dimension: for N, m >= 1, GL(N, Z) has an element of order m if and only if psi(m) <= N, also in SL(N, Z) for N >= 2, with the tables for N <= 12, the least dimension of each order, the determinant -1 threshold psi(m) + 1 for even m, and the same over Q"
+  name: "The crystallographic restriction in every dimension: GL(N, ℤ) has an element of order m if and only if ψ(m) ≤ N"
   description: >-
     A Lean 4 development of the crystallographic restriction in every dimension. For a positive integer m
     let psi(m) be the sum of phi(p^k) over the prime powers p^k exactly dividing m, except that the prime

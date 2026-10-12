@@ -1,4 +1,4 @@
-# The crystallographic restriction in every dimension: for N, m ≥ 1, GL(N, ℤ) has an element of order m if and only if ψ(m) ≤ N
+# The crystallographic restriction in every dimension: GL(N, ℤ) has an element of order m if and only if ψ(m) ≤ N
 
 For a positive integer `m` let `ψ(m)` be the sum of `φ(pᵏ)` over the prime powers `pᵏ` exactly dividing `m`, except that
 the prime power `2` contributes `0` (`φ` is Euler's totient; `ψ(1) = ψ(2) = 0`, `ψ(3) = ψ(4) = ψ(6) = 2`,
